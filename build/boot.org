@@ -2,7 +2,7 @@
 
 * boot.properties
 
-  Файл boot.properties используется Boot для привязки проекта к конкретной версии Boot и запуска это версии Boot
+  Файл boot.properties используется Boot для привязки проекта к конкретной версии Boot и запуска этой версии Boot
   на конкретной версии Clojure.
 
   #+NAME: boot.properties
