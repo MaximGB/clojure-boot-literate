@@ -1,0 +1,70 @@
+#+SETUPFILE: sutup.org
+
+* boot.properties
+
+  Файл boot.properties используется Boot для привязки проекта к конкретной версии Boot и запуска это версии Boot
+  на конкретной версии Clojure.
+
+  #+NAME: boot.properties
+  #+BEGIN_SRC sh :tangle ../boot.properties :noweb yes
+    #http://boot-clj.com
+    #<<time-is-now()>>
+    BOOT_CLOJURE_NAME=org.clojure/clojure
+    BOOT_CLOJURE_VERSION=<<get-specification-param(title="Версия Clojure")>>
+    BOOT_VERSION=<<get-specification-param(title="Версия Boot")>>
+  #+END_SRC
+
+* build.boot
+
+  Файл ~build.boot~ исполняется Boot при запуске src_sh{boot task}, где ~task~ имя задачи для исполнения. Задачи проекта
+  описаны ниже, в соответствующем разделе.
+
+  #+NAME: build.boot
+  #+BEGIN_SRC clojure :tangle ../build.boot :noweb yes
+    (set-env! :source-paths #{"<<get-specification-param(title="Расположение исходников")>>"}
+              :dependencies '[[org.clojure/clojure "<<get-specification-param(title="Версия Clojure")>>"]])
+
+    (task-options! target {:dir #{"<<get-specification-param(title="Целевая дирректория")>>"}}
+                   aot    {:all true}
+                   pom    {:project '<<get-specification-param(title="Имя проекта")>>
+                           :version "<<get-specification-param(title="Версия проекта")>>"}
+                   jar    {:main '<<get-specification-param(title="Пространство имён main", splitby=".", joinby="/")>>})
+
+    <<boot-task>>
+  #+END_SRC
+
+* Boot-задачи проекта
+
+** build
+
+   Эта задача строит uberjar проекта который запускается командой.
+
+   #+BEGIN_SRC sh :dir ".." :noweb yes
+     java -jar <<get-specification-param(title="Целевая дирректория")>>/project.jar
+   #+END_SRC
+
+   #+NAME: boot-task
+   #+BEGIN_SRC clojure :noweb yes :padline yes
+     (deftask build
+       "Builds project's uberjar"
+       []
+       (comp (pom) (aot) (uber) (jar) (target)))
+   #+END_SRC
+
+   Для вызова задачи выполните: src_sh[:dir ".."]{boot build}
+
+** run
+
+   Эта задача компилирует и запускает проект в той же Java-среде в которой запущен Boot.
+
+   #+NAME: boot-task
+   #+BEGIN_SRC clojure :noweb yes :padline yes
+     (deftask run
+       "Runs the project's main function"
+       []
+       (require '<<get-specification-param(title="Пространство имён main")>>)
+       (let [main-fn (resolve '<<get-specification-param(title="Пространство имён main")>>/-main)]
+         (comp (aot) (with-pass-thru _ (main-fn)))))
+   #+END_SRC
+
+   Для вызова задачи выполните: src_sh[:dir ".."]{boot run}

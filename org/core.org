@@ -1,0 +1,19 @@
+#+SETUPFILE: ../build/setup.org
+
+* Пространство имён Core
+
+** Функции
+
+*** -main
+
+    #+NAME: core/main
+    #+BEGIN_SRC clojure :tangle (org-sbe "in-src-path" (path \"core.clj\"))
+      (ns <<get-specification-param(title="Пространство имён main")>>
+        (:gen-class))
+
+      (defn -main
+        "Project's entry point"
+        [& args]
+        (println "Hello, from <<get-specification-param(title="Имя проекта")>>!"))
+    #+END_SRC
+

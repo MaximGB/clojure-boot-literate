@@ -1,0 +1,89 @@
+* Библиотека вспомагательных блоков-функций для проекта            :noexport:
+
+  Возвращает текущее время в виде строки в заданном формате.
+
+  Параметры:
+  | Имя    | Значение по умолчанию | Описание                    |
+  |--------+-----------------------+-----------------------------|
+  | format | "%F %X"               | Формат возвращаемой строки. |
+  #+NAME: time-is-now
+  #+BEGIN_SRC emacs-lisp :var format="%F %X" :exports no :results value silent
+    (format-time-string format)
+  #+END_SRC
+
+  Возвращает значение параметра с указанным именем из какой-либо таблицы. В первой колонке таблицы задаются имена
+  параметров, во второй колонке - значения.
+
+  Параметры:
+  | Имя     | Значение по умолчанию | Описание                                                                     |
+  |---------+-----------------------+------------------------------------------------------------------------------|
+  | table   | (quote ())            | Ссылка на таблицу. В виде [путь к файлу с таблицей:]имя таблицы, например:   |
+  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же |
+  |         |                       | файле из которого делается вызов. Значение по-умолчанию позволяет просто без |
+  |         |                       | ошибки вернуть nil, так как таблица передаётся в блок просто в виде списка.  |
+  | title   | ""                    | Имя параметра.                                                               |
+  | splitby | ""                    | Разделитель значений параметра. Работает совместно с joinby. Если значения   |
+  |         |                       | в ячейке перечислены, например, через запятую, то, указав splitby=",", мы их |
+  |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.          |
+  | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.              |
+  #+NAME: get-table-param
+  #+BEGIN_SRC emacs-lisp :var table=(quote ()) :var title="" :var splitby="" :var joinby="" :hlines no :exports none :results value silent
+    (let* ((titles (mapcar #'car table))
+           (values (mapcar #'cdr table))
+           (result (car (org-lookup-first title titles values))))
+          (if (and result splitby joinby)
+              (mapconcat #'identity (split-string result (regexp-quote splitby) t "\s+") joinby))
+            result)))
+  #+END_SRC
+
+  Возвращает значение параметра с указанным именем из спецификации проекта.
+
+  Параметры:
+  | Имя     | Значение по умолчанию | Описание                                                                     |
+  |---------+-----------------------+------------------------------------------------------------------------------|
+  | title   | ""                    | Имя параметра.                                                               |
+  | splitby | ""                    | Разделитель значений параметра. Работает совместно с joinby. Если значения   |
+  |         |                       | в ячейке перечислены, например, через запятую, то, указав splitby=",", мы их |
+  |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.          |
+  | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.              |
+  #+NAME: get-specification-param
+  #+BEGIN_SRC emacs-lisp :var title="" :var splitby="" :var joinby="" :exports none :results value silent
+    (save-excursion
+      (let ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org")))
+           (if project-org-dir
+             (let ((project-spec-ref (concat project-org-dir "project.org:project-specification")))
+                  (org-babel-execute-src-block
+                    nil
+                    (cdr (assoc 'get-table-param org-babel-library-of-babel))
+                    (list
+                      (cons :var (format "table=%s" project-spec-ref))
+                      (cons :var (format "title=\"%s\"" title))
+                      (cons :var (format "splitby=\"%s\"" splitby))
+                      (cons :var (format "joinby=\"%s\""  joinby))))))))
+  #+END_SRC
+
+  Возвращает абсолютный путь до файла в дирректории экспортируемых исходников проекта.
+
+  Параметры:
+  | Имя  | Значение по умолчанию | Описание                                |
+  |------+-----------------------+-----------------------------------------|
+  | path | ""                    | Путь отнистельно дирректории исходников |
+  #+NAME: in-src-path
+  #+BEGIN_SRC emacs-lisp :var path="" :exports no :results value silent
+    (save-excursion
+      (let* ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org"))
+             (src-path (org-babel-execute-src-block
+                         nil
+                         (cdr (assoc 'get-specification-param org-babel-library-of-babel))
+                         (list
+                           (cons :var "title=\"Расположение исходников\""))))
+             (project-name (org-babel-execute-src-block
+                             nil
+                             (cdr (assoc 'get-specification-param org-babel-library-of-babel))
+                             (list
+                               (cons :var "title=\"Имя проекта\"")
+                               (cons :var "splitby=\".\"")
+                               (cons :var "joinby=\"/\""))))
+             (ns-path (replace-regexp-in-string "\-" "_" project-name)))
+            (concat project-org-dir src-path "/" ns-path "/" path)))
+  #+END_SRC

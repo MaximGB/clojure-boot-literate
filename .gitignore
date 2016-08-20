@@ -1,8 +1,12 @@
 pom.xml
 pom.xml.asc
-*jar
-*pdf
-*tex
+boot.properties
+build.boot
+tangle.sh
+tangle-all.sh
+*.jar
+*.pdf
+*.tex
 /src/
 /tests/
 /target/
