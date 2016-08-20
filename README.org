@@ -12,4 +12,4 @@
   programming project from several org-files, and no just one, and still have proper documentation and code export (tangling)
   both from Emacs directly as well as from project generated shell-scripts.
   
-  The project is self-documenting, get started from ~project.org~ and it should be more or less clear how to use it.
+  The project is self-documenting (though in Russian), get started from ~project.org~ and it should be more or less clear how to use it.
