@@ -6,6 +6,6 @@
 
 * In english
 
-  This is a skeleton if a Literate Clojure/Boot project in Emacs/Org envirenoment. It shows how to shape a literate 
+  This is a skeleton of a Literate Clojure/Boot project in Emacs/Org envirenoment. It shows how to shape a literate 
   programming project from several org-files, and no just one, and still have proper documentation and code export (tangling)
   both from Emacs directly as well as from project generated shell-scripts.
