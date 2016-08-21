@@ -7,7 +7,7 @@
 *** -main
 
     #+NAME: core/main
-    #+BEGIN_SRC clojure :tangle (org-sbe "in-src-path" (path \"core.clj\"))
+    #+BEGIN_SRC clojure :tangle (org-sbe in-src-path (path \"core.clj\"))
       (ns <<get-specification-param(title="Пространство имён main")>>
         (:gen-class))
 
