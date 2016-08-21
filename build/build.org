@@ -53,5 +53,5 @@
 
   #+NAME: tangle-all.sh
   #+BEGIN_SRC sh :tangle ../tangle-all.sh  :shebang "#!/bin/sh" :noweb yes :results silent
-    ./tangle.sh project.org build/*.org org/*.org
+    ./tangle.sh project.org build/*.org <<get-specification-param(title="Расположение org-исходников")>>/*.org
   #+END_SRC
