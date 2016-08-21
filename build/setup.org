@@ -3,5 +3,6 @@
 #+STARTUP: overview inlineimages
 #+EXCLUDE_TAGS: noexport
 #+PROPERTY: header-args :noweb yes :exports code :mkdirp yes :padline no :results value silent
+#+OPTIONS: toc:4 h:4
 #+LATEX_CLASS: article
 #+LATEX_HEADER: \usepackage[a4paper,margin=1in,footskip=0.25in]{geometry}
