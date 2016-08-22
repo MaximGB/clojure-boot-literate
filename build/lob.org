@@ -109,12 +109,14 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя   | Значение по умолчанию         | Описание                                                      |
-  |-------+-------------------------------+---------------------------------------------------------------|
-  | param | "Расположение clj-исходников" | Имя параметра, задющего часть пути относительно корня проекта |
-  | path  | ""                            | Путь относительно дирректории исходников                       |
+  | Имя         | Значение по умолчанию         | Описание                                                      |
+  |-------------+-------------------------------+---------------------------------------------------------------|
+  | param       | "Расположение clj-исходников" | Имя параметра, задющего часть пути относительно корня проекта |
+  | path        | ""                            | Путь относительно дирректории исходников                      |
+  | projectvise | t                             | Вставлять имя проекта между базовой дирректорией              |
+  |             |                               | формируемым окончанием пути.                                  |
   #+NAME: in-some-path
-  #+BEGIN_SRC emacs-lisp :var param="Расположение clj-исходников" :var path="" :results value silent
+  #+BEGIN_SRC emacs-lisp :var param="Расположение clj-исходников" :var path="" :var projectvise='t :results value silent
     (save-excursion
       (let* ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org"))
              (src-path (org-babel-execute-src-block
@@ -130,7 +132,7 @@
                                (cons :var "splitby=\".\"")
                                (cons :var "joinby=\"/\""))))
              (ns-path (replace-regexp-in-string "\-" "_" project-name)))
-            (concat project-org-dir src-path "/" ns-path "/" path)))
+            (concat project-org-dir src-path "/" (if projectvise (concat ns-path "/") "") path)))
   #+END_SRC
 
 * in-src-path
@@ -279,9 +281,9 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя  | Значение по умолчанию | Описание                                     |
-  |------+-----------------------+----------------------------------------------|
-  | path | ""                    | Путь относительно дирректории cljs-исходников |
+  | Имя  | Значение по умолчанию | Описание                                        |
+  |------+-----------------------+-------------------------------------------------|
+  | path | ""                    | Путь относительно дирректории исходников тестов |
   #+NAME: in-tests-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -291,4 +293,37 @@
         (list
          (cons :var "param=\"Расположение тестов\"")
          (cons :var (format "path=\"%s\"" path)))))
+  #+END_SRC
+
+* in-resources-path
+
+  Возвращает абсолютный путь до файла в дирректории ресурсов.
+
+  *Требования*: В спецификации проекта должен быть заданы параметры:
+  - Имя проекта
+  - Расположение ресурсов времени исполнения
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    #+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
+       ...
+    #+END_SRC
+    <<in-resources-path(path="index.html")>>
+    #+CALL: in-resources-path(path="index.html")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя  | Значение по умолчанию | Описание                               |
+  |------+-----------------------+----------------------------------------|
+  | path | ""                    | Путь относительно дирректории ресурсов |
+  #+NAME: in-resources-path
+  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+    (save-excursion
+      (org-babel-execute-src-block
+        nil
+        (cdr (assoc 'in-some-path org-babel-library-of-babel))
+        (list
+         (cons :var "param=\"Расположение ресурсов времени исполнения\"")
+         (cons :var (format "path=\"%s\"" path))
+         (cons :var "projectvise=()"))))
   #+END_SRC
