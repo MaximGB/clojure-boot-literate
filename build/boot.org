@@ -1,4 +1,4 @@
-#+SETUPFILE: sutup.org
+#+SETUPFILE: setup.org
 
 * boot.properties
 
