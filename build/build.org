@@ -8,7 +8,7 @@
 
 * Экспорт кода из файлов
 
-  Для преобразования org-файлов в файлы с исходным кодом Clojure необходим файл *tangle.sh*
+  Для преобразования org-файлов в файлы с исходным кодом Clojure необходим файл *tangle.sh*[fn:thi-ng-credit]
 
   К сожалению экспортировать код напрямую из Emacs вызовом *M-x org-babel-tangle* просто так не получиться. Файлы
   проекта используют Library of Babel, расположенную в файле *build/lob.org* и для её инициализации нужен вызов
@@ -46,7 +46,7 @@
 
 * Экспорт кода проекта
 
-  Для извлечения кода из всех org-файлов используется скрипт *tangle-all.sh*.
+  Для извлечения кода из всех org-файлов используется скрипт *tangle-all.sh*[fn:thi-ng-credit].
 
   Для создания файла *tangle-all.sh* в дирректории с этим файлом поместите курсор в следующий блок кода и нажмите
   комбинацию клавиш C-u C-c C-v t чтобы записать содержимое блока на диск в файл *tangle.sh*.
@@ -55,3 +55,5 @@
   #+BEGIN_SRC sh :tangle ../tangle-all.sh  :shebang "#!/bin/sh" :noweb yes :results silent
     ./tangle.sh project.org build/*.org <<get-specification-param(title="Расположение org-исходников")>>/*.org
   #+END_SRC
+
+[fn:thi-ng-credit] Скрипты tangle.sh и tangle-all.sh были взяты из проекта [[https://github.com/thi-ng/babel][thi.ng/babel]].

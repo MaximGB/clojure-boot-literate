@@ -1,8 +1,39 @@
-#+LANGUAGE: russian
+#+LANGUAGE: ru
 #+AUTHOR: Maxim Bazhenov
-#+STARTUP: overview inlineimages
+#+EMAIL: maximgb@yandex.ru
+#+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
 #+PROPERTY: header-args :noweb yes :exports code :mkdirp yes :padline no :results value silent
-#+OPTIONS: toc:4 h:4
+#+OPTIONS: toc:nil h:4 f:t email:t
+#+STARTUP: overview inlineimages
 #+LATEX_CLASS: article
 #+LATEX_HEADER: \usepackage[a4paper,margin=1in,footskip=0.25in]{geometry}
+
+# Это только если у вас пакет minted версии < 2.0, если при экпорте в PDF unicode-символы отображаются нормально,
+# то всё что ниже можно удалить
+#+LATEX_HEADER: \makeatletter
+#+LATEX_HEADER: \newcommand{\minted@write@detok}[1]{%
+#+LATEX_HEADER:   \immediate\write\FV@OutFile{\detokenize{#1}}}%
+#+LATEX_HEADER:
+#+LATEX_HEADER: \newcommand{\minted@FVB@VerbatimOut}[1]{%
+#+LATEX_HEADER:   \@bsphack
+#+LATEX_HEADER:   \begingroup
+#+LATEX_HEADER:     \FV@UseKeyValues
+#+LATEX_HEADER:     \FV@DefineWhiteSpace
+#+LATEX_HEADER:     \def\FV@Space{\space}%
+#+LATEX_HEADER:     \FV@DefineTabOut
+#+LATEX_HEADER:     %\def\FV@ProcessLine{\immediate\write\FV@OutFile}% %Old, non-Unicode version
+#+LATEX_HEADER:     \let\FV@ProcessLine\minted@write@detok %Patch for Unicode
+#+LATEX_HEADER:     \immediate\openout\FV@OutFile #1\relax
+#+LATEX_HEADER:     \let\FV@FontScanPrep\relax
+#+LATEX_HEADER: %% DG/SR modification begin - May. 18, 1998 (to avoid problems with ligatures)
+#+LATEX_HEADER:     \let\@noligs\relax
+#+LATEX_HEADER: %% DG/SR modification end
+#+LATEX_HEADER:     \FV@Scan}
+#+LATEX_HEADER:     \let\FVB@VerbatimOut\minted@FVB@VerbatimOut
+#+LATEX_HEADER:
+#+LATEX_HEADER: \renewcommand\minted@savecode[1]{
+#+LATEX_HEADER:   \immediate\openout\minted@code\jobname.pyg
+#+LATEX_HEADER:   \immediate\write\minted@code{\expandafter\detokenize\expandafter{#1}}%
+#+LATEX_HEADER:   \immediate\closeout\minted@code}
+#+LATEX_HEADER: \makeatother
