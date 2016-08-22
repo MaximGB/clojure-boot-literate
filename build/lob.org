@@ -92,30 +92,32 @@
 
 * in-src-path
 
-  Возвращает абсолютный путь до файла в дирректории экспортируемых исходников проекта с учётом имени проекта.
+  Возвращает абсолютный путь до файла в одной из дирректорий экспортируемых исходников проекта с учётом имени проекта
+  и промежуточной дирректории, задаваемой параметром из спецификации проекта.
 
   *Примеры:*
   #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-src-path (path \"core.clj\"))
+    #+BEGIN_SRC clojure :tangle (org-sbe in-src-path (param="Расположение clj-исходников" path \"core.clj\"))
        ...
     #+END_SRC
-    <<in-src-path(path="core.clj")>>
-    #+CALL: in-src-path(path="core.clj")
+    <<in-src-path(param="Расоложение clj-исходников", path="core.clj")>>
+    #+CALL: in-src-path(param="Расположение clj-исходников", path="core.clj")
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя  | Значение по умолчанию | Описание                                |
-  |------+-----------------------+-----------------------------------------|
-  | path | ""                    | Путь отнистельно дирректории исходников |
+  | Имя   | Значение по умолчанию         | Описание                                                      |
+  |-------+-------------------------------+---------------------------------------------------------------|
+  | param | "Расположение clj-исходников" | Имя параметра, задющего часть пути относительно корня проекта |
+  | path  | ""                            | Путь отнистельно дирректории исходников                       |
   #+NAME: in-src-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+  #+BEGIN_SRC emacs-lisp :var param="Расположение clj-исходников" :var path="" :results value silent
     (save-excursion
       (let* ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org"))
              (src-path (org-babel-execute-src-block
                          nil
                          (cdr (assoc 'get-specification-param org-babel-library-of-babel))
                          (list
-                           (cons :var "title=\"Расположение исходников\""))))
+                           (cons :var (format "title=\"%s\"" param)))))
              (project-name (org-babel-execute-src-block
                              nil
                              (cdr (assoc 'get-specification-param org-babel-library-of-babel))
@@ -125,4 +127,116 @@
                                (cons :var "joinby=\"/\""))))
              (ns-path (replace-regexp-in-string "\-" "_" project-name)))
             (concat project-org-dir src-path "/" ns-path "/" path)))
+  #+END_SRC
+
+* in-clj-path
+
+  Возвращает абсолютный путь до файла в дирректории экспортируемых clj-исходников проекта с учётом имени проекта.
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    #+BEGIN_SRC clojure :tangle (org-sbe in-clj-path (path \"core.clj\"))
+       ...
+    #+END_SRC
+    <<in-clj-path(path="core.clj")>>
+    #+CALL: in-clj-path(path="core.clj")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя  | Значение по умолчанию | Описание                                    |
+  |------+-----------------------+---------------------------------------------|
+  | path | ""                    | Путь отнистельно дирректории clj-исходников |
+  #+NAME: in-clj-path
+  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+    (save-excursion
+      (org-babel-execute-src-block
+        nil
+        (cdr (assoc 'in-src-path org-babel-library-of-babel))
+        (list
+         (cons :var "param=\"Расположение clj-исходников\"")
+         (cons :var (format "path=\"%s\"" path)))))
+  #+END_SRC
+
+* in-cljs-path
+
+  Возвращает абсолютный путь до файла в дирректории экспортируемых cljs-исходников проекта с учётом имени проекта.
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    #+BEGIN_SRC clojure :tangle (org-sbe in-cljs-path (path \"core.clj\"))
+       ...
+    #+END_SRC
+    <<in-cljs-path(path="core.clj")>>
+    #+CALL: in-cljs-path(path="core.clj")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя  | Значение по умолчанию | Описание                                     |
+  |------+-----------------------+----------------------------------------------|
+  | path | ""                    | Путь отнистельно дирректории cljs-исходников |
+  #+NAME: in-cljs-path
+  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+    (save-excursion
+      (org-babel-execute-src-block
+        nil
+        (cdr (assoc 'in-src-path org-babel-library-of-babel))
+        (list
+         (cons :var "param=\"Расположение cljs-исходников\"")
+         (cons :var (format "path=\"%s\"" path)))))
+  #+END_SRC
+
+* in-cljc-path
+
+  Возвращает абсолютный путь до файла в дирректории экспортируемых cljc-исходников проекта с учётом имени проекта.
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    #+BEGIN_SRC clojure :tangle (org-sbe in-cljc-path (path \"core.clj\"))
+       ...
+    #+END_SRC
+    <<in-cljc-path(path="core.clj")>>
+    #+CALL: in-cljc-path(path="core.clj")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя  | Значение по умолчанию | Описание                                     |
+  |------+-----------------------+----------------------------------------------|
+  | path | ""                    | Путь отнистельно дирректории cljs-исходников |
+  #+NAME: in-cljc-path
+  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+    (save-excursion
+      (org-babel-execute-src-block
+        nil
+        (cdr (assoc 'in-src-path org-babel-library-of-babel))
+        (list
+         (cons :var "param=\"Расположение cljs-исходников\"")
+         (cons :var (format "path=\"%s\"" path)))))
+  #+END_SRC
+
+* in-tests-path
+
+  Возвращает абсолютный путь до файла в дирректории экспортируемых тестов проекта с учётом имени проекта.
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    #+BEGIN_SRC clojure :tangle (org-sbe in-tests-path (path \"core.clj\"))
+       ...
+    #+END_SRC
+    <<in-tests-path(path="core.clj")>>
+    #+CALL: in-tests-path(path="core.clj")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя  | Значение по умолчанию | Описание                                     |
+  |------+-----------------------+----------------------------------------------|
+  | path | ""                    | Путь отнистельно дирректории cljs-исходников |
+  #+NAME: in-tests-path
+  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+    (save-excursion
+      (org-babel-execute-src-block
+        nil
+        (cdr (assoc 'in-src-path org-babel-library-of-babel))
+        (list
+         (cons :var "param=\"Расположение тестов\"")
+         (cons :var (format "path=\"%s\"" path)))))
   #+END_SRC
