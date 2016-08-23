@@ -51,8 +51,8 @@
            (values (mapcar #'cdr table))
            (result (car (org-lookup-first title titles values))))
           (if (and result splitby joinby)
-              (mapconcat #'identity (split-string result (regexp-quote splitby) t "\s+") joinby))
-            result)))
+              (mapconcat #'identity (split-string result (regexp-quote splitby) t "\s+") joinby)
+              result))
   #+END_SRC
 
 * get-specification-param
