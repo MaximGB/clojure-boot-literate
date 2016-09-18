@@ -1,5 +1,5 @@
 Тут описаны вспомогательные функции-блоки для литературного проекта. Эти функции-блоки работают в среде *Emacs/Org*,
-а не являются каким-то функциями, которые Вы можете вызывать из Clojure.
+они не предназначены для вызова из Clojure.
 
 * time-is-now
 
@@ -16,12 +16,17 @@
   | Имя    | Значение по умолчанию | Описание                    |
   |--------+-----------------------+-----------------------------|
   | format | "%F %X"               | Формат возвращаемой строки. |
+
   #+NAME: time-is-now
   #+BEGIN_SRC emacs-lisp :var format="%F %X" :results value silent
     (format-time-string format)
   #+END_SRC
 
 * get-table-param
+  :PROPERTIES:
+  :CUSTOM_ID: lob-get-table-param
+  :END:
+
 
   Возвращает значение параметра с указанным именем из какой-либо таблицы. В первой колонке таблицы задаются имена
   параметров, во второй колонке - значения.
@@ -29,30 +34,48 @@
   *Примеры:*
   #+BEGIN_EXAMPLE
     <<get-table-param(table=../project.org:project-specification, title="Имя проекта")>>
-    <<get-table-param(table=../project.org:project-specification, title="Пространство имён main", splitby=".", joinby="/")>>
+    <<get-table-param(table=../project.org:project-specification, title="Имя проекта", splitby="-", joinby="_")>>
+    <<get-table param(table=../project.org:project-specification, title="Clojure/Версия")>>
     #+CALL: get-table-param(table=../project.org:project-specification, title="Имя проекта")
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя     | Значение по умолчанию | Описание                                                                     |
-  |---------+-----------------------+------------------------------------------------------------------------------|
-  | table   | (quote ())            | Ссылка на таблицу. В виде [путь к файлу с таблицей:]имя таблицы, например:   |
-  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же |
-  |         |                       | файле из которого делается вызов. Значение по-умолчанию позволяет просто без |
-  |         |                       | ошибки вернуть nil, так как таблица передаётся в блок просто в виде списка.  |
-  | title   | ""                    | Имя параметра.                                                               |
-  | splitby | ""                    | Разделитель значений параметра. Работает совместно с joinby. Если значения   |
-  |         |                       | в ячейке перечислены, например, через запятую, то, указав splitby=",", мы их |
-  |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.          |
-  | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.              |
+  | Имя     | Значение по умолчанию | Описание                                                                         |
+  |---------+-----------------------+----------------------------------------------------------------------------------|
+  | table   | (quote ())            | Ссылка на таблицу. В виде [путь к файлу с таблицей:]имя таблицы, например:       |
+  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же     |
+  |         |                       | файле из которого делается вызов. Значение по-умолчанию позволяет просто без     |
+  |         |                       | ошибки вернуть nil, так как таблица передаётся в блок просто в виде списка.      |
+  |---------+-----------------------+----------------------------------------------------------------------------------|
+  | title   | ""                    | Имя параметра. Поддерживаются имена-пути, или емена содержащие '/'. Если         |
+  |         |                       | задан такой параметр, то он разбивается на части, и каждая часть рассматривается |
+  |         |                       | как отдельный параметр. Поиск очередного параметра начинается со строки          |
+  |         |                       | предыдущего, значение предыдущего параметра отбрасывается. Возвращается значение |
+  |         |                       | последнего параметра.                                                            |
+  |---------+-----------------------+----------------------------------------------------------------------------------|
+  | splitby | ""                    | Разделитель значений параметра. Работает совместно с joinby. Если значения       |
+  |         |                       | в ячейке перечислены, например, через запятую, то, указав splitby=",", мы их     |
+  |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.              |
+  |---------+-----------------------+----------------------------------------------------------------------------------|
+  | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.                  |
   #+NAME: get-table-param
-  #+BEGIN_SRC emacs-lisp :var table=(quote ()) :var title="" :var splitby="" :var joinby="" :hlines no :results value silent
-    (let* ((titles (mapcar #'car table))
-           (values (mapcar #'cdr table))
-           (result (car (org-lookup-first title titles values))))
-          (if (and result splitby joinby)
-              (mapconcat #'identity (split-string result (regexp-quote splitby) t "\s+") joinby)
-              result))
+  #+BEGIN_SRC emacs-lisp :var table=(quote ()) :var title="" :var splitby="" :var joinby="" :hlines yes :results value silent
+    (let* ((table-adopted (mapcar (lambda (x)
+                                    (if (equal x 'hline)
+                                       '(hline hline hline)
+                                     x))
+                                  table))
+           (titles (mapcar #'car table-adopted))
+           (path (split-string title (regexp-quote "/")))
+           (last-index (reduce (lambda (index title)
+                                 (cl-position title titles :start index :test #'equal))
+                               path
+                               :initial-value nil)))
+      (if last-index
+          (let* ((result (nth 1 (nth last-index table-adopted))))
+            (if (and result splitby joinby)
+                (mapconcat #'identity (split-string result (regexp-quote splitby) t "\s+") joinby)
+              result))))
   #+END_SRC
 
 * get-specification-param
@@ -67,13 +90,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя     | Значение по умолчанию | Описание                                                                     |
-  |---------+-----------------------+------------------------------------------------------------------------------|
-  | title   | ""                    | Имя параметра.                                                               |
-  | splitby | ""                    | Разделитель значений параметра. Работает совместно с joinby. Если значения   |
-  |         |                       | в ячейке перечислены, например, через запятую, то, указав splitby=",", мы их |
-  |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.          |
-  | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.              |
+  | Имя     | Значение по умолчанию | Описание                                                |
+  |---------+-----------------------+---------------------------------------------------------|
+  | title   | ""                    | Имя параметра (см. [[#lob-get-table-param][(get-table-param)]]).                  |
+  | splitby | ""                    | Разделитель значений параметра (см. [[#lob-get-table-param][(get-table-param)]]). |
+  | joinby  |                       | Объединитель значений параметр (см. [[#lob-get-table-param][(get-table-param)]]). |
   #+NAME: get-specification-param
   #+BEGIN_SRC emacs-lisp :var title="" :var splitby="" :var joinby="" :results value silent
     (save-excursion
@@ -101,22 +122,22 @@
 
   *Примеры:*
   #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-some-path (param="Расположение clj-исходников" path \"core.clj\"))
+    #+BEGIN_SRC clojure :tangle (org-sbe in-some-path (param="Clojure/Расположение исходников" path \"core.clj\"))
        ...
     #+END_SRC
-    <<in-some-path(param="Расоложение clj-исходников", path="core.clj")>>
-    #+CALL: in-some-path(param="Расположение clj-исходников", path="core.clj")
+    <<in-some-path(param="Clojure/Расоложение исходников", path="core.clj")>>
+    #+CALL: in-some-path(param="Clojure/Расположение исходников", path="core.clj")
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя         | Значение по умолчанию         | Описание                                                      |
-  |-------------+-------------------------------+---------------------------------------------------------------|
-  | param       | "Расположение clj-исходников" | Имя параметра, задющего часть пути относительно корня проекта |
-  | path        | ""                            | Путь относительно дирректории исходников                      |
-  | projectvise | t                             | Вставлять имя проекта между базовой дирректорией              |
-  |             |                               | формируемым окончанием пути.                                  |
+  | Имя         | Значение по умолчанию             | Описание                                                      |
+  |-------------+-----------------------------------+---------------------------------------------------------------|
+  | param       | "Clojure/Расположение исходников" | Имя параметра, задющего часть пути относительно корня проекта |
+  | path        | ""                                | Путь относительно дирректории исходников                      |
+  | projectvise | t                                 | Вставлять имя проекта между базовой дирректорией              |
+  |             |                                   | и формируемым окончанием пути.                                |
   #+NAME: in-some-path
-  #+BEGIN_SRC emacs-lisp :var param="Расположение clj-исходников" :var path="" :var projectvise='t :results value silent
+  #+BEGIN_SRC emacs-lisp :var param="Clojure/Расположение исходников" :var path="" :var projectvise='t :results value silent
     (save-excursion
       (let* ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org"))
              (src-path (org-babel-execute-src-block
@@ -135,45 +156,13 @@
             (concat project-org-dir src-path "/" (if projectvise (concat ns-path "/") "") path)))
   #+END_SRC
 
-* in-src-path
-
-  Возвращает абсолютный путь до файла в дирректории экспортируемых исходников проекта с учётом имени проекта.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение исходников
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-src-path (path \"core.clj\"))
-       ...
-    #+END_SRC
-    <<in-src-path(path="core.clj")>>
-    #+CALL: in-src-path(path="core.clj")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  | Имя  | Значение по умолчанию | Описание                                 |
-  |------+-----------------------+------------------------------------------|
-  | path | ""                    | Путь относительно дирректории исходников |
-  #+NAME: in-src-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"Расположение исходников\"")
-         (cons :var (format "path=\"%s\"" path)))))
-  #+END_SRC
-
 * in-clj-path
 
   Возвращает абсолютный путь до файла в дирректории экспортируемых clj-исходников проекта с учётом имени проекта.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
   - Имя проекта
-  - Расположение clj-исходников
+  - Clojure/Расположение исходников
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -185,9 +174,9 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя  | Значение по умолчанию | Описание                                    |
-  |------+-----------------------+---------------------------------------------|
-  | path | ""                    | Путь относительно дирректории clj-исходников |
+  | Имя  | Значение по умолчанию | Описание                                         |
+  |------+-----------------------+--------------------------------------------------|
+  | path | ""                    | Путь относительно дирректории Clojure исходников |
   #+NAME: in-clj-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -195,7 +184,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Расположение clj-исходников\"")
+         (cons :var "param=\"Clojure/Расположение исходников\"")
          (cons :var (format "path=\"%s\"" path)))))
   #+END_SRC
 
@@ -205,7 +194,7 @@
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
   - Имя проекта
-  - Расположение cljs-исходников
+  - ClojureScript/Расположение исходников
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -217,9 +206,9 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
-  | Имя  | Значение по умолчанию | Описание                                     |
-  |------+-----------------------+----------------------------------------------|
-  | path | ""                    | Путь относительно дирректории cljs-исходников |
+  | Имя  | Значение по умолчанию | Описание                                               |
+  |------+-----------------------+--------------------------------------------------------|
+  | path | ""                    | Путь относительно дирректории ClojureScript исходников |
   #+NAME: in-cljs-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -227,39 +216,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Расположение cljs-исходников\"")
-         (cons :var (format "path=\"%s\"" path)))))
-  #+END_SRC
-
-* in-cljc-path
-
-  Возвращает абсолютный путь до файла в дирректории экспортируемых cljc-исходников проекта с учётом имени проекта.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение cljc-исходников
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-cljc-path (path \"core.clj\"))
-       ...
-    #+END_SRC
-    <<in-cljc-path(path="core.clj")>>
-    #+CALL: in-cljc-path(path="core.clj")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  | Имя  | Значение по умолчанию | Описание                                     |
-  |------+-----------------------+----------------------------------------------|
-  | path | ""                    | Путь относительно дирректории cljs-исходников |
-  #+NAME: in-cljc-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"Расположение cljs-исходников\"")
+         (cons :var "param=\"ClojureScript/Расположение исходников\"")
          (cons :var (format "path=\"%s\"" path)))))
   #+END_SRC
 
@@ -297,11 +254,11 @@
 
 * in-resources-path
 
-  Возвращает абсолютный путь до файла в дирректории ресурсов.
+  Возвращает абсолютный путь до файла в дирректории classpath ресурсов.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
   - Имя проекта
-  - Расположение ресурсов времени исполнения
+  - Расположение classpath ресурсов
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -323,7 +280,134 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Расположение ресурсов времени исполнения\"")
+         (cons :var "param=\"Расположение classpath ресурсов\"")
          (cons :var (format "path=\"%s\"" path))
          (cons :var "projectvise=()"))))
+  #+END_SRC
+
+* in-assets-path
+
+  Возвращает абсолютный путь до файла в дирректории прочих ресурсов.
+
+  *Требования*: В спецификации проекта должен быть заданы параметры:
+  - Имя проекта
+  - Расположение прочих ресурсов
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    #+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
+       ...
+    #+END_SRC
+    <<in-resources-path(path="index.html")>>
+    #+CALL: in-resources-path(path="index.html")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя  | Значение по умолчанию | Описание                               |
+  |------+-----------------------+----------------------------------------|
+  | path | ""                    | Путь относительно дирректории ресурсов |
+  #+NAME: in-assets-path
+  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+    (save-excursion
+      (org-babel-execute-src-block
+        nil
+        (cdr (assoc 'in-some-path org-babel-library-of-babel))
+        (list
+         (cons :var "param=\"Расположение прочих ресурсов\"")
+         (cons :var (format "path=\"%s\"" path))
+         (cons :var "projectvise=()"))))
+  #+END_SRC
+* in-target-path
+
+  Возвращает абсолютный путь до файла в целевой дирректории.
+
+  *Требования*: В спецификации проекта должен быть заданы параметры:
+  - Имя проекта
+  - Целевая дирректория
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    #+BEGIN_SRC clojure :tangle (org-sbe in-target-path (path \"index.html"))
+       ...
+    #+END_SRC
+    <<in-target-path(path="index.html")>>
+    #+CALL: in-target-path(path="index.html")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя  | Значение по умолчанию | Описание                              |
+  |------+-----------------------+---------------------------------------|
+  | path | ""                    | Путь относительно целевой дирректории |
+  #+NAME: in-target-path
+  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
+    (save-excursion
+      (org-babel-execute-src-block
+        nil
+        (cdr (assoc 'in-some-path org-babel-library-of-babel))
+        (list
+         (cons :var "param=\"Целевая дирректория\"")
+         (cons :var (format "path=\"%s\"" path))
+         (cons :var "projectvise=()"))))
+  #+END_SRC
+
+* render-project-dependencies
+
+  Возвращает строки содержащие зависимости проекта взятые из таблицы зависимостей
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    <<render-project-dependencies()>>
+    #+CALL: render-project-dependencies()
+  #+END_EXAMPLE
+
+  #+NAME: render-project-dependencies
+  #+BEGIN_SRC emacs-lisp :results value silent
+    (let ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org")))
+      (if project-org-dir
+          (let* ((project-spec-ref (concat project-org-dir "project.org:project-dependencies"))
+                 (deps-table (org-babel-ref-resolve project-spec-ref)))
+            (mapconcat (lambda (dependency)
+                         (destructuring-bind (name version scope _) dependency
+                           (if (not (string= "" scope))
+                               (format "[%s \"%s\" :%s]" name version scope)
+                             (format "[%s \"%s\"]" name version))))
+                       ; Skipping header and header separating hline
+                       (cddr deps-table)
+                       "\n"))))
+  #+END_SRC
+
+* render-code-block-if
+
+  Выводит результат работы блока кода если в спецификации проекта присутствует параметр с требуемым значением.
+
+  *Требования*:
+  - Блок кода с данным именем должен присутствовать в org-файле из которого делается вызов
+
+  *Примеры:*
+  #+BEGIN_EXAMPLE
+    <<render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")>>
+    #+CALL: render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")
+  #+END_EXAMPLE
+
+  #+CAPTION: *Параметры:*
+  | Имя       | Значение по умолчанию | Описание                                                                        |
+  |-----------+-----------------------+---------------------------------------------------------------------------------|
+  | name      | ""                    | Имя блока присвоенное через диррективу ~#+NAME:~.                               |
+  | condition | ""                    | Условие вывода в формате "ПАРАМЕТР = ЗНАЧЕНИЕ", где = операция сравнения строк. |
+
+  #+NAME: render-codeblock-if
+  #+BEGIN_SRC emacs-lisp :var name="" :var condition="" :results value silent
+        (save-excursion
+          (destructuring-bind (&optional (param-name "") &optional (cond-value "")) (split-string condition "=" t "\s+")
+            (let ((param-value (org-babel-execute-src-block
+                                nil
+                                (cdr (assoc 'get-specification-param org-babel-library-of-babel))
+                                (list
+                                 (cons :var (format "title=\"%s\"" param-name))))))
+              (if (string= param-value cond-value)
+                  (progn
+                    (org-babel-goto-named-src-block name)
+                    (let ((tangle-result (org-babel-tangle-single-block "")))
+                      (nth 5 tangle-result)))
+                ""))))
   #+END_SRC

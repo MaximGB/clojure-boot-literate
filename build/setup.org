@@ -3,7 +3,7 @@
 #+EMAIL: maximgb@yandex.ru
 #+SELECT_TAGS: export
 #+EXCLUDE_TAGS: noexport
-#+PROPERTY: header-args :noweb yes :exports code :mkdirp yes :padline no :results value silent
+#+PROPERTY: header-args :noweb yes :exports code :mkdirp yes :padline yes :results value silent
 #+OPTIONS: toc:nil h:4 f:t email:t
 #+STARTUP: overview inlineimages
 #+LATEX_CLASS: article

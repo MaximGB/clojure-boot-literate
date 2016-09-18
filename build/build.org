@@ -31,7 +31,7 @@
     emacs -Q --batch \
         --eval \
         "(progn
-         (require 'org)(require 'ob)(require 'ob-tangle)(require 'ob-lob)
+         (require 'cl)(require 'org)(require 'ob)(require 'ob-tangle)(require 'ob-lob)
          (org-babel-lob-ingest \"build/lob.org\")
          (setq org-confirm-babel-evaluate nil)
          (mapc (lambda (file)
