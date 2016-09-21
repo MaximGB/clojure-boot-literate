@@ -211,11 +211,11 @@
        []
        (comp
          (serve :dir "<<get-specification-param(title="Целевая дирректория")>>/")
+         (cljs-repl)
          (watch)
          (speak)
-         (reload :on-jsload 'literate_boot.core/main)
-         (cljs-repl)
          (cljs :source-map true :optimizations :none)
+         (reload :on-jsload 'literate_boot.core/main)
          (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
    #+END_SRC
 
