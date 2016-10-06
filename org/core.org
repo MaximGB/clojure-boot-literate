@@ -8,7 +8,7 @@
 
     #+NAME: core/main
     #+BEGIN_SRC clojure :tangle (org-sbe in-clj-path (path \"core.clj\"))
-      (ns <<get-specification-param(title="Имя проекта")>>.<<get-specification-param(title="Пространство имён main")>>
+      (ns <<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
         (:gen-class))
 
       (defn -main
@@ -19,7 +19,7 @@
 
     #+NAME: core/main
     #+BEGIN_SRC clojure :tangle (org-sbe in-cljs-path (path \"core.cljs\"))
-      (ns <<get-specification-param(title="Имя проекта")>>.<<get-specification-param(title="Пространство имён main")>>
+      (ns <<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
         (:refer-clojure))
 
       (enable-console-print!)
