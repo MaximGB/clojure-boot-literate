@@ -113,7 +113,7 @@
                   :version "<<get-specification-param(title="Версия проекта")>>")
              (aot :all true)
              (uber)
-             (jar :main '<<get-specification-param(title="Имя проекта")>>/<<get-specification-param(title="Пространство имён main")>>)
+             (jar :main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
              (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
    #+END_SRC
 
@@ -129,9 +129,9 @@
      (deftask clj-run
        "Runs the project's main function"
        []
-       (require '<<get-specification-param(title="Имя проекта")>>.<<get-specification-param(title="Пространство имён main")>>)
-       (let [main-fn (resolve '<<get-specification-param(title="Имя проекта")>>.<<get-specification-param(title="Пространство имён main")>>/-main)]
-         (comp (with-pass-thru _ (main-fn)))))
+       (require '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
+       (let [main-fn (resolve '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main)]
+         (comp (aot :all true) (with-pass-thru _ (main-fn)))))
    #+END_SRC
 
    Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-run}
