@@ -13,6 +13,7 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя    | Значение по умолчанию | Описание                    |
   |--------+-----------------------+-----------------------------|
   | format | "%F %X"               | Формат возвращаемой строки. |
@@ -27,7 +28,6 @@
   :CUSTOM_ID: lob-get-table-param
   :END:
 
-
   Возвращает значение параметра с указанным именем из какой-либо таблицы. В первой колонке таблицы задаются имена
   параметров, во второй колонке - значения.
 
@@ -40,10 +40,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя     | Значение по умолчанию | Описание                                                                         |
   |---------+-----------------------+----------------------------------------------------------------------------------|
   | table   | (quote ())            | Ссылка на таблицу. В виде [путь к файлу с таблицей:]имя таблицы, например:       |
-  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же     |
+  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же |
   |         |                       | файле из которого делается вызов. Значение по-умолчанию позволяет просто без     |
   |         |                       | ошибки вернуть nil, так как таблица передаётся в блок просто в виде списка.      |
   |---------+-----------------------+----------------------------------------------------------------------------------|
@@ -58,6 +59,7 @@
   |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.              |
   |---------+-----------------------+----------------------------------------------------------------------------------|
   | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.                  |
+
   #+NAME: get-table-param
   #+BEGIN_SRC emacs-lisp :var table=(quote ()) :var title="" :var splitby="" :var joinby="" :hlines yes :results value silent
     (let* ((table-adopted (mapcar (lambda (x)
@@ -90,11 +92,13 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя     | Значение по умолчанию | Описание                                                |
   |---------+-----------------------+---------------------------------------------------------|
   | title   | ""                    | Имя параметра (см. [[#lob-get-table-param][(get-table-param)]]).                  |
   | splitby | ""                    | Разделитель значений параметра (см. [[#lob-get-table-param][(get-table-param)]]). |
   | joinby  |                       | Объединитель значений параметр (см. [[#lob-get-table-param][(get-table-param)]]). |
+
   #+NAME: get-specification-param
   #+BEGIN_SRC emacs-lisp :var title="" :var splitby="" :var joinby="" :results value silent
     (save-excursion
@@ -130,12 +134,14 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{8cm}| :float nil
   | Имя         | Значение по умолчанию             | Описание                                                      |
   |-------------+-----------------------------------+---------------------------------------------------------------|
   | param       | "Clojure/Расположение исходников" | Имя параметра, задющего часть пути относительно корня проекта |
   | path        | ""                                | Путь относительно дирректории исходников                      |
   | projectvise | t                                 | Вставлять имя проекта между базовой дирректорией              |
   |             |                                   | и формируемым окончанием пути.                                |
+
   #+NAME: in-some-path
   #+BEGIN_SRC emacs-lisp :var param="Clojure/Расположение исходников" :var path="" :var projectvise='t :results value silent
     (save-excursion
@@ -174,9 +180,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя  | Значение по умолчанию | Описание                                         |
   |------+-----------------------+--------------------------------------------------|
   | path | ""                    | Путь относительно дирректории Clojure исходников |
+
   #+NAME: in-clj-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -206,9 +214,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя  | Значение по умолчанию | Описание                                               |
   |------+-----------------------+--------------------------------------------------------|
   | path | ""                    | Путь относительно дирректории ClojureScript исходников |
+
   #+NAME: in-cljs-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -238,9 +248,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя  | Значение по умолчанию | Описание                                        |
   |------+-----------------------+-------------------------------------------------|
   | path | ""                    | Путь относительно дирректории исходников тестов |
+
   #+NAME: in-tests-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -270,9 +282,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя  | Значение по умолчанию | Описание                               |
   |------+-----------------------+----------------------------------------|
   | path | ""                    | Путь относительно дирректории ресурсов |
+
   #+NAME: in-resources-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -303,9 +317,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя  | Значение по умолчанию | Описание                               |
   |------+-----------------------+----------------------------------------|
   | path | ""                    | Путь относительно дирректории ресурсов |
+
   #+NAME: in-assets-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -335,9 +351,11 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя  | Значение по умолчанию | Описание                              |
   |------+-----------------------+---------------------------------------|
   | path | ""                    | Путь относительно целевой дирректории |
+
   #+NAME: in-target-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
     (save-excursion
@@ -362,18 +380,121 @@
 
   #+NAME: render-project-dependencies
   #+BEGIN_SRC emacs-lisp :results value silent
+    ; Full dependency definition specification is given here
+    ; https://github.com/cemerick/pomegranate/blob/master/src/main/clojure/cemerick/pomegranate/aether.clj
+    ; in resolve-dependencies function
     (let ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org")))
       (if project-org-dir
           (let* ((project-spec-ref (concat project-org-dir "project.org:project-dependencies"))
-                 (deps-table (org-babel-ref-resolve project-spec-ref)))
-            (mapconcat (lambda (dependency)
-                         (destructuring-bind (name version scope _) dependency
-                           (if (not (string= "" scope))
-                               (format "[%s \"%s\" :%s]" name version scope)
-                             (format "[%s \"%s\"]" name version))))
-                       ; Skipping header and header separating hline
-                       (cddr deps-table)
-                       "\n"))))
+                 ; deps-table is a list of lists and hlines
+                 (deps-table (org-babel-ref-resolve project-spec-ref))
+                 ; Dependency representing hash-map key traversing sequence
+                 (serialize-key-traversing-seq '(name version scope optional classifier extension exclusions)))
+            (cl-labels (
+                      ; dependency hash map has following keys
+                      ; - name - dependency artifact name
+                      ; - version - dependency artifact version
+                      ; - scope - dependency scope
+                      ; - optional - flag showing whether a dependency is optional, any value but "" and "no" is considered to be true
+                      ; - classifier - dependency Maven-classifier
+                      ; - extension - dependency Maven-extension
+                      ; - exclusions - list of transient dependency exclusions for a dependency
+                      (make-dependency (name version scope optional classifier extension exclusions)
+                                       (let ((new-dep (make-hash-table)))
+                                         (puthash 'name name new-dep)
+                                         (puthash 'version (format "%s" version) new-dep)
+                                         (puthash 'scope scope new-dep)
+                                         (puthash 'optional (if (or
+                                                                 (string-empty-p optional)
+                                                                 (string= "no" (downcase optional)))
+                                                                nil
+                                                              't)
+                                                  new-dep)
+                                         (puthash 'classifier classifier new-dep)
+                                         (puthash 'extension  extension  new-dep)
+                                         (puthash 'exclusions exclusions new-dep)
+                                         new-dep))
+                      ; Dependency serializing function
+                      (serialize-dependency (dependency)
+                                            (concat "["
+                                                    ; Traversing every key in the dependency hash table and building dependency definition string
+                                                    (mapconcat (lambda (key)
+                                                                 (let ((value (gethash key dependency)))
+                                                                      (cond
+                                                                        ; name is always given
+                                                                        ((equal key 'name)
+                                                                            value)
+                                                                              ; I'm not sure but maybe version might be empty
+                                                                        ((and (equal key 'version) (not (string-empty-p value)))
+                                                                            (format "\"%s\"" value))
+                                                                              ; Scope is optional
+                                                                        ((and (equal key 'scope) (not (string-empty-p value)))
+                                                                            (format ":scope \"%s\"" value))
+                                                                              ; Optional flag should be set only if it's true
+                                                                        ((and (equal key 'optional) value)
+                                                                            ":optional true")
+                                                                              ; Classifier is optinal
+                                                                        ((and (equal key 'classifier) (not (string-empty-p value)))
+                                                                            (format ":classifier \"%s\"" value))
+                                                                              ; Extension is optional
+                                                                        ((and (equal key 'extension) (not (string-empty-p value)))
+                                                                            (format ":extension \"%s\"" value))
+                                                                              ; Exclusions should be given if there're any
+                                                                        ((and (equal key 'exclusions) (not (seq-empty-p value)))
+                                                                            (concat
+                                                                                ":exclusions ["
+                                                                                (mapconcat #'serialize-dependency value " ")
+                                                                                "]")))))
+                                                               serialize-key-traversing-seq
+                                                               " ")
+                                                    "]")))
+              (let (
+                    ; deps-adopted is a list of hash tables representing dependencies
+                    (deps-adopted (reduce
+                                    (lambda (deps-adopted dependency)
+                                      ; Skip any hlines and empty rows
+                                      (if (or (equal dependency 'hline) (every #'string-empty-p dependency))
+                                          deps-adopted
+                                        ; Else destructuring the dependency given
+                                        (destructuring-bind (name version scope optional classifier extension exclusions ex-classifier ex-extension _) dependency
+                                          (cond
+                                           ; Append new dependency hash map in case there's a name given
+                                           ((not (string-empty-p name))
+                                            (append deps-adopted
+                                                    (list (make-dependency name
+                                                                           version
+                                                                           scope
+                                                                           optional
+                                                                           classifier
+                                                                           extension
+                                                                           (if (not (string-empty-p exclusions))
+                                                                               (list (make-dependency exclusions
+                                                                                                      ""
+                                                                                                      ""
+                                                                                                      ""
+                                                                                                      ex-classifier
+                                                                                                      ex-extension
+                                                                                                      nil)))))))
+                                           ; Append another exclusion in case there's no name but exclusions given
+                                           ((and (string-empty-p name) (not (string-empty-p exclusions)))
+                                            (let* ((last-dep (car (last deps-adopted))))
+                                              (puthash 'exclusions
+                                                       (append (gethash 'exclusions last-dep nil)
+                                                               (list (make-dependency exclusions
+                                                                                      ""
+                                                                                      ""
+                                                                                      ""
+                                                                                      ex-classifier
+                                                                                      ex-extension
+                                                                                      nil)))
+                                                       last-dep)
+                                              deps-adopted))))))
+                                    ; Skipping title line
+                                    (cdr deps-table)
+                                    :initial-value nil)))
+                ; So now I have list of dependencies (as hash maps) which I'm to transform into Clojure's vector of vectors
+                ; in Clojure syntax
+                (mapconcat #'serialize-dependency deps-adopted "\n"))))))
   #+END_SRC
 
 * render-code-block-if
@@ -390,6 +511,7 @@
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
+  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
   | Имя       | Значение по умолчанию | Описание                                                                        |
   |-----------+-----------------------+---------------------------------------------------------------------------------|
   | name      | ""                    | Имя блока присвоенное через диррективу ~#+NAME:~.                               |
