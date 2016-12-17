@@ -16,7 +16,7 @@
 
 * build.boot
 
-  Файл ~build.boot~ исполняется Boot при запуске src_shell{boot task}, где ~task~ имя задачи для исполнения. Задачи проекта
+  Файл ~build.boot~ исполняется Boot при запуске src_sh{boot task}, где ~task~ имя задачи для исполнения. Задачи проекта
   описаны ниже, в соответствующем разделе.
 
   #+NAME: build.boot
@@ -117,7 +117,7 @@
               (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
     #+END_SRC
 
-    Для вызова задачи выполните: src_shell[:dir ".."]{boot clj-build}
+    Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-build}
 
 *** clj-run
 
@@ -134,7 +134,7 @@
           (comp (aot :all true) (with-pass-thru _ (main-fn)))))
     #+END_SRC
 
-    Для вызова задачи выполните: src_shell[:dir ".."]{boot clj-run}
+    Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-run}
 
 ** Boot-задачи проекта для /ClojureScript/
 
@@ -151,13 +151,13 @@
 
 *** cljs-figwheel
 
-    Эта задача интерфейс к *figwheel*, для запуска используйте src_shell{boot cljs-figwheel}.\\
+    Эта задача интерфейс к *figwheel*, для запуска используйте src_sh[:dir "."]{boot cljs-figwheel}.\\
 
     Компилирует ClojureScript файлы, запускает HTTP-server обслуживающий дирректорию публичных ресурсов,
     запускает монитор для перекомпиляции, запускает nRepl сервер. Для входа в ClojureScript REPL выполнить
     "9 шагов к успеху":
 
-    1. выполнить src_shell{boot cljs-figwheel}
+    1. выполнить src_sh{boot cljs-figwheel}
     2. дождаться звукового сигнала
     3. посмотреть в консоли адрес и порт запущенного веб-сервера (обычно http://localhost:3449)
     4. открыть браузер, открыть URL, увидеть в JavaScript-консоли сообщение Opened Websocket REPL connection
