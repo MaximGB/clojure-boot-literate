@@ -19,7 +19,7 @@
   комбинацию клавиш C-u C-c C-v t чтобы записать содержимое блока на диск в файл *tangle.sh*.
 
   #+NAME: tangle.sh
-  #+BEGIN_SRC sh :tangle ../tangle.sh  :shebang "#!/bin/sh" :noweb yes :results silent
+  #+BEGIN_SRC shell :tangle ../tangle.sh  :shebang "#!/bin/sh" :noweb yes :results silent
     DIR=`pwd`
     FILES=""
 
@@ -31,13 +31,16 @@
     emacs -Q --batch \
         --eval \
         "(progn
-         (require 'cl)(require 'org)(require 'ob)(require 'ob-tangle)(require 'ob-lob)
-         (org-babel-lob-ingest \"build/lob.org\")
-         (setq org-confirm-babel-evaluate nil)
-         (mapc (lambda (file)
-                (find-file (expand-file-name file \"$DIR\"))
-                (org-babel-tangle)
-                (kill-buffer)) '($FILES)))" \
+           (require 'package)
+           (let ((default-directory package-user-dir))
+             (normal-top-level-add-subdirs-to-load-path))
+           (require 'cl)(require 'org)(require 'ob)(require 'ob-tangle)(require 'ob-lob)
+           (org-babel-lob-ingest \"build/lob.org\")
+           (setq org-confirm-babel-evaluate nil)
+           (mapc (lambda (file)
+                  (find-file (expand-file-name file \"$DIR\"))
+                  (org-babel-tangle)
+                  (kill-buffer)) '($FILES)))" \
     #2>&1 | grep Tangled
   #+END_SRC
 
@@ -52,8 +55,8 @@
   комбинацию клавиш C-u C-c C-v t чтобы записать содержимое блока на диск в файл *tangle.sh*.
 
   #+NAME: tangle-all.sh
-  #+BEGIN_SRC sh :tangle ../tangle-all.sh  :shebang "#!/bin/sh" :noweb yes :results silent
+  #+BEGIN_SRC shell :tangle ../tangle-all.sh  :shebang "#!/bin/sh" :noweb yes :results silent
     ./tangle.sh project.org build/*.org <<get-specification-param(title="Расположение org-исходников")>>/*.org
   #+END_SRC
 
-[fn:thi-ng-credit] Скрипты tangle.sh и tangle-all.sh были взяты из проекта [[https://github.com/thi-ng/babel][thi.ng/babel]].
+[fn:thi-ng-credit] Скрипты tangle.sh и tangle-all.sh были взяты из проекта [[https://github.com/thi-ng/babel][thi.ng/babel]] и немного адаптированы.

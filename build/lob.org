@@ -376,6 +376,7 @@
   #+BEGIN_EXAMPLE
     <<render-project-dependencies()>>
     #+CALL: render-project-dependencies()
+    (org-sbe render-project-dependencies)
   #+END_EXAMPLE
 
   #+NAME: render-project-dependencies
@@ -383,6 +384,9 @@
     ; Full dependency definition specification is given here
     ; https://github.com/cemerick/pomegranate/blob/master/src/main/clojure/cemerick/pomegranate/aether.clj
     ; in resolve-dependencies function
+    (require 'subr-x)
+    (require 'seq)
+
     (let ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org")))
       (if project-org-dir
           (let* ((project-spec-ref (concat project-org-dir "project.org:project-dependencies"))
@@ -519,17 +523,17 @@
 
   #+NAME: render-codeblock-if
   #+BEGIN_SRC emacs-lisp :var name="" :var condition="" :results value silent
-        (save-excursion
-          (destructuring-bind (&optional (param-name "") &optional (cond-value "")) (split-string condition "=" t "\s+")
-            (let ((param-value (org-babel-execute-src-block
-                                nil
-                                (cdr (assoc 'get-specification-param org-babel-library-of-babel))
-                                (list
-                                 (cons :var (format "title=\"%s\"" param-name))))))
-              (if (string= param-value cond-value)
-                  (progn
-                    (org-babel-goto-named-src-block name)
-                    (let ((tangle-result (org-babel-tangle-single-block "")))
-                      (nth 5 tangle-result)))
-                ""))))
+    (save-excursion
+      (destructuring-bind (&optional (param-name "") &optional (cond-value "")) (split-string condition "=" t "\s+")
+        (let ((param-value (org-babel-execute-src-block
+                            nil
+                            (cdr (assoc 'get-specification-param org-babel-library-of-babel))
+                            (list
+                             (cons :var (format "title=\"%s\"" param-name))))))
+          (if (string= param-value cond-value)
+              (progn
+                (org-babel-goto-named-src-block name)
+                (let ((tangle-result (org-babel-tangle-single-block "")))
+                  (nth 5 tangle-result)))
+            ""))))
   #+END_SRC

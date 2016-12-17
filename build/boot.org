@@ -16,11 +16,11 @@
 
 * build.boot
 
-  Файл ~build.boot~ исполняется Boot при запуске src_sh{boot task}, где ~task~ имя задачи для исполнения. Задачи проекта
+  Файл ~build.boot~ исполняется Boot при запуске src_shell{boot task}, где ~task~ имя задачи для исполнения. Задачи проекта
   описаны ниже, в соответствующем разделе.
 
   #+NAME: build.boot
-  #+BEGIN_SRC clojure :tangle ../build.boot :noweb yes
+  #+BEGIN_SRC clojure :tangle ../build.boot :noweb yes :exports none
     (require '[clojure.java.io :refer [file]])
 
     <<set-project-paths>>
@@ -80,146 +80,137 @@
       (set-env! :dependencies #(into % deps)))
   #+END_SRC
 
-* Boot-задачи проекта для /Clojure/
+** Boot-задачи проекта для /Clojure/
 
-  Boot-задачи для /Clojure/ будут добавлены в результирующий ~build.boot~, если в спецификации проекта в параметре
-  ~Clojure~ указано значение ~yes~.
+   Boot-задачи для /Clojure/ будут добавлены в результирующий ~build.boot~, если в спецификации проекта в параметре
+   ~Clojure~ указано значение ~yes~.
 
-  Все блоки кода с boot-задачами для /Clojure/ должны иметь имя ~boot-clojure-task~. Каждая задача с таким именем будет
-  включена в результирующий ~build.boot~.
+   Все блоки кода с boot-задачами для /Clojure/ должны иметь имя ~boot-clojure-task~. Каждая задача с таким именем будет
+   включена в результирующий ~build.boot~.
 
-  #+NAME: boot-clojure-tasks
-  #+BEGIN_SRC clojure :noweb yes :export none
-    <<boot-clojure-task>>
-  #+END_SRC
-
-** clj-build
-   :PROPERTIES:
-   :CUSTOM_ID: clj-build
-   :END:
-
-   Эта задача строит uberjar проекта который запускается командой.
-
-   #+BEGIN_SRC sh :dir ".." :noweb yes
-     java -jar <<get-specification-param(title="Целевая дирректория")>>/project.jar
+   #+NAME: boot-clojure-tasks
+   #+BEGIN_SRC clojure :noweb yes :exports none
+     <<boot-clojure-task>>
    #+END_SRC
 
-   #+NAME: boot-clojure-task
-   #+BEGIN_SRC clojure
-     (deftask clj-build
-       "Builds project's uberjar"
-       []
-       (comp (pom :project '<<get-specification-param(title="Имя проекта")>>
-                  :version "<<get-specification-param(title="Версия проекта")>>")
-             (aot :all true)
-             (uber)
-             (jar :main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
-             (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
+*** clj-build
+    :PROPERTIES:
+    :CUSTOM_ID: clj-build
+    :END:
+
+    Эта задача строит uberjar проекта который запускается командой.
+
+    #+BEGIN_SRC sh :dir ".." :noweb yes
+      java -jar <<get-specification-param(title="Целевая дирректория")>>/project.jar
+    #+END_SRC
+
+    #+NAME: boot-clojure-task
+    #+BEGIN_SRC clojure
+      (deftask clj-build
+        "Builds project's uberjar"
+        []
+        (comp (pom :project '<<get-specification-param(title="Имя проекта")>>
+                   :version "<<get-specification-param(title="Версия проекта")>>")
+              (aot :all true)
+              (uber)
+              (jar :main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
+              (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
+    #+END_SRC
+
+    Для вызова задачи выполните: src_shell[:dir ".."]{boot clj-build}
+
+*** clj-run
+
+    Эта задача запускает проект в той же Java-среде в которой запущен Boot. Перед запуском надо скомпелировать проект
+    задачей [[#clj-build][clj-build]].
+
+    #+NAME: boot-clojure-task
+    #+BEGIN_SRC clojure
+      (deftask clj-run
+        "Runs the project's main function"
+        []
+        (require '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
+        (let [main-fn (resolve '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main)]
+          (comp (aot :all true) (with-pass-thru _ (main-fn)))))
+    #+END_SRC
+
+    Для вызова задачи выполните: src_shell[:dir ".."]{boot clj-run}
+
+** Boot-задачи проекта для /ClojureScript/
+
+   Boot-задачи для /ClojureScript/ будут добавлены в результирующий ~build.boot~, если в спецификации проекта
+   в параметре ~ClojureScript~ указано значение ~yes~.
+
+   Все блоки кода с boot-задачами для /ClojureScript/ должны иметь имя ~boot-clojurescript-task~. Каждая задача с таким
+   именем будет включена в результирующий ~build.boot~.
+
+   #+NAME: boot-clojurescript-tasks
+   #+BEGIN_SRC clojure :noweb yes :exports none
+     <<boot-clojurescript-task>>
    #+END_SRC
 
-   Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-build}
+*** cljs-figwheel
 
-** clj-run
+    Эта задача интерфейс к *figwheel*, для запуска используйте src_shell{boot cljs-figwheel}.\\
 
-   Эта задача запускает проект в той же Java-среде в которой запущен Boot. Перед запуском надо скомпелировать проект
-   задачей [[#clj-build][clj-build]].
+    Компилирует ClojureScript файлы, запускает HTTP-server обслуживающий дирректорию публичных ресурсов,
+    запускает монитор для перекомпиляции, запускает nRepl сервер. Для входа в ClojureScript REPL выполнить
+    "9 шагов к успеху":
 
-   #+NAME: boot-clojure-task
-   #+BEGIN_SRC clojure
-     (deftask clj-run
-       "Runs the project's main function"
-       []
-       (require '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
-       (let [main-fn (resolve '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main)]
-         (comp (aot :all true) (with-pass-thru _ (main-fn)))))
-   #+END_SRC
+    1. выполнить src_shell{boot cljs-figwheel}
+    2. дождаться звукового сигнала
+    3. посмотреть в консоли адрес и порт запущенного веб-сервера (обычно http://localhost:3449)
+    4. открыть браузер, открыть URL, увидеть в JavaScript-консоли сообщение Opened Websocket REPL connection
+    5. посмотреть в консоли адрес и порт nRepl сервера, передать их в следующем шаге
+    6. выполнить src_emacs-lisp{(cider-connect HOST PORT)} или M-x cider-connect и ввести HOST и PORT, хотя, походу
+       cider сам прекрасно всё цепляет из файла ~.nrepl-port~, так что можно просто два раза ENTER нажать
+    7. в REPL буфере ввести src_clojure{(cljs-repl)} чтобы запустить ClojureScript REPL
+    8. в REPL буфере ввести src_clojure{(.log js/console "OK!")}
+    9. увидеть сообщение "OK!" в JavaScript-консоли браузера
 
-   Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-run}
+    #+NAME: boot-clojurescript-task
+    #+BEGIN_SRC clojure
+      (set-env! :dependencies #(into % '[[ajchemist/boot-figwheel "0.5.4-6" :scope "test"]
+                                         [org.clojure/tools.nrepl "0.2.12" :scope "test"]
+                                         [com.cemerick/piggieback "0.2.1" :scope "test"]
+                                         [figwheel-sidecar "0.5.7" :scope "test"]]))
 
-* Boot-задачи проекта для /ClojureScript/
+      (require '[boot-figwheel :refer [figwheel start-figwheel! stop-figwheel! start-autobuild stop-autobuild cljs-repl fig-status]])
 
-  Boot-задачи для /ClojureScript/ будут добавлены в результирующий ~build.boot~, если в спецификации проекта
-  в параметре ~ClojureScript~ указано значение ~yes~.
+      ;; This is for (cider-connect) to work.
+      ;; NOTE: do not use (cider-jack-in), use (cider-connect) instead
+      ;; ---------------------------
+      ;; Start of cider related code
+      (swap! boot.repl/*default-dependencies* concat '[[cider/cider-nrepl "<<get-specification-param(title="Cider/Версия")>>"]])
+      (swap! boot.repl/*default-middleware* conj 'cider.nrepl/cider-middleware)
+      ;; End of cider related code
 
-  Все блоки кода с boot-задачами для /ClojureScript/ должны иметь имя ~boot-clojurescript-task~. Каждая задача с таким
-  именем будет включена в результирующий ~build.boot~.
-
-  #+NAME: boot-clojurescript-tasks
-  #+BEGIN_SRC clojure :noweb yes :export none
-    <<boot-clojurescript-task>>
-  #+END_SRC
-
-** cljs-build
-
-   Эта задача компилирует исходные файлы /ClojureScript/.
-
-   #+NAME: boot-clojurescript-task
-   #+BEGIN_SRC clojure
-     (set-env! :dependencies #(conj % '[adzerk/boot-cljs "1.7.228-1" :scope "test"]))
-
-     (require '[adzerk.boot-cljs :refer [cljs]])
-
-     (deftask cljs-build
-       "Compiles ClojureScript sources"
-       []
-       (comp
-        (cljs :optimizations :none)
-        (target)))
-   #+END_SRC
-
-** cljs-serve-watch
-
-   Компилирует ClojureScript файлы, запускает HTTP-server обслуживающий целевую дирректорию, запускает монитор для
-   перекомпиляции, запускает nRepl сервер. Для входа в ClojureScript REPL выполнить "9 шагов к успеху":
-
-   1. выполнить src_sh{boot cljs-serve-watch}
-   2. дождаться звукового сигнала
-   3. посмотреть в консоли адрес и порт запущенного веб-сервера (обычно http://localhost:3000)
-   4. открыть браузер, открыть URL, увидеть в JavaScript-консоли сообщение Opened Websocket REPL connection
-   5. посмотреть в консоли адрес и порт nRepl сервера, передать их в следующем шаге
-   6. выполнить src_emacs-lisp{(cider-connect HOST PORT)} или M-x cider-connect и ввести HOST и PORT, хотя, походу
-      cider сам прекрасно всё цепляет из файла ~.nrepl-port~, так что можно просто два раза ENTER нажать
-   7. в REPL буфере ввести src_clojure{(start-repl)} чтобы запустить ClojureScript REPL
-   8. в REPL буфере ввести src_clojure{(.log js/console "OK!")}
-   9. увидеть сообщение "OK!" в JavaScript-консоли браузера
-
-   #+NAME: boot-clojurescript-task
-   #+BEGIN_SRC clojure
-     (set-env! :dependencies #(into % '[[adzerk/boot-reload "0.4.12" :scope "test"]
-                                        [pandeiro/boot-http "0.7.3" :scope "test"]
-                                        [adzerk/boot-cljs-repl "0.3.2" :scope "test"]
-                                        [com.cemerick/piggieback "0.2.1" :scope "test"]
-                                        [weasel "0.7.0" :scope "test"]
-                                        [org.clojure/tools.nrepl "0.2.12" :scope "test"]]))
-
-     (require '[boot.repl]
-              '[adzerk.boot-cljs-repl :refer [cljs-repl start-repl]]
-              '[adzerk.boot-reload :refer [reload]]
-              '[pandeiro.boot-http :refer [serve]])
-
-     ;; This is for (cider-connect) to work.
-     ;; NOTE: do not use (cider-jack-in), use (cider-connect) instead
-     ;; ---------------------------
-     ;; Start of cider related code
-     (swap! boot.repl/*default-dependencies* concat '[[cider/cider-nrepl "<<get-specification-param(title="Cider/Версия")>>"]])
-
-     (swap! boot.repl/*default-middleware* conj 'cider.nrepl/cider-middleware)
-     ;; End of cider related code
-
-     (deftask cljs-serve-watch
-       "Compiles ClojureScript, serves it, keeps re-compiling via watch"
-       []
-       (comp
-         (serve :dir "<<get-specification-param(title="Целевая дирректория")>>/")
-         (watch)
+      (deftask cljs-figwheel
+        "Compiles ClojureScript, serves it, autobuilds"
+        []
+        (comp
+         (figwheel :build-ids ["dev"]
+                   ;:once-build ["advanced"]
+                   :all-builds [{:id "dev"
+                                 :source-paths (seq (get-env :source-paths))
+                                 :compiler {:main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
+                                            :optimizations :none
+                                            :source-map true
+                                            :output-to "app.js"}
+                                 :figwheel {:build-id "dev"
+                                            :on-jsload '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main
+                                            :heads-up-display true
+                                            :autoload true
+                                            :debug false}}]
+                   :figwheel-options {:http-server-root "public"
+                                      :open-file-command "emacsclient"
+                                      :repl false}
+                   :target-path "<<get-specification-param(title="Расположение публичных ресурсов")>>")
          (speak)
-         (cljs-repl)
-         (cljs :source-map true :optimizations :none)
-         (reload :on-jsload 'literate_boot.core/main)
-         (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
-   #+END_SRC
+         (repl)))
+    #+END_SRC
 
-* Пользовательские boot-задачи
+** Пользовательские boot-задачи
 
-  Все блоки кода с пользовательскими boot-задачами должны иметь имя ~boot-user-task~. Каждая задача с таким
-  именем будет включена в результирующий ~build.boot~.
+   Все блоки кода с пользовательскими boot-задачами должны иметь имя ~boot-user-task~. Каждая задача с таким
+   именем будет включена в результирующий ~build.boot~.

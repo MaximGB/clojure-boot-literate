@@ -6,7 +6,7 @@
 
 *** -main
 
-    #+NAME: core/main
+    #+NAME: core/main.clj
     #+BEGIN_SRC clojure :tangle (org-sbe in-clj-path (path \"core.clj\"))
       (ns <<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
         (:gen-class))
@@ -17,7 +17,7 @@
         (println "Hello, from <<get-specification-param(title="Имя проекта")>>!"))
     #+END_SRC
 
-    #+NAME: core/main
+    #+NAME: core/main.cljs
     #+BEGIN_SRC clojure :tangle (org-sbe in-cljs-path (path \"core.cljs\"))
       (ns <<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
         (:refer-clojure))
@@ -27,18 +27,18 @@
       (defn ^:export -main
         "Project's entry point"
         [& args]
-        (println "Hello, from <<get-specification-param(title="Имя проекта")>>!"))
+        (println "Hello, from <<get-specification-param(title="Имя проекта")>>!!"))
     #+END_SRC
 
     #+NAME: index.html
-    #+BEGIN_SRC html :tangle (org-sbe in-resources-path (path \"index.html\"))
+    #+BEGIN_SRC html :tangle (org-sbe in-resources-path (path \"public/index.html\"))
       <!doctype html>
       <html>
        <head>
         <title><<get-specification-param(title="Имя проекта")>></title>
        </head>
        <body>
-         <script src="main.js"></script>
+         <script src="app.js"></script>
        </body>
      </html>
   #+END_SRC
