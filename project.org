@@ -6,9 +6,35 @@
  - [[Спецификация проекта][Спецификация проекта]]
    - [[Зависимости][Зависимости]]
  - [[Требования к среде и проекту][Требования к среде и проекту]]
+   - [[Среда][Среда]]
+   - [[Экспорт кода из файлов][Экспорт кода из файлов]]
+   - [[Экспорт кода проекта][Экспорт кода проекта]]
  - [[Библиотека вспомагательных блоков-функций для проекта][Библиотека вспомагательных блоков-функций для проекта]]
+   - [[time-is-now][time-is-now]]
+   - [[get-table-param][get-table-param]]
+   - [[get-specification-param][get-specification-param]]
+   - [[in-some-path][in-some-path]]
+   - [[in-clj-path][in-clj-path]]
+   - [[in-cljs-path][in-cljs-path]]
+   - [[in-tests-path][in-tests-path]]
+   - [[in-resources-path][in-resources-path]]
+   - [[in-assets-path][in-assets-path]]
+   - [[in-target-path][in-target-path]]
+   - [[render-project-dependencies][render-project-dependencies]]
+   - [[render-code-block-if][render-code-block-if]]
  - [[Boot-проект][Boot-проект]]
+   - [[boot.properties][boot.properties]]
+   - [[build.boot][build.boot]]
+     - [[Boot-задачи проекта для /Clojure/][Boot-задачи проекта для /Clojure/]]
+       - [[clj-build][clj-build]]
+       - [[clj-run][clj-run]]
+     - [[Boot-задачи проекта для /ClojureScript/][Boot-задачи проекта для /ClojureScript/]]
+       - [[cljs-figwheel][cljs-figwheel]]
+     - [[Пользовательские boot-задачи][Пользовательские boot-задачи]]
  - [[Код проекта][Код проекта]]
+   - [[Пространство имён Core][Пространство имён Core]]
+     - [[Функции][Функции]]
+       - [[-main][-main]]
  - [[Footnotes][Footnotes]]
 
 * Быстрый старт
@@ -20,13 +46,17 @@
     кода ~tangle.sh~ и ~tangle-all.sh~.
   - Запустить ~tangle-all.sh~ src_sh[]{./tangle-all.sh}, для этого поставить курсор на блок и нажать C-c C-c,
     или запустить ~tangle-all.sh~ из терминала.
-  - Построить проект с помощью *Boot* src_sh[]{boot build}, для этого поставить курсор на блок и нажать C-c C-c.
-    или запустить ~boot build~ из терминала.
+  - Построить проект с помощью *Boot*:
+    - Для *Clojure* src_sh[]{boot clj-build}, для этого поставить курсор на блок и нажать C-c C-c, или запустить
+      ~boot clj-build~ из терминала.
+    - Для *ClojureScript* src_sh[]{boot cljs-figwheel}, для этого поставить курсор на блок и нажать C-c C-c, или запустить
+      ~boot cljs-figwheel~ из терминала.
   - Запустить проект
     src_sh[:dir "." :noweb yes]{java -jar <<get-specification-param(title="Целевая дирректория")>>/project.jar},
     для этого поставить курсор на блок и нажать C-c C-c, или запустить ~java jar target/project.jar~ из терминала.
   - Работать, переодически экспортируя и строя код.
   - Для экспорта документации в ~project.pdf~ нажать С-с С-e l p.
+  - Для экспорта документации в ~project.html~ нажать C-c C-e h h.
 
 * Спецификация проекта
   :PROPERTIES:
@@ -212,7 +242,7 @@
   | Имя     | Значение по умолчанию | Описание                                                                         |
   |---------+-----------------------+----------------------------------------------------------------------------------|
   | table   | (quote ())            | Ссылка на таблицу. В виде [путь к файлу с таблицей:]имя таблицы, например:       |
-  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же |
+  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же     |
   |         |                       | файле из которого делается вызов. Значение по-умолчанию позволяет просто без     |
   |         |                       | ошибки вернуть nil, так как таблица передаётся в блок просто в виде списка.      |
   |---------+-----------------------+----------------------------------------------------------------------------------|
