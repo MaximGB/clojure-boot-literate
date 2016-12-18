@@ -1,1007 +1,125 @@
-#+TITLE: Литературный проект на Clojure/Boot
+#+TITLE: Clojure/ClojureScript Boot literate programming template
 #+SETUPFILE: build/setup.org
 
-* Содержание                                                       :noexport:TOC_4_org:
- - [[Быстрый старт][Быстрый старт]]
- - [[Спецификация проекта][Спецификация проекта]]
-   - [[Зависимости][Зависимости]]
- - [[Требования к среде и проекту][Требования к среде и проекту]]
-   - [[Среда][Среда]]
-   - [[Экспорт кода из файлов][Экспорт кода из файлов]]
-   - [[Экспорт кода проекта][Экспорт кода проекта]]
- - [[Библиотека вспомагательных блоков-функций для проекта][Библиотека вспомагательных блоков-функций для проекта]]
-   - [[time-is-now][time-is-now]]
-   - [[get-table-param][get-table-param]]
-   - [[get-specification-param][get-specification-param]]
-   - [[in-some-path][in-some-path]]
-   - [[in-clj-path][in-clj-path]]
-   - [[in-cljs-path][in-cljs-path]]
-   - [[in-tests-path][in-tests-path]]
-   - [[in-resources-path][in-resources-path]]
-   - [[in-assets-path][in-assets-path]]
-   - [[in-target-path][in-target-path]]
-   - [[render-project-dependencies][render-project-dependencies]]
-   - [[render-code-block-if][render-code-block-if]]
- - [[Boot-проект][Boot-проект]]
-   - [[boot.properties][boot.properties]]
-   - [[build.boot][build.boot]]
-     - [[Boot-задачи проекта для /Clojure/][Boot-задачи проекта для /Clojure/]]
-       - [[clj-build][clj-build]]
-       - [[clj-run][clj-run]]
-     - [[Boot-задачи проекта для /ClojureScript/][Boot-задачи проекта для /ClojureScript/]]
-       - [[cljs-figwheel][cljs-figwheel]]
-     - [[Пользовательские boot-задачи][Пользовательские boot-задачи]]
- - [[Код проекта][Код проекта]]
-   - [[Пространство имён Core][Пространство имён Core]]
-     - [[Функции][Функции]]
-       - [[-main][-main]]
+* Table of contents                                      :noexport:TOC_4_org:
+ - [[Quick start][Quick start]]
+ - [[Project specification][Project specification]]
+   - [[Dependencies][Dependencies]]
+ - [[Environment and project requirements][Environment and project requirements]]
+ - [["Library of Babel" helper code blocks library]["Library of Babel" helper code blocks library]]
+ - [[Boot-project][Boot-project]]
+ - [[Project code][Project code]]
  - [[Footnotes][Footnotes]]
 
-* Быстрый старт
+* Quick start
 
-  - Загрузить *Library of Babel* проекта, выполнив следующий кодовый блок
-    src_emacs-lisp[]{(org-babel-lob-ingest "build/lob.org")}, для этого поставить курсор на блок и нажать C-c C-c.
-  - Заполнить таблицу в разеделе [[#project-specification][Спецификация проекта]].
-  - Прочитать раздел [[#env-requirements][Требования к среде и проекту]], привести среду в соответствие и сформировать скрипты для экспорта
-    кода ~tangle.sh~ и ~tangle-all.sh~.
-  - Запустить ~tangle-all.sh~ src_sh[]{./tangle-all.sh}, для этого поставить курсор на блок и нажать C-c C-c,
-    или запустить ~tangle-all.sh~ из терминала.
-  - Построить проект с помощью *Boot*:
-    - Для *Clojure* src_sh[]{boot clj-build}, для этого поставить курсор на блок и нажать C-c C-c, или запустить
-      ~boot clj-build~ из терминала.
-    - Для *ClojureScript* src_sh[]{boot cljs-figwheel}, для этого поставить курсор на блок и нажать C-c C-c, или запустить
-      ~boot cljs-figwheel~ из терминала.
-  - Запустить проект
-    src_sh[:dir "." :noweb yes]{java -jar <<get-specification-param(title="Целевая дирректория")>>/project.jar},
-    для этого поставить курсор на блок и нажать C-c C-c, или запустить ~java jar target/project.jar~ из терминала.
-  - Работать, переодически экспортируя и строя код.
-  - Для экспорта документации в ~project.pdf~ нажать С-с С-e l p.
-  - Для экспорта документации в ~project.html~ нажать C-c C-e h h.
+  - Load project *Library of Babel*, by executing the following code block
+    src_emacs-lisp[]{(org-babel-lob-ingest "build/lob.org")}, to execute it place the cursor on the block
+    and press C-c C-c.
+  - Fill in the table in the [[#project-specification][Project specification]] section.
+  - Read the [[#env-requirements][Environment and project requirements]] section, setup your environment accordingly and create
+    the code exporting scripts ~tangle.sh~ and ~tangle-all.sh~.
+  - Export initial project code by runing src_sh[]{./tangle-all.sh}, place the cursor on
+    the code block and press C-c C-c to execute it from *Emacs*, or run ~tangle-all.sh~ from a terminal.
+  - Build the project with *Boot*:
+    - For *Clojure* src_sh[]{boot clj-build}, place the cursor on the code block and press C-c C-c to execute it,
+      or run ~boot clj-build~ from a terminal.
+    - For *ClojureScript* src_sh[]{boot cljs-figwheel}, place the cursor on the code block and
+      press C-c C-c to execute it, or run ~boot cljs-figwheel~ from a terminal.
+  - Run the project by running
+    src_sh[:dir "." :noweb yes]{java -jar <<get-specification-param(title="Target path")>>/project.jar},
+    place the cursor on the code block and press C-c C-c, or run ~java jar target/project.jar~ from a terminal.
+  - Keep working on the project export the code periodically.
+  - To export the project documentation:
+    - Into ~project.pdf~ press С-с С-e l p.
+    - Into ~project.html~ press C-c C-e h h.
 
-* Спецификация проекта
+* Project specification
   :PROPERTIES:
   :CUSTOM_ID: project-specification
   :END:
 
-  Спецификация проекта описана в таблице ниже. На базе спецификации формируется структура проекта, файлы
-  *boot.properties* и *build.boot* и т.п.
+  Project specification is given in the table following. The project file system as well as ~boot.properties~
+  and ~build.boot~ files are generated according to the specification.
 
-  #+CAPTION: Спецификация
+  #+CAPTION: Project specification
   #+NAME: project-specification
-  | Свойство                        | Значение         |
-  |---------------------------------+------------------|
-  | Boot                            |                  |
-  |---------------------------------+------------------|
-  | Версия                          | 2.6.0            |
-  |---------------------------------+------------------|
-  | Имя проекта                     | literate-boot    |
-  | Версия проекта                  | 0.1.0-SNAPSHOT   |
-  | Расположение org-исходников     | org              |
-  | Расположение тестов             | tests            |
-  | Расположение classpath ресурсов | resources        |
-  | Расположение прочих ресурсов    | assets           |
-  | Целевая дирректория             | target           |
-  | Пространство имён main          | core             |
-  |---------------------------------+------------------|
-  | Clojure                         | yes              |
-  |---------------------------------+------------------|
-  | Версия                          | 1.8.0            |
-  | Расположение исходников         | src              |
-  |---------------------------------+------------------|
-  | ClojureScript                   | yes              |
-  |---------------------------------+------------------|
-  | Версия                          | 1.9.225          |
-  | Расположение исходников         | src              |
-  | Расположение публичных ресурсов | resources/public |
-  |---------------------------------+------------------|
-  | Cider                           |                  |
-  |---------------------------------+------------------|
-  | Версия                          | 0.14.0           |
+  | Property                 | Value            |
+  |--------------------------+------------------|
+  | Boot                     |                  |
+  |--------------------------+------------------|
+  | Version                  | 2.6.0            |
+  |--------------------------+------------------|
+  | Project name             | literate-boot    |
+  | Project version          | 0.1.0-SNAPSHOT   |
+  | Org sources path         | org              |
+  | Tests path               | tests            |
+  | Classpath resources path | resources        |
+  | Assets path              | assets           |
+  | Target path              | target           |
+  | Main namespace           | core             |
+  |--------------------------+------------------|
+  | Clojure                  | yes              |
+  |--------------------------+------------------|
+  | Version                  | 1.8.0            |
+  | Sources path             | src              |
+  |--------------------------+------------------|
+  | ClojureScript            | yes              |
+  |--------------------------+------------------|
+  | Version                  | 1.9.225          |
+  | Sources path             | src              |
+  | Public resources path    | resources/public |
+  |--------------------------+------------------|
+  | Cider                    |                  |
+  |--------------------------+------------------|
+  | Version                  | 0.14.0           |
 
-** Зависимости
+** Dependencies
 
-   Зависимости проекта указывается в таблицие зависимостей\\
+   Project dependencies are given in the *dependencies* table\\
 
-   Указывается по одной зависимости в строке таблицы, колонки таблицы соответствуют опциям поддерживаемым [[https://github.com/cemerick/pomegranate][pomegranate]],
-   который, в свою очередь, используется Boot для разрешения зависимостей[fn:1]:
+   One dependency per the table row should be given. The table columns correspond to options supported by [[https://github.com/cemerick/pomegranate][pomegranate]]
+   library, which in it's turn, is used by *Boot* for dependecies resolution [fn:1]:
 
-   * *Имя*           - имя артифакта
-   * *Версия*        - версия артифакта
-   * *Область*       - область применения зависимости (dependency scope в терминах maven), можеть быть:
-                       compile, provided, runtime, test, system, import
-   * *Опциональная*  - флаг задающий опциональность зависимости, зависимость с любым значением в этой колонке, кроме "no"
-                       и пустой строки считается, считается опциональной
-   * *Классификатор* - Maven-классификатор
-   * *Расширение*    - Maven-расширение (тип)
-   * *Исключения*    - список транзитивных исключений для этой зависимости, указывается по одному значению в строке,
-                       т.е. если для одной зависисмости надо указать больше одного исключения, то для второго и далее
-                       исключений колонки: *имя*, *версия*, *область*, *опциональная* будут пустыми
-   * *Классификатор* - Maven-классификатор исключения
-   * *Расширение*    - Maven-расширение (тип) исключения
-   * *Пояснение*     - эта колонка просто игнорируется, она служит для документации
+   * *Name*       - artifact name
+   * *Version*    - artifact version
+   * *Scope*      - dependency scope (in Maven terms), mighe be one of: ~compile, provided, runtime, test, system, import~
+   * *Optional*   - dependency optionality flag, any dependency having ~no~ or empty value in this column
+                    is considired to be optional
+   * *Classifier* - dependency classifier (in Maven terms)
+   * *Extension*  - dependency extension (in Maven-terms)
+   * *Exclusion*  - transitive dependencies exclusions for the dependency, one exclusion per the table row is allowed
+                    if you need to setup several exclusions for one dependency than for second and other exclusions
+                    *name*, *version*, *scope*, *optional*, *classifier*, *extension* columns should be empty
+   * *Classifier* - exclusion dependency classifier (in Maven terms)
+   * *Extension*  - exclusion dependency extension (in Maven-terms)
+   * *Note*       - this column is ignored, it's used for documentation purposes
 
-  #+CAPTION: Зависимости
+  #+CAPTION: Dependencies
   #+ATTR_LATEX: :width \textwidth :align |l|r|r|c|r|r|l|r|r|l| :float nil
   #+NAME: project-dependencies
-  | Имя | Версия | Область | Опциональная | Классификатор | Расширение | Исключения | Классификатор | Расширение | Пояснение |
-  |-----+--------+---------+--------------+---------------+------------+------------+---------------+------------+-----------|
+  | Name | Version | Scope | Optional | Classifier | Extension | Exclusion | Classifier | Extension | Note |
+  |------+---------+-------+----------+------------+-----------+-----------+------------+-----------+------|
 
-* Требования к среде и проекту
+* Environment and project requirements
   :PROPERTIES:
   :CUSTOM_ID: env-requirements
   :END:
 
-  #+SETUPFILE: setup.org
-  
-** Среда
+  #+INCLUDE: "build/build.org" :minlevel 2
 
-  Данный проект требует Emacs/Org-mode, Clojure, Boot. Проект следует принципам литературного программирования, когда
-  код программы выделяется из org-файлов, совмещающих документацию проекта и код проекта, с помощью процесса
-  называемом в англоязычной среде *tangle*.
+* "Library of Babel" helper code blocks library
 
-** Экспорт кода из файлов
+  #+INCLUDE: "build/lob.org" :minlevel 2
 
-  Для преобразования org-файлов в файлы с исходным кодом Clojure необходим файл *tangle.sh*[fn:-1-thi-ng-credit]
+* Boot-project
 
-  К сожалению экспортировать код напрямую из Emacs вызовом *M-x org-babel-tangle* просто так не получиться. Файлы
-  проекта используют Library of Babel, расположенную в файле *build/lob.org* и для её инициализации нужен вызов
-  ~(org-babel-lob-ingest)~. Этот вызов делается в файле *tangle.sh*, поэтому там всё работает. Для экспорта кода из
-  Emacs надо раз в сессию выполнять вызов src_emacs-lisp{(org-babel-lob-ingest "build/lob.org")}
+  #+INCLUDE: "build/boot.org" :minlevel 2
 
-  Для создания файла *tangle.sh* в корневой дирректории проекта поместите курсор в следующий блок кода и нажмите
-  комбинацию клавиш C-u C-c C-v t чтобы записать содержимое блока на диск в файл *tangle.sh*.
+* Project code
 
-  #+NAME: tangle.sh
-  #+BEGIN_SRC shell :tangle ../tangle.sh  :shebang "#!/bin/sh" :noweb yes :results silent
-    DIR=`pwd`
-    FILES=""
-
-    # wrap each argument in the code required to call tangle on it
-    for i in $@; do
-        FILES="$FILES \"$i\""
-    done
-
-    emacs -Q --batch \
-        --eval \
-        "(progn
-           (require 'package)
-           (let ((default-directory package-user-dir))
-             (normal-top-level-add-subdirs-to-load-path))
-           (require 'cl)(require 'org)(require 'ob)(require 'ob-tangle)(require 'ob-lob)
-           (org-babel-lob-ingest \"build/lob.org\")
-           (setq org-confirm-babel-evaluate nil)
-           (mapc (lambda (file)
-                  (find-file (expand-file-name file \"$DIR\"))
-                  (org-babel-tangle)
-                  (kill-buffer)) '($FILES)))" \
-    #2>&1 | grep Tangled
-  #+END_SRC
-
-  Этому скрипту надо передать имя org-файла из которого извлекать исходники src_sh{tangle.sh file ...},
-  где ~file~ - имя org-файла или имена org-файлов.
-
-** Экспорт кода проекта
-
-  Для извлечения кода из всех org-файлов используется скрипт *tangle-all.sh*[fn:-1-thi-ng-credit].
-
-  Для создания файла *tangle-all.sh* в дирректории с этим файлом поместите курсор в следующий блок кода и нажмите
-  комбинацию клавиш C-u C-c C-v t чтобы записать содержимое блока на диск в файл *tangle.sh*.
-
-  #+NAME: tangle-all.sh
-  #+BEGIN_SRC shell :tangle ../tangle-all.sh  :shebang "#!/bin/sh" :noweb yes :results silent
-    ./tangle.sh project.org build/*.org <<get-specification-param(title="Расположение org-исходников")>>/*.org
-  #+END_SRC
-
-[fn:-1-thi-ng-credit] Скрипты tangle.sh и tangle-all.sh были взяты из проекта [[https://github.com/thi-ng/babel][thi.ng/babel]] и немного адаптированы.
-
-* Библиотека вспомагательных блоков-функций для проекта
-
-  Тут описаны вспомогательные функции-блоки для литературного проекта. Эти функции-блоки работают в среде *Emacs/Org*,
-  они не предназначены для вызова из Clojure.
-  
-** time-is-now
-
-  Возвращает текущее время в виде строки в заданном формате.
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    <<time-is-now()>>
-    <<time-is-now(format="%F")
-    #+CALL: time-is-now()
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя    | Значение по умолчанию | Описание                    |
-  |--------+-----------------------+-----------------------------|
-  | format | "%F %X"               | Формат возвращаемой строки. |
-
-  #+NAME: time-is-now
-  #+BEGIN_SRC emacs-lisp :var format="%F %X" :results value silent
-    (format-time-string format)
-  #+END_SRC
-
-** get-table-param
-  :PROPERTIES:
-  :CUSTOM_ID: lob-get-table-param
-  :END:
-
-  Возвращает значение параметра с указанным именем из какой-либо таблицы. В первой колонке таблицы задаются имена
-  параметров, во второй колонке - значения.
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    <<get-table-param(table=../project.org:project-specification, title="Имя проекта")>>
-    <<get-table-param(table=../project.org:project-specification, title="Имя проекта", splitby="-", joinby="_")>>
-    <<get-table param(table=../project.org:project-specification, title="Clojure/Версия")>>
-    #+CALL: get-table-param(table=../project.org:project-specification, title="Имя проекта")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя     | Значение по умолчанию | Описание                                                                         |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | table   | (quote ())            | Ссылка на таблицу. В виде [путь к файлу с таблицей:]имя таблицы, например:       |
-  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же     |
-  |         |                       | файле из которого делается вызов. Значение по-умолчанию позволяет просто без     |
-  |         |                       | ошибки вернуть nil, так как таблица передаётся в блок просто в виде списка.      |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | title   | ""                    | Имя параметра. Поддерживаются имена-пути, или емена содержащие '/'. Если         |
-  |         |                       | задан такой параметр, то он разбивается на части, и каждая часть рассматривается |
-  |         |                       | как отдельный параметр. Поиск очередного параметра начинается со строки          |
-  |         |                       | предыдущего, значение предыдущего параметра отбрасывается. Возвращается значение |
-  |         |                       | последнего параметра.                                                            |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | splitby | ""                    | Разделитель значений параметра. Работает совместно с joinby. Если значения       |
-  |         |                       | в ячейке перечислены, например, через запятую, то, указав splitby=",", мы их     |
-  |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.              |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.                  |
-
-  #+NAME: get-table-param
-  #+BEGIN_SRC emacs-lisp :var table=(quote ()) :var title="" :var splitby="" :var joinby="" :hlines yes :results value silent
-    (let* ((table-adopted (mapcar (lambda (x)
-                                    (if (equal x 'hline)
-                                       '(hline hline hline)
-                                     x))
-                                  table))
-           (titles (mapcar #'car table-adopted))
-           (path (split-string title (regexp-quote "/")))
-           (last-index (reduce (lambda (index title)
-                                 (cl-position title titles :start index :test #'equal))
-                               path
-                               :initial-value nil)))
-      (if last-index
-          (let* ((result (nth 1 (nth last-index table-adopted))))
-            (if (and result splitby joinby)
-                (mapconcat #'identity (split-string result (regexp-quote splitby) t "\s+") joinby)
-              result))))
-  #+END_SRC
-
-** get-specification-param
-
-  Возвращает значение параметра с указанным именем из спецификации проекта.
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    <<get-specification-param(title="Имя проекта")>>
-    <<get-specification-param(title="Пространство имён main", splitby="." joinby="/")>>
-    #+CALL: get-specification-param(title="Имя проекта")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя     | Значение по умолчанию | Описание                                                |
-  |---------+-----------------------+---------------------------------------------------------|
-  | title   | ""                    | Имя параметра (см. [[#lob-get-table-param][(get-table-param)]]).                  |
-  | splitby | ""                    | Разделитель значений параметра (см. [[#lob-get-table-param][(get-table-param)]]). |
-  | joinby  |                       | Объединитель значений параметр (см. [[#lob-get-table-param][(get-table-param)]]). |
-
-  #+NAME: get-specification-param
-  #+BEGIN_SRC emacs-lisp :var title="" :var splitby="" :var joinby="" :results value silent
-    (save-excursion
-      (let ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org")))
-           (if project-org-dir
-             (let ((project-spec-ref (concat project-org-dir "project.org:project-specification")))
-                  (org-babel-execute-src-block
-                    nil
-                    (cdr (assoc 'get-table-param org-babel-library-of-babel))
-                    (list
-                      (cons :var (format "table=%s" project-spec-ref))
-                      (cons :var (format "title=\"%s\"" title))
-                      (cons :var (format "splitby=\"%s\"" splitby))
-                      (cons :var (format "joinby=\"%s\""  joinby))))))))
-  #+END_SRC
-
-** in-some-path
-
-  Возвращает абсолютный путь до файла в одной из дирректорий экспортируемых исходников проекта с учётом имени проекта
-  и промежуточной дирректории, задаваемой параметром из спецификации проекта.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Параметр передаваемый через param
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-some-path (param="Clojure/Расположение исходников" path \"core.clj\"))
-       ...
-    #+END_SRC
-    <<in-some-path(param="Clojure/Расоложение исходников", path="core.clj")>>
-    #+CALL: in-some-path(param="Clojure/Расположение исходников", path="core.clj")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{8cm}| :float nil
-  | Имя         | Значение по умолчанию             | Описание                                                      |
-  |-------------+-----------------------------------+---------------------------------------------------------------|
-  | param       | "Clojure/Расположение исходников" | Имя параметра, задющего часть пути относительно корня проекта |
-  | path        | ""                                | Путь относительно дирректории исходников                      |
-  | projectvise | t                                 | Вставлять имя проекта между базовой дирректорией              |
-  |             |                                   | и формируемым окончанием пути.                                |
-
-  #+NAME: in-some-path
-  #+BEGIN_SRC emacs-lisp :var param="Clojure/Расположение исходников" :var path="" :var projectvise='t :results value silent
-    (save-excursion
-      (let* ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org"))
-             (src-path (org-babel-execute-src-block
-                         nil
-                         (cdr (assoc 'get-specification-param org-babel-library-of-babel))
-                         (list
-                           (cons :var (format "title=\"%s\"" param)))))
-             (project-name (org-babel-execute-src-block
-                             nil
-                             (cdr (assoc 'get-specification-param org-babel-library-of-babel))
-                             (list
-                               (cons :var "title=\"Имя проекта\"")
-                               (cons :var "splitby=\".\"")
-                               (cons :var "joinby=\"/\""))))
-             (ns-path (replace-regexp-in-string "\-" "_" project-name)))
-            (concat project-org-dir src-path "/" (if projectvise (concat ns-path "/") "") path)))
-  #+END_SRC
-
-** in-clj-path
-
-  Возвращает абсолютный путь до файла в дирректории экспортируемых clj-исходников проекта с учётом имени проекта.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Clojure/Расположение исходников
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-clj-path (path \"core.clj\"))
-       ...
-    #+END_SRC
-    <<in-clj-path(path="core.clj")>>
-    #+CALL: in-clj-path(path="core.clj")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                                         |
-  |------+-----------------------+--------------------------------------------------|
-  | path | ""                    | Путь относительно дирректории Clojure исходников |
-
-  #+NAME: in-clj-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"Clojure/Расположение исходников\"")
-         (cons :var (format "path=\"%s\"" path)))))
-  #+END_SRC
-
-** in-cljs-path
-
-  Возвращает абсолютный путь до файла в дирректории экспортируемых cljs-исходников проекта с учётом имени проекта.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - ClojureScript/Расположение исходников
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-cljs-path (path \"core.clj\"))
-       ...
-    #+END_SRC
-    <<in-cljs-path(path="core.clj")>>
-    #+CALL: in-cljs-path(path="core.clj")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                                               |
-  |------+-----------------------+--------------------------------------------------------|
-  | path | ""                    | Путь относительно дирректории ClojureScript исходников |
-
-  #+NAME: in-cljs-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"ClojureScript/Расположение исходников\"")
-         (cons :var (format "path=\"%s\"" path)))))
-  #+END_SRC
-
-** in-tests-path
-
-  Возвращает абсолютный путь до файла в дирректории экспортируемых тестов проекта с учётом имени проекта.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение тестов
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-tests-path (path \"core.clj\"))
-       ...
-    #+END_SRC
-    <<in-tests-path(path="core.clj")>>
-    #+CALL: in-tests-path(path="core.clj")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                                        |
-  |------+-----------------------+-------------------------------------------------|
-  | path | ""                    | Путь относительно дирректории исходников тестов |
-
-  #+NAME: in-tests-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"Расположение тестов\"")
-         (cons :var (format "path=\"%s\"" path)))))
-  #+END_SRC
-
-** in-resources-path
-
-  Возвращает абсолютный путь до файла в дирректории classpath ресурсов.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение classpath ресурсов
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
-       ...
-    #+END_SRC
-    <<in-resources-path(path="index.html")>>
-    #+CALL: in-resources-path(path="index.html")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                               |
-  |------+-----------------------+----------------------------------------|
-  | path | ""                    | Путь относительно дирректории ресурсов |
-
-  #+NAME: in-resources-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"Расположение classpath ресурсов\"")
-         (cons :var (format "path=\"%s\"" path))
-         (cons :var "projectvise=()"))))
-  #+END_SRC
-
-** in-assets-path
-
-  Возвращает абсолютный путь до файла в дирректории прочих ресурсов.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение прочих ресурсов
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
-       ...
-    #+END_SRC
-    <<in-resources-path(path="index.html")>>
-    #+CALL: in-resources-path(path="index.html")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                               |
-  |------+-----------------------+----------------------------------------|
-  | path | ""                    | Путь относительно дирректории ресурсов |
-
-  #+NAME: in-assets-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"Расположение прочих ресурсов\"")
-         (cons :var (format "path=\"%s\"" path))
-         (cons :var "projectvise=()"))))
-  #+END_SRC
-** in-target-path
-
-  Возвращает абсолютный путь до файла в целевой дирректории.
-
-  *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Целевая дирректория
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-target-path (path \"index.html"))
-       ...
-    #+END_SRC
-    <<in-target-path(path="index.html")>>
-    #+CALL: in-target-path(path="index.html")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                              |
-  |------+-----------------------+---------------------------------------|
-  | path | ""                    | Путь относительно целевой дирректории |
-
-  #+NAME: in-target-path
-  #+BEGIN_SRC emacs-lisp :var path="" :results value silent
-    (save-excursion
-      (org-babel-execute-src-block
-        nil
-        (cdr (assoc 'in-some-path org-babel-library-of-babel))
-        (list
-         (cons :var "param=\"Целевая дирректория\"")
-         (cons :var (format "path=\"%s\"" path))
-         (cons :var "projectvise=()"))))
-  #+END_SRC
-
-** render-project-dependencies
-
-  Возвращает строки содержащие зависимости проекта взятые из таблицы зависимостей
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    <<render-project-dependencies()>>
-    #+CALL: render-project-dependencies()
-    (org-sbe render-project-dependencies)
-  #+END_EXAMPLE
-
-  #+NAME: render-project-dependencies
-  #+BEGIN_SRC emacs-lisp :results value silent
-    ; Full dependency definition specification is given here
-    ; https://github.com/cemerick/pomegranate/blob/master/src/main/clojure/cemerick/pomegranate/aether.clj
-    ; in resolve-dependencies function
-    (require 'subr-x)
-    (require 'seq)
-
-    (let ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org")))
-      (if project-org-dir
-          (let* ((project-spec-ref (concat project-org-dir "project.org:project-dependencies"))
-                 ; deps-table is a list of lists and hlines
-                 (deps-table (org-babel-ref-resolve project-spec-ref))
-                 ; Dependency representing hash-map key traversing sequence
-                 (serialize-key-traversing-seq '(name version scope optional classifier extension exclusions)))
-            (cl-labels (
-                      ; dependency hash map has following keys
-                      ; - name - dependency artifact name
-                      ; - version - dependency artifact version
-                      ; - scope - dependency scope
-                      ; - optional - flag showing whether a dependency is optional, any value but "" and "no" is considered to be true
-                      ; - classifier - dependency Maven-classifier
-                      ; - extension - dependency Maven-extension
-                      ; - exclusions - list of transient dependency exclusions for a dependency
-                      (make-dependency (name version scope optional classifier extension exclusions)
-                                       (let ((new-dep (make-hash-table)))
-                                         (puthash 'name name new-dep)
-                                         (puthash 'version (format "%s" version) new-dep)
-                                         (puthash 'scope scope new-dep)
-                                         (puthash 'optional (if (or
-                                                                 (string-empty-p optional)
-                                                                 (string= "no" (downcase optional)))
-                                                                nil
-                                                              't)
-                                                  new-dep)
-                                         (puthash 'classifier classifier new-dep)
-                                         (puthash 'extension  extension  new-dep)
-                                         (puthash 'exclusions exclusions new-dep)
-                                         new-dep))
-                      ; Dependency serializing function
-                      (serialize-dependency (dependency)
-                                            (concat "["
-                                                    ; Traversing every key in the dependency hash table and building dependency definition string
-                                                    (mapconcat (lambda (key)
-                                                                 (let ((value (gethash key dependency)))
-                                                                      (cond
-                                                                        ; name is always given
-                                                                        ((equal key 'name)
-                                                                            value)
-                                                                              ; I'm not sure but maybe version might be empty
-                                                                        ((and (equal key 'version) (not (string-empty-p value)))
-                                                                            (format "\"%s\"" value))
-                                                                              ; Scope is optional
-                                                                        ((and (equal key 'scope) (not (string-empty-p value)))
-                                                                            (format ":scope \"%s\"" value))
-                                                                              ; Optional flag should be set only if it's true
-                                                                        ((and (equal key 'optional) value)
-                                                                            ":optional true")
-                                                                              ; Classifier is optinal
-                                                                        ((and (equal key 'classifier) (not (string-empty-p value)))
-                                                                            (format ":classifier \"%s\"" value))
-                                                                              ; Extension is optional
-                                                                        ((and (equal key 'extension) (not (string-empty-p value)))
-                                                                            (format ":extension \"%s\"" value))
-                                                                              ; Exclusions should be given if there're any
-                                                                        ((and (equal key 'exclusions) (not (seq-empty-p value)))
-                                                                            (concat
-                                                                                ":exclusions ["
-                                                                                (mapconcat #'serialize-dependency value " ")
-                                                                                "]")))))
-                                                               serialize-key-traversing-seq
-                                                               " ")
-                                                    "]")))
-              (let (
-                    ; deps-adopted is a list of hash tables representing dependencies
-                    (deps-adopted (reduce
-                                    (lambda (deps-adopted dependency)
-                                      ; Skip any hlines and empty rows
-                                      (if (or (equal dependency 'hline) (every #'string-empty-p dependency))
-                                          deps-adopted
-                                        ; Else destructuring the dependency given
-                                        (destructuring-bind (name version scope optional classifier extension exclusions ex-classifier ex-extension _) dependency
-                                          (cond
-                                           ; Append new dependency hash map in case there's a name given
-                                           ((not (string-empty-p name))
-                                            (append deps-adopted
-                                                    (list (make-dependency name
-                                                                           version
-                                                                           scope
-                                                                           optional
-                                                                           classifier
-                                                                           extension
-                                                                           (if (not (string-empty-p exclusions))
-                                                                               (list (make-dependency exclusions
-                                                                                                      ""
-                                                                                                      ""
-                                                                                                      ""
-                                                                                                      ex-classifier
-                                                                                                      ex-extension
-                                                                                                      nil)))))))
-                                           ; Append another exclusion in case there's no name but exclusions given
-                                           ((and (string-empty-p name) (not (string-empty-p exclusions)))
-                                            (let* ((last-dep (car (last deps-adopted))))
-                                              (puthash 'exclusions
-                                                       (append (gethash 'exclusions last-dep nil)
-                                                               (list (make-dependency exclusions
-                                                                                      ""
-                                                                                      ""
-                                                                                      ""
-                                                                                      ex-classifier
-                                                                                      ex-extension
-                                                                                      nil)))
-                                                       last-dep)
-                                              deps-adopted))))))
-                                    ; Skipping title line
-                                    (cdr deps-table)
-                                    :initial-value nil)))
-                ; So now I have list of dependencies (as hash maps) which I'm to transform into Clojure's vector of vectors
-                ; in Clojure syntax
-                (mapconcat #'serialize-dependency deps-adopted "\n"))))))
-  #+END_SRC
-
-** render-code-block-if
-
-  Выводит результат работы блока кода если в спецификации проекта присутствует параметр с требуемым значением.
-
-  *Требования*:
-  - Блок кода с данным именем должен присутствовать в org-файле из которого делается вызов
-
-  *Примеры:*
-  #+BEGIN_EXAMPLE
-    <<render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")>>
-    #+CALL: render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")
-  #+END_EXAMPLE
-
-  #+CAPTION: *Параметры:*
-  #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя       | Значение по умолчанию | Описание                                                                        |
-  |-----------+-----------------------+---------------------------------------------------------------------------------|
-  | name      | ""                    | Имя блока присвоенное через диррективу ~#+NAME:~.                               |
-  | condition | ""                    | Условие вывода в формате "ПАРАМЕТР = ЗНАЧЕНИЕ", где = операция сравнения строк. |
-
-  #+NAME: render-codeblock-if
-  #+BEGIN_SRC emacs-lisp :var name="" :var condition="" :results value silent
-    (save-excursion
-      (destructuring-bind (&optional (param-name "") &optional (cond-value "")) (split-string condition "=" t "\s+")
-        (let ((param-value (org-babel-execute-src-block
-                            nil
-                            (cdr (assoc 'get-specification-param org-babel-library-of-babel))
-                            (list
-                             (cons :var (format "title=\"%s\"" param-name))))))
-          (if (string= param-value cond-value)
-              (progn
-                (org-babel-goto-named-src-block name)
-                (let ((tangle-result (org-babel-tangle-single-block "")))
-                  (nth 5 tangle-result)))
-            ""))))
-  #+END_SRC
-
-* Boot-проект
-
-  #+SETUPFILE: setup.org
-  
-** boot.properties
-
-  Файл boot.properties используется Boot для привязки проекта к конкретной версии Boot и запуска этой версии Boot
-  на конкретной версии Clojure.
-
-  #+NAME: boot.properties
-  #+BEGIN_SRC sh :tangle ../boot.properties :noweb yes
-    #http://boot-clj.com
-    #<<time-is-now()>>
-    BOOT_CLOJURE_NAME=org.clojure/clojure
-    BOOT_CLOJURE_VERSION=<<get-specification-param(title="Clojure/Версия")>>
-    BOOT_VERSION=<<get-specification-param(title="Boot/Версия")>>
-  #+END_SRC
-
-** build.boot
-
-  Файл ~build.boot~ исполняется Boot при запуске src_sh{boot task}, где ~task~ имя задачи для исполнения. Задачи проекта
-  описаны ниже, в соответствующем разделе.
-
-  #+NAME: build.boot
-  #+BEGIN_SRC clojure :tangle ../build.boot :noweb yes :exports none
-    (require '[clojure.java.io :refer [file]])
-
-    <<set-project-paths>>
-
-    <<render-codeblock-if(name="set-project-clojure-dependency", condition="Clojure=yes")>>
-
-    <<render-codeblock-if(name="set-project-clojurescript-dependency", condition="ClojureScript=yes")>>
-
-    <<set-project-user-dependencies>>
-
-    <<render-codeblock-if(name="boot-clojure-tasks", condition="Clojure=yes")>>
-
-    <<render-codeblock-if(name="boot-clojurescript-tasks", condition="ClojureScript=yes")>>
-
-    <<boot-user-task>>
-  #+END_SRC
-
-  Устанавливаем дирректории проекта, если они объявлены в спецификации и присутствуют на диске.
-
-  #+NAME: set-project-paths
-  #+BEGIN_SRC clojure
-    (def paths [ [:source-paths "<<get-specification-param(title="Clojure/Расположение исходников")>>"]
-                 [:source-paths "<<get-specification-param(title="ClojureScript/Расположение исходников")>>"]
-                 [:resource-paths "<<get-specification-param(title="Расположение classpath ресурсов")>>"]
-                 [:asset-paths "<<get-specification-param(title="Расположение прочих ресурсов")>>"] ] )
-
-    (doseq [[ env-key path ] paths]
-      (if (and (seq path) (not ((get-env env-key) path)))
-        (let [dir (file path)]
-          (if (.isDirectory dir)
-            (set-env! env-key #(conj % (.getName dir)))))))
-  #+END_SRC
-
-  Если в проекте объявлена зависимость от /Clojure/, т.е. в спецификации для параметра ~Clojure~ указано ~yes~,
-  то добавляем зависимость от /Clojure/.
-
-  #+NAME: set-project-clojure-dependency
-  #+BEGIN_SRC clojure
-    (set-env! :dependencies #(conj % '[org.clojure/clojure "<<get-specification-param(title="Clojure/Версия")>>"]))
-  #+END_SRC
-
-  Если в проекте объявлена зависимость от /ClojureScript/, т.е. в спецификации для параметра ~ClojureScript~
-  указано ~yes~, то добавляем зависимость от /ClojureScript/.
-
-  #+NAME: set-project-clojurescript-dependency
-  #+BEGIN_SRC clojure
-    (set-env! :dependencies #(conj % '[org.clojure/clojurescript "<<get-specification-param(title="ClojureScript/Версия")>>"]))
-  #+END_SRC
-
-  Добавляем пользовательские зависимости проекта.
-
-  #+NAME: set-project-user-dependencies
-  #+BEGIN_SRC clojure
-    (let [deps '[
-                <<render-project-dependencies()>>
-               ]]
-      (set-env! :dependencies #(into % deps)))
-  #+END_SRC
-
-*** Boot-задачи проекта для /Clojure/
-
-   Boot-задачи для /Clojure/ будут добавлены в результирующий ~build.boot~, если в спецификации проекта в параметре
-   ~Clojure~ указано значение ~yes~.
-
-   Все блоки кода с boot-задачами для /Clojure/ должны иметь имя ~boot-clojure-task~. Каждая задача с таким именем будет
-   включена в результирующий ~build.boot~.
-
-   #+NAME: boot-clojure-tasks
-   #+BEGIN_SRC clojure :noweb yes :exports none
-     <<boot-clojure-task>>
-   #+END_SRC
-
-**** clj-build
-    :PROPERTIES:
-    :CUSTOM_ID: clj-build
-    :END:
-
-    Эта задача строит uberjar проекта который запускается командой.
-
-    #+BEGIN_SRC sh :dir ".." :noweb yes
-      java -jar <<get-specification-param(title="Целевая дирректория")>>/project.jar
-    #+END_SRC
-
-    #+NAME: boot-clojure-task
-    #+BEGIN_SRC clojure
-      (deftask clj-build
-        "Builds project's uberjar"
-        []
-        (comp (pom :project '<<get-specification-param(title="Имя проекта")>>
-                   :version "<<get-specification-param(title="Версия проекта")>>")
-              (aot :all true)
-              (uber)
-              (jar :main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
-              (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
-    #+END_SRC
-
-    Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-build}
-
-**** clj-run
-
-    Эта задача запускает проект в той же Java-среде в которой запущен Boot. Перед запуском надо скомпелировать проект
-    задачей [[#clj-build][clj-build]].
-
-    #+NAME: boot-clojure-task
-    #+BEGIN_SRC clojure
-      (deftask clj-run
-        "Runs the project's main function"
-        []
-        (require '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
-        (let [main-fn (resolve '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main)]
-          (comp (aot :all true) (with-pass-thru _ (main-fn)))))
-    #+END_SRC
-
-    Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-run}
-
-*** Boot-задачи проекта для /ClojureScript/
-
-   Boot-задачи для /ClojureScript/ будут добавлены в результирующий ~build.boot~, если в спецификации проекта
-   в параметре ~ClojureScript~ указано значение ~yes~.
-
-   Все блоки кода с boot-задачами для /ClojureScript/ должны иметь имя ~boot-clojurescript-task~. Каждая задача с таким
-   именем будет включена в результирующий ~build.boot~.
-
-   #+NAME: boot-clojurescript-tasks
-   #+BEGIN_SRC clojure :noweb yes :exports none
-     <<boot-clojurescript-task>>
-   #+END_SRC
-
-**** cljs-figwheel
-
-    Эта задача интерфейс к *figwheel*, для запуска используйте src_sh[:dir "."]{boot cljs-figwheel}.\\
-
-    Компилирует ClojureScript файлы, запускает HTTP-server обслуживающий дирректорию публичных ресурсов,
-    запускает монитор для перекомпиляции, запускает nRepl сервер. Для входа в ClojureScript REPL выполнить
-    "9 шагов к успеху":
-
-    1. выполнить src_sh{boot cljs-figwheel}
-    2. дождаться звукового сигнала
-    3. посмотреть в консоли адрес и порт запущенного веб-сервера (обычно http://localhost:3449)
-    4. открыть браузер, открыть URL, увидеть в JavaScript-консоли сообщение Opened Websocket REPL connection
-    5. посмотреть в консоли адрес и порт nRepl сервера, передать их в следующем шаге
-    6. выполнить src_emacs-lisp{(cider-connect HOST PORT)} или M-x cider-connect и ввести HOST и PORT, хотя, походу
-       cider сам прекрасно всё цепляет из файла ~.nrepl-port~, так что можно просто два раза ENTER нажать
-    7. в REPL буфере ввести src_clojure{(cljs-repl)} чтобы запустить ClojureScript REPL
-    8. в REPL буфере ввести src_clojure{(.log js/console "OK!")}
-    9. увидеть сообщение "OK!" в JavaScript-консоли браузера
-
-    #+NAME: boot-clojurescript-task
-    #+BEGIN_SRC clojure
-      (set-env! :dependencies #(into % '[[ajchemist/boot-figwheel "0.5.4-6" :scope "test"]
-                                         [org.clojure/tools.nrepl "0.2.12" :scope "test"]
-                                         [com.cemerick/piggieback "0.2.1" :scope "test"]
-                                         [figwheel-sidecar "0.5.7" :scope "test"]]))
-
-      (require '[boot-figwheel :refer [figwheel start-figwheel! stop-figwheel! start-autobuild stop-autobuild cljs-repl fig-status]])
-
-      ;; This is for (cider-connect) to work.
-      ;; NOTE: do not use (cider-jack-in), use (cider-connect) instead
-      ;; ---------------------------
-      ;; Start of cider related code
-      (swap! boot.repl/*default-dependencies* concat '[[cider/cider-nrepl "<<get-specification-param(title="Cider/Версия")>>"]])
-      (swap! boot.repl/*default-middleware* conj 'cider.nrepl/cider-middleware)
-      ;; End of cider related code
-
-      (deftask cljs-figwheel
-        "Compiles ClojureScript, serves it, autobuilds"
-        []
-        (comp
-         (figwheel :build-ids ["dev"]
-                   ;:once-build ["advanced"]
-                   :all-builds [{:id "dev"
-                                 :source-paths (seq (get-env :source-paths))
-                                 :compiler {:main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
-                                            :optimizations :none
-                                            :source-map true
-                                            :output-to "app.js"}
-                                 :figwheel {:build-id "dev"
-                                            :on-jsload '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main
-                                            :heads-up-display true
-                                            :autoload true
-                                            :debug false}}]
-                   :figwheel-options {:http-server-root "public"
-                                      :open-file-command "emacsclient"
-                                      :repl false}
-                   :target-path "<<get-specification-param(title="Расположение публичных ресурсов")>>")
-         (speak)
-         (repl)))
-    #+END_SRC
-
-*** Пользовательские boot-задачи
-
-   Все блоки кода с пользовательскими boot-задачами должны иметь имя ~boot-user-task~. Каждая задача с таким
-   именем будет включена в результирующий ~build.boot~.
-
-* Код проекта
-
-  #+SETUPFILE: ../build/setup.org
-  
-** Пространство имён Core
-
-*** Функции
-
-**** -main
-
-    #+NAME: core/main.clj
-    #+BEGIN_SRC clojure :tangle (org-sbe in-clj-path (path \"core.clj\"))
-      (ns <<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
-        (:gen-class))
-
-      (defn -main
-        "Project's entry point"
-        [& args]
-        (println "Hello, from <<get-specification-param(title="Имя проекта")>>!"))
-    #+END_SRC
-
-    #+NAME: core/main.cljs
-    #+BEGIN_SRC clojure :tangle (org-sbe in-cljs-path (path \"core.cljs\"))
-      (ns <<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
-        (:refer-clojure))
-
-      (enable-console-print!)
-
-      (defn ^:export -main
-        "Project's entry point"
-        [& args]
-        (println "Hello, from <<get-specification-param(title="Имя проекта")>>!!"))
-    #+END_SRC
-
-    #+NAME: index.html
-    #+BEGIN_SRC html :tangle (org-sbe in-resources-path (path \"public/index.html\"))
-      <!doctype html>
-      <html>
-       <head>
-        <title><<get-specification-param(title="Имя проекта")>></title>
-       </head>
-       <body>
-         <script src="app.js"></script>
-       </body>
-     </html>
-  #+END_SRC
+  #+INCLUDE: "org/core.org" :minlevel 2
 
 * Footnotes
 
-[fn:1] Для особо интересующихся см. документацию к функции cemeric.pomegranate.aether/resolve-dependencies
+[fn:1] For the one interested please see the documentation for ~cemeric.pomegranate.aether/resolve-dependencies~ function

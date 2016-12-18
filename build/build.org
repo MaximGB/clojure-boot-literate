@@ -56,7 +56,7 @@
 
   #+NAME: tangle-all.sh
   #+BEGIN_SRC shell :tangle ../tangle-all.sh  :shebang "#!/bin/sh" :noweb yes :results silent
-    ./tangle.sh project.org build/*.org <<get-specification-param(title="Расположение org-исходников")>>/*.org
+    ./tangle.sh project.org build/*.org <<get-specification-param(title="Org sources path")>>/*.org
   #+END_SRC
 
 [fn:thi-ng-credit] Скрипты tangle.sh и tangle-all.sh были взяты из проекта [[https://github.com/thi-ng/babel][thi.ng/babel]] и немного адаптированы.

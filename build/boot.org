@@ -10,8 +10,8 @@
     #http://boot-clj.com
     #<<time-is-now()>>
     BOOT_CLOJURE_NAME=org.clojure/clojure
-    BOOT_CLOJURE_VERSION=<<get-specification-param(title="Clojure/Версия")>>
-    BOOT_VERSION=<<get-specification-param(title="Boot/Версия")>>
+    BOOT_CLOJURE_VERSION=<<get-specification-param(title="Clojure/Version")>>
+    BOOT_VERSION=<<get-specification-param(title="Boot/Version")>>
   #+END_SRC
 
 * build.boot
@@ -42,10 +42,10 @@
 
   #+NAME: set-project-paths
   #+BEGIN_SRC clojure
-    (def paths [ [:source-paths "<<get-specification-param(title="Clojure/Расположение исходников")>>"]
-                 [:source-paths "<<get-specification-param(title="ClojureScript/Расположение исходников")>>"]
-                 [:resource-paths "<<get-specification-param(title="Расположение classpath ресурсов")>>"]
-                 [:asset-paths "<<get-specification-param(title="Расположение прочих ресурсов")>>"] ] )
+    (def paths [ [:source-paths "<<get-specification-param(title="Clojure/Sources path")>>"]
+                 [:source-paths "<<get-specification-param(title="ClojureScript/Sources path")>>"]
+                 [:resource-paths "<<get-specification-param(title="Classpath resources path")>>"]
+                 [:asset-paths "<<get-specification-param(title="Assets path")>>"] ] )
 
     (doseq [[ env-key path ] paths]
       (if (and (seq path) (not ((get-env env-key) path)))
@@ -59,7 +59,7 @@
 
   #+NAME: set-project-clojure-dependency
   #+BEGIN_SRC clojure
-    (set-env! :dependencies #(conj % '[org.clojure/clojure "<<get-specification-param(title="Clojure/Версия")>>"]))
+    (set-env! :dependencies #(conj % '[org.clojure/clojure "<<get-specification-param(title="Clojure/Version")>>"]))
   #+END_SRC
 
   Если в проекте объявлена зависимость от /ClojureScript/, т.е. в спецификации для параметра ~ClojureScript~
@@ -67,7 +67,7 @@
 
   #+NAME: set-project-clojurescript-dependency
   #+BEGIN_SRC clojure
-    (set-env! :dependencies #(conj % '[org.clojure/clojurescript "<<get-specification-param(title="ClojureScript/Версия")>>"]))
+    (set-env! :dependencies #(conj % '[org.clojure/clojurescript "<<get-specification-param(title="ClojureScript/Version")>>"]))
   #+END_SRC
 
   Добавляем пользовательские зависимости проекта.
@@ -101,7 +101,7 @@
     Эта задача строит uberjar проекта который запускается командой.
 
     #+BEGIN_SRC sh :dir ".." :noweb yes
-      java -jar <<get-specification-param(title="Целевая дирректория")>>/project.jar
+      java -jar <<get-specification-param(title="Target path")>>/project.jar
     #+END_SRC
 
     #+NAME: boot-clojure-task
@@ -109,12 +109,12 @@
       (deftask clj-build
         "Builds project's uberjar"
         []
-        (comp (pom :project '<<get-specification-param(title="Имя проекта")>>
-                   :version "<<get-specification-param(title="Версия проекта")>>")
+        (comp (pom :project '<<get-specification-param(title="Project name")>>
+                   :version "<<get-specification-param(title="Project version")>>")
               (aot :all true)
               (uber)
-              (jar :main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
-              (target :dir #{"<<get-specification-param(title="Целевая дирректория")>>"})))
+              (jar :main '<<get-specification-param(title="Project name", splitby="/", joinby=".")>>.<<get-specification-param(title="Main namespace")>>)
+              (target :dir #{"<<get-specification-param(title="Target path")>>"})))
     #+END_SRC
 
     Для вызова задачи выполните: src_sh[:dir ".."]{boot clj-build}
@@ -129,8 +129,8 @@
       (deftask clj-run
         "Runs the project's main function"
         []
-        (require '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>)
-        (let [main-fn (resolve '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main)]
+        (require '<<get-specification-param(title="Project name", splitby="/", joinby=".")>>.<<get-specification-param(title="Main namespace")>>)
+        (let [main-fn (resolve '<<get-specification-param(title="Project name", splitby="/", joinby=".")>>.<<get-specification-param(title="Main namespace")>>/-main)]
           (comp (aot :all true) (with-pass-thru _ (main-fn)))))
     #+END_SRC
 
@@ -181,7 +181,7 @@
       ;; NOTE: do not use (cider-jack-in), use (cider-connect) instead
       ;; ---------------------------
       ;; Start of cider related code
-      (swap! boot.repl/*default-dependencies* concat '[[cider/cider-nrepl "<<get-specification-param(title="Cider/Версия")>>"]])
+      (swap! boot.repl/*default-dependencies* concat '[[cider/cider-nrepl "<<get-specification-param(title="Cider/Version")>>"]])
       (swap! boot.repl/*default-middleware* conj 'cider.nrepl/cider-middleware)
       ;; End of cider related code
 
@@ -193,19 +193,19 @@
                    ;:once-build ["advanced"]
                    :all-builds [{:id "dev"
                                  :source-paths (seq (get-env :source-paths))
-                                 :compiler {:main '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>
+                                 :compiler {:main '<<get-specification-param(title="Project name", splitby="/", joinby=".")>>.<<get-specification-param(title="Main namespace")>>
                                             :optimizations :none
                                             :source-map true
                                             :output-to "app.js"}
                                  :figwheel {:build-id "dev"
-                                            :on-jsload '<<get-specification-param(title="Имя проекта", splitby="/", joinby=".")>>.<<get-specification-param(title="Пространство имён main")>>/-main
+                                            :on-jsload '<<get-specification-param(title="Project name", splitby="/", joinby=".")>>.<<get-specification-param(title="Main namespace")>>/-main
                                             :heads-up-display true
                                             :autoload true
                                             :debug false}}]
                    :figwheel-options {:http-server-root "public"
                                       :open-file-command "emacsclient"
                                       :repl false}
-                   :target-path "<<get-specification-param(title="Расположение публичных ресурсов")>>")
+                   :target-path "<<get-specification-param(title="Public resources path")>>")
          (speak)
          (repl)))
     #+END_SRC

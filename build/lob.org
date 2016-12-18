@@ -33,10 +33,10 @@
 
   *Примеры:*
   #+BEGIN_EXAMPLE
-    <<get-table-param(table=../project.org:project-specification, title="Имя проекта")>>
-    <<get-table-param(table=../project.org:project-specification, title="Имя проекта", splitby="-", joinby="_")>>
-    <<get-table param(table=../project.org:project-specification, title="Clojure/Версия")>>
-    #+CALL: get-table-param(table=../project.org:project-specification, title="Имя проекта")
+    <<get-table-param(table=../project.org:project-specification, title="Project name")>>
+    <<get-table-param(table=../project.org:project-specification, title="Project name", splitby="-", joinby="_")>>
+    <<get-table param(table=../project.org:project-specification, title="Clojure/Version")>>
+    #+CALL: get-table-param(table=../project.org:project-specification, title="Project name")
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
@@ -86,9 +86,9 @@
 
   *Примеры:*
   #+BEGIN_EXAMPLE
-    <<get-specification-param(title="Имя проекта")>>
-    <<get-specification-param(title="Пространство имён main", splitby="." joinby="/")>>
-    #+CALL: get-specification-param(title="Имя проекта")
+    <<get-specification-param(title="Project name")>>
+    <<get-specification-param(title="Main namespace", splitby="." joinby="/")>>
+    #+CALL: get-specification-param(title="Project name")
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
@@ -121,29 +121,29 @@
   и промежуточной дирректории, задаваемой параметром из спецификации проекта.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
+  - Project name
   - Параметр передаваемый через param
 
   *Примеры:*
   #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-some-path (param="Clojure/Расположение исходников" path \"core.clj\"))
+    #+BEGIN_SRC clojure :tangle (org-sbe in-some-path (param="Clojure/Sources path" path \"core.clj\"))
        ...
     #+END_SRC
     <<in-some-path(param="Clojure/Расоложение исходников", path="core.clj")>>
-    #+CALL: in-some-path(param="Clojure/Расположение исходников", path="core.clj")
+    #+CALL: in-some-path(param="Clojure/Sources path", path="core.clj")
   #+END_EXAMPLE
 
   #+CAPTION: *Параметры:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{8cm}| :float nil
   | Имя         | Значение по умолчанию             | Описание                                                      |
   |-------------+-----------------------------------+---------------------------------------------------------------|
-  | param       | "Clojure/Расположение исходников" | Имя параметра, задющего часть пути относительно корня проекта |
+  | param       | "Clojure/Sources path" | Имя параметра, задющего часть пути относительно корня проекта |
   | path        | ""                                | Путь относительно дирректории исходников                      |
   | projectvise | t                                 | Вставлять имя проекта между базовой дирректорией              |
   |             |                                   | и формируемым окончанием пути.                                |
 
   #+NAME: in-some-path
-  #+BEGIN_SRC emacs-lisp :var param="Clojure/Расположение исходников" :var path="" :var projectvise='t :results value silent
+  #+BEGIN_SRC emacs-lisp :var param="Clojure/Sources path" :var path="" :var projectvise='t :results value silent
     (save-excursion
       (let* ((project-org-dir (locate-dominating-file (buffer-file-name) "project.org"))
              (src-path (org-babel-execute-src-block
@@ -155,7 +155,7 @@
                              nil
                              (cdr (assoc 'get-specification-param org-babel-library-of-babel))
                              (list
-                               (cons :var "title=\"Имя проекта\"")
+                               (cons :var "title=\"Project name\"")
                                (cons :var "splitby=\".\"")
                                (cons :var "joinby=\"/\""))))
              (ns-path (replace-regexp-in-string "\-" "_" project-name)))
@@ -167,8 +167,8 @@
   Возвращает абсолютный путь до файла в дирректории экспортируемых clj-исходников проекта с учётом имени проекта.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Clojure/Расположение исходников
+  - Project name
+  - Clojure/Sources path
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -192,7 +192,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Clojure/Расположение исходников\"")
+         (cons :var "param=\"Clojure/Sources path\"")
          (cons :var (format "path=\"%s\"" path)))))
   #+END_SRC
 
@@ -201,8 +201,8 @@
   Возвращает абсолютный путь до файла в дирректории экспортируемых cljs-исходников проекта с учётом имени проекта.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - ClojureScript/Расположение исходников
+  - Project name
+  - ClojureScript/Sources path
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -226,7 +226,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"ClojureScript/Расположение исходников\"")
+         (cons :var "param=\"ClojureScript/Sources path\"")
          (cons :var (format "path=\"%s\"" path)))))
   #+END_SRC
 
@@ -235,8 +235,8 @@
   Возвращает абсолютный путь до файла в дирректории экспортируемых тестов проекта с учётом имени проекта.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение тестов
+  - Project name
+  - Tests path
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -260,7 +260,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Расположение тестов\"")
+         (cons :var "param=\"Tests path\"")
          (cons :var (format "path=\"%s\"" path)))))
   #+END_SRC
 
@@ -269,8 +269,8 @@
   Возвращает абсолютный путь до файла в дирректории classpath ресурсов.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение classpath ресурсов
+  - Project name
+  - Classpath resources path
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -294,7 +294,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Расположение classpath ресурсов\"")
+         (cons :var "param=\"Classpath resources path\"")
          (cons :var (format "path=\"%s\"" path))
          (cons :var "projectvise=()"))))
   #+END_SRC
@@ -304,8 +304,8 @@
   Возвращает абсолютный путь до файла в дирректории прочих ресурсов.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Расположение прочих ресурсов
+  - Project name
+  - Assets path
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -329,7 +329,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Расположение прочих ресурсов\"")
+         (cons :var "param=\"Assets path\"")
          (cons :var (format "path=\"%s\"" path))
          (cons :var "projectvise=()"))))
   #+END_SRC
@@ -338,8 +338,8 @@
   Возвращает абсолютный путь до файла в целевой дирректории.
 
   *Требования*: В спецификации проекта должен быть заданы параметры:
-  - Имя проекта
-  - Целевая дирректория
+  - Project name
+  - Target path
 
   *Примеры:*
   #+BEGIN_EXAMPLE
@@ -363,7 +363,7 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Целевая дирректория\"")
+         (cons :var "param=\"Target path\"")
          (cons :var (format "path=\"%s\"" path))
          (cons :var "projectvise=()"))))
   #+END_SRC

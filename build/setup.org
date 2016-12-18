@@ -1,4 +1,4 @@
-#+LANGUAGE: ru
+#+LANGUAGE: en
 #+AUTHOR: Maxim Bazhenov
 #+EMAIL: maximgb@yandex.ru
 #+SELECT_TAGS: export
@@ -10,8 +10,10 @@
 #+LATEX_CLASS_OPTIONS: [11pt,a4paper]
 #+LATEX_HEADER: \usepackage[a4paper,margin=1in,footskip=0.25in]{geometry}
 
-# Это только если у вас пакет minted версии < 2.0, если при экпорте в PDF unicode-символы отображаются нормально,
-# то всё что ниже можно удалить
+# These headers are needed only you have minted with version < 2.0 and you have unicode issues
+# If non latin symbols in PDF export are properly encoded and visible than the following latex
+# headers might be removed
+# ------------------------
 #+LATEX_HEADER: \makeatletter
 #+LATEX_HEADER: \newcommand{\minted@write@detok}[1]{%
 #+LATEX_HEADER:   \immediate\write\FV@OutFile{\detokenize{#1}}}%
@@ -39,8 +41,10 @@
 #+LATEX_HEADER:   \immediate\closeout\minted@code}
 #+LATEX_HEADER: \makeatother
 
-# From https://github.com/fniessen/org-html-themes
-#
+# HTML export theming:
+# --------------------
+# Taken from https://github.com/fniessen/org-html-themes
+# ------------------------------------------------------
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/htmlize.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/bigblow.css"/>
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/hideshow.css"/>
@@ -54,6 +58,7 @@
 #+HTML_HEAD: <script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
 #
 # For source code blocks background
+# ---------------------------------
 #+HTML_HEAD: <style>
 #+HTML_HEAD: #content, #postamble {margin: 0 200px 0 200px; max-width: 100%}
 #+HTML_HEAD: pre.src {background-color: #303030; color: #e5e5e5}
