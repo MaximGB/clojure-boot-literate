@@ -1,22 +1,24 @@
 #+SETUPFILE: setup.org
 
-* Среда
+* Environtment
 
-  Данный проект требует Emacs/Org-mode, Clojure, Boot. Проект следует принципам литературного программирования, когда
-  код программы выделяется из org-файлов, совмещающих документацию проекта и код проекта, с помощью процесса
-  называемом в англоязычной среде *tangle*.
+  This project template requires Emacs/Org-mode, Clojure, Boot. The project which might be built using this template
+  will follow principles of the literate programming, i.e. when program code is extracted from Org files,
+  which in turn combine a project documentation and code.
 
-* Экспорт кода из файлов
+* Code export from org-files.
 
-  Для преобразования org-файлов в файлы с исходным кодом Clojure необходим файл *tangle.sh*[fn:thi-ng-credit]
+  To exctract code from org-files into files with *Clojure* source code ~tangle.sh~ file is used [fn:thi-ng-credit].
 
-  К сожалению экспортировать код напрямую из Emacs вызовом *M-x org-babel-tangle* просто так не получиться. Файлы
-  проекта используют Library of Babel, расположенную в файле *build/lob.org* и для её инициализации нужен вызов
-  ~(org-babel-lob-ingest)~. Этот вызов делается в файле *tangle.sh*, поэтому там всё работает. Для экспорта кода из
-  Emacs надо раз в сессию выполнять вызов src_emacs-lisp{(org-babel-lob-ingest "build/lob.org")}
+  Unfortunatelly it's impossible to export code  from Emacs by simply executing *M-x org-babel-tangle*
+  call out of the box using this template. The project org-files are using the so called *"Library of Babel"* feature,
+  the code of which is inside ~build/lob.org~ file. To initialize the library a call to ~(org-babel-lob-ingest)~
+  is required. This call is done inside ~tangle.sh~ file and if you run it from a terminal everything should work
+  out of the box. To export code from Emacs you will have to execute src_emacs-lisp{(org-babel-lib-ingest "build/lob.org")}
+  call once per session (Emacs run).
 
-  Для создания файла *tangle.sh* в корневой дирректории проекта поместите курсор в следующий блок кода и нажмите
-  комбинацию клавиш C-u C-c C-v t чтобы записать содержимое блока на диск в файл *tangle.sh*.
+  To create ~tangle.sh~ file in the project's root directory place the cursor into the following source code block
+  and press C-u C-c C-v t, this will put the code block contents into ~tangle.sh~ file on your disk.
 
   #+NAME: tangle.sh
   #+BEGIN_SRC shell :tangle ../tangle.sh  :shebang "#!/bin/sh" :noweb yes :results silent
@@ -41,22 +43,22 @@
                   (find-file (expand-file-name file \"$DIR\"))
                   (org-babel-tangle)
                   (kill-buffer)) '($FILES)))" \
-    #2>&1 | grep Tangled
+    2>&1 | grep Tangled
   #+END_SRC
 
-  Этому скрипту надо передать имя org-файла из которого извлекать исходники src_sh{tangle.sh file ...},
-  где ~file~ - имя org-файла или имена org-файлов.
+  This script receives org-file names which to extract source code from: src_sh{tangle.sh file ...}, where ~file~ is
+  name or names of org-files to process.
 
-* Экспорт кода проекта
+* Project code export
 
-  Для извлечения кода из всех org-файлов используется скрипт *tangle-all.sh*[fn:thi-ng-credit].
+  To extract project source code from all org-files the ~tangle-all.sh~ shell-script is used [fn:thi-ng-credit].
 
-  Для создания файла *tangle-all.sh* в дирректории с этим файлом поместите курсор в следующий блок кода и нажмите
-  комбинацию клавиш C-u C-c C-v t чтобы записать содержимое блока на диск в файл *tangle.sh*.
+  To create ~tangle-all.sh~ file in the project's root directory place the cursor into the following source code block
+  and press C-u C-c C-v t, this will put the code block contents into ~tangle-all.sh~ file on your disk.
 
   #+NAME: tangle-all.sh
   #+BEGIN_SRC shell :tangle ../tangle-all.sh  :shebang "#!/bin/sh" :noweb yes :results silent
     ./tangle.sh project.org build/*.org <<get-specification-param(title="Org sources path")>>/*.org
   #+END_SRC
 
-[fn:thi-ng-credit] Скрипты tangle.sh и tangle-all.sh были взяты из проекта [[https://github.com/thi-ng/babel][thi.ng/babel]] и немного адаптированы.
+[fn:thi-ng-credit] ~tangle.sh~ and ~tangle-all.sh~ shell-script has been taken from [[https://github.com/thi-ng/babel][thi.ng/babel]] project and adopted to this project a bit.
