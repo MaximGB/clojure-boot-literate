@@ -1,15 +1,8 @@
-* По русски 
-
-  Это заготовка литературного проекта на Clojure/Boot в среде Emacs/Org. Проект демонстрирует как сформировать литературный 
-  проект из нескольких org-файлов, а не одного, и при этом иметь возможность экспорта документации и кода как напрямую из
-  Emacs, так и с помощью сформированных им же shell-скриптов.
-  
-  Проект сомодокументируемый, начните знакомство с ~project.org~ и как его использовать должно стать более или менее понятным.
-
-* In english
+* Clojure/ClojureScript/Boot literate programing project template for Emacs + Org mode
 
   This is a skeleton of a Literate Clojure/Boot project in Emacs/Org envirenoment. It shows how to shape a literate 
-  programming project from several org-files, and no just one, and still have proper documentation and code export (tangling)
-  both from Emacs directly as well as from project generated shell-scripts.
+  programming project from several org-files, and no just one, and still have proper documentation and code export
+  (tangling) both from Emacs directly as well as from project generated shell-scripts.
   
-  The project is self-documenting (though in Russian), get started from ~project.org~ and it should be more or less clear how to use it.
+  The project is self-documenting, get started from ~project.org~ and it should be more or less clear how to use it,
+  or navigate to [[docs/][pre-exported documentation]].

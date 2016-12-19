@@ -1,0 +1,1882 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2016-12-19 Пн. 05:58 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clojure/ClojureScript Boot literate programming template</title>
+<meta name="generator" content="Org mode" />
+<meta name="author" content="Maxim Bazhenov" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/bigblow.css"/>
+<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/hideshow.css"/>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery-ui-1.10.2.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery.localscroll-min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery.scrollTo-1.4.3.1-min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/jquery.zclip.min.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/bigblow.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/bigblow/js/hideshow.js"></script>
+<script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.min.js"></script>
+<style>
+#content, #postamble {margin: 0 200px 0 200px; max-width: 100%}
+pre.src {background-color: #303030; color: #e5e5e5}
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Clojure/ClojureScript Boot literate programming template</h1>
+
+<div id="outline-container-org34a79fd" class="outline-2">
+<h2 id="org34a79fd"><span class="section-number-2">1</span> Quick start</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>Load project <b>Library of Babel</b>, by executing the following code block
+<code class="src src-emacs-lisp">(org-babel-lob-ingest "build/lob.org")</code>, to execute it place the cursor on the block
+and press C-c C-c.</li>
+<li>Fill in the table in the <a href="#project-specification">Project specification</a> section.</li>
+<li>Read the <a href="#env-requirements">Environment and project requirements</a> section, setup your environment accordingly and create
+the code exporting scripts <code>tangle.sh</code> and <code>tangle-all.sh</code>.</li>
+<li>Export initial project code by runing <code class="src src-sh">./tangle-all.sh</code>, place the cursor on
+the code block and press C-c C-c to execute it from <b>Emacs</b>, or run <code>tangle-all.sh</code> from a terminal.</li>
+<li>Build the project with <b>Boot</b>:
+<ul class="org-ul">
+<li>For <b>Clojure</b> <code class="src src-sh">boot clj-build</code>, place the cursor on the code block and press C-c C-c to execute it,
+or run <code>boot clj-build</code> from a terminal.</li>
+<li>For <b>ClojureScript</b> <code class="src src-sh">boot cljs-figwheel</code>, place the cursor on the code block and
+press C-c C-c to execute it, or run <code>boot cljs-figwheel</code> from a terminal.</li>
+</ul></li>
+<li>Run the project by running
+<code class="src src-sh">java -jar target/project.jar</code>,
+place the cursor on the code block and press C-c C-c, or run <code>java jar target/project.jar</code> from a terminal.</li>
+<li>Keep working on the project export the code periodically.</li>
+<li>To export the project documentation:
+<ul class="org-ul">
+<li>Into <code>project.pdf</code> press С-с С-e l p.</li>
+<li>Into <code>project.html</code> press C-c C-e h h.</li>
+</ul></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-orgdfc785b" class="outline-2">
+<h2 id="project-specification"><a id="orgdfc785b"></a><span class="section-number-2">2</span> Project specification</h2>
+<div class="outline-text-2" id="text-project-specification">
+<p>
+Project specification is given in the table following. The project file system as well as <code>boot.properties</code>
+and <code>build.boot</code> files are generated according to the specification.
+</p>
+
+<table id="org0c221a3" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 1:</span> Project specification</caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Property</th>
+<th scope="col" class="org-left">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Boot</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">Version</td>
+<td class="org-left">2.6.0</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">Project name</td>
+<td class="org-left">literate-boot</td>
+</tr>
+
+<tr>
+<td class="org-left">Project version</td>
+<td class="org-left">0.1.0-SNAPSHOT</td>
+</tr>
+
+<tr>
+<td class="org-left">Org sources path</td>
+<td class="org-left">org</td>
+</tr>
+
+<tr>
+<td class="org-left">Tests path</td>
+<td class="org-left">tests</td>
+</tr>
+
+<tr>
+<td class="org-left">Resource path</td>
+<td class="org-left">resources</td>
+</tr>
+
+<tr>
+<td class="org-left">Assets path</td>
+<td class="org-left">assets</td>
+</tr>
+
+<tr>
+<td class="org-left">Target path</td>
+<td class="org-left">target</td>
+</tr>
+
+<tr>
+<td class="org-left">Main namespace</td>
+<td class="org-left">core</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">Clojure</td>
+<td class="org-left">yes</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">Version</td>
+<td class="org-left">1.8.0</td>
+</tr>
+
+<tr>
+<td class="org-left">Sources path</td>
+<td class="org-left">src</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">ClojureScript</td>
+<td class="org-left">yes</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">Version</td>
+<td class="org-left">1.9.225</td>
+</tr>
+
+<tr>
+<td class="org-left">Sources path</td>
+<td class="org-left">src</td>
+</tr>
+
+<tr>
+<td class="org-left">Public resources path</td>
+<td class="org-left">resources/public</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">Cider</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">Version</td>
+<td class="org-left">0.14.0</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div id="outline-container-org50b83a8" class="outline-3">
+<h3 id="project-dependencies"><a id="org50b83a8"></a><span class="section-number-3">2.1</span> Dependencies</h3>
+<div class="outline-text-3" id="text-project-dependencies">
+<p>
+Project dependencies are given in the <b>dependencies</b> table<br  />
+</p>
+
+<p>
+One dependency per the table row should be given. The table columns correspond to options supported by <a href="https://github.com/cemerick/pomegranate">pomegranate</a>
+library, which in it's turn, is used by <b>Boot</b> for dependecies resolution <sup><a id="fnr.1" class="footref" href="#fn.1">1</a></sup>:
+</p>
+
+<ul class="org-ul">
+<li><b>Name</b>       - artifact name</li>
+<li><b>Version</b>    - artifact version</li>
+<li><b>Scope</b>      - dependency scope (in Maven terms), mighe be one of: <code>compile, provided, runtime, test, system, import</code></li>
+<li><b>Optional</b>   - dependency optionality flag, any dependency having <code>no</code> or empty value in this column
+is considired to be optional</li>
+<li><b>Classifier</b> - dependency classifier (in Maven terms)</li>
+<li><b>Extension</b>  - dependency extension (in Maven-terms)</li>
+<li><b>Exclusion</b>  - transitive dependencies exclusions for the dependency, one exclusion per the table row is allowed
+if you need to setup several exclusions for one dependency than for second and other exclusions
+<b>name</b>, <b>version</b>, <b>scope</b>, <b>optional</b>, <b>classifier</b>, <b>extension</b> columns should be empty</li>
+<li><b>Classifier</b> - exclusion dependency classifier (in Maven terms)</li>
+<li><b>Extension</b>  - exclusion dependency extension (in Maven-terms)</li>
+<li><b>Note</b>       - this column is ignored, it's used for documentation purposes</li>
+</ul>
+
+<table id="org86beb65" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 2:</span> Dependencies</caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Name</td>
+<td class="org-left">Version</td>
+<td class="org-left">Scope</td>
+<td class="org-left">Optional</td>
+<td class="org-left">Classifier</td>
+<td class="org-left">Extension</td>
+<td class="org-left">Exclusion</td>
+<td class="org-left">Classifier</td>
+<td class="org-left">Extension</td>
+<td class="org-left">Note</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0ca4793" class="outline-2">
+<h2 id="env-requirements"><a id="org0ca4793"></a><span class="section-number-2">3</span> Environment and project requirements</h2>
+<div class="outline-text-2" id="text-env-requirements">
+</div>
+
+<div id="outline-container-org7efddd3" class="outline-3">
+<h3 id="org7efddd3"><span class="section-number-3">3.1</span> Environtment</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+This project template requires Emacs/Org-mode, Clojure, Boot. The project which might be built using this template
+will follow principles of the literate programming, i.e. when program code is extracted from Org files,
+which in turn combine a project documentation and code.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org35d4edf" class="outline-3">
+<h3 id="org35d4edf"><span class="section-number-3">3.2</span> Code export from org-files.</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+To exctract code from org-files into files with <b>Clojure</b> source code <code>tangle.sh</code> file is used <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</p>
+
+<p>
+Unfortunatelly it's impossible to export code  from Emacs by simply executing <b>M-x org-babel-tangle</b>
+call out of the box using this template. The project org-files are using the so called <b>"Library of Babel"</b> feature,
+the code of which is inside <code>build/lob.org</code> file. To initialize the library a call to <code>(org-babel-lob-ingest)</code>
+is required. This call is done inside <code>tangle.sh</code> file and if you run it from a terminal everything should work
+out of the box. To export code from Emacs you will have to execute <code class="src src-emacs-lisp">(org-babel-lib-ingest "build/lob.org")</code>
+call once per session (Emacs run).
+</p>
+
+<p>
+To create <code>tangle.sh</code> file in the project's root directory place the cursor into the following source code block
+and press C-u C-c C-v t, this will put the code block contents into <code>tangle.sh</code> file on your disk.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="org1558378"><span style="color: #eedd82;">DIR</span>=<span style="color: #fa8072;">`pwd`</span>
+<span style="color: #eedd82;">FILES</span>=<span style="color: #ffa07a;">""</span>
+
+<span style="color: #ff7f24;"># </span><span style="color: #ff7f24;">wrap each argument in the code required to call tangle on it</span>
+<span style="color: #00ffff;">for</span> i<span style="color: #00ffff;"> in</span> $<span style="color: #eedd82;">@</span>; <span style="color: #00ffff;">do</span>
+    <span style="color: #eedd82;">FILES</span>=<span style="color: #ffa07a;">"$FILES \"$i\""</span>
+<span style="color: #00ffff;">done</span>
+
+emacs -Q --batch <span style="color: #ffa07a;">\</span>
+    --eval <span style="color: #ffa07a;">\</span>
+    <span style="color: #ffa07a;">"(progn</span>
+<span style="color: #ffa07a;">       (require 'package)</span>
+<span style="color: #ffa07a;">       (let ((default-directory package-user-dir))</span>
+<span style="color: #ffa07a;">         (normal-top-level-add-subdirs-to-load-path))</span>
+<span style="color: #ffa07a;">       (require 'cl)(require 'org)(require 'ob)(require 'ob-tangle)(require 'ob-lob)</span>
+<span style="color: #ffa07a;">       (org-babel-lob-ingest \"build/lob.org\")</span>
+<span style="color: #ffa07a;">       (setq org-confirm-babel-evaluate nil)</span>
+<span style="color: #ffa07a;">       (mapc (lambda (file)</span>
+<span style="color: #ffa07a;">              (find-file (expand-file-name file \"$DIR\"))</span>
+<span style="color: #ffa07a;">              (org-babel-tangle)</span>
+<span style="color: #ffa07a;">              (kill-buffer)) '($FILES)))"</span> <span style="color: #ffa07a;">\</span>
+2&gt;&amp;1 | grep Tangled
+</pre>
+</div>
+
+<p>
+This script receives org-file names which to extract source code from: <code class="src src-sh">tangle.sh file ...</code>, where <code>file</code> is
+name or names of org-files to process.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdf09b47" class="outline-3">
+<h3 id="orgdf09b47"><span class="section-number-3">3.3</span> Project code export</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+To extract project source code from all org-files the <code>tangle-all.sh</code> shell-script is used <sup><a id="fnr.2.100" class="footref" href="#fn.2">2</a></sup>.
+</p>
+
+<p>
+To create <code>tangle-all.sh</code> file in the project's root directory place the cursor into the following source code block
+and press C-u C-c C-v t, this will put the code block contents into <code>tangle-all.sh</code> file on your disk.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell" id="orgd102db6">./tangle.sh project.org build/*.org org/*.org
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgb18c2a3" class="outline-2">
+<h2 id="orgb18c2a3"><span class="section-number-2">4</span> "Library of Babel" helper code blocks library</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+Helper code blocks constituting the project's <b>"Library of Babel"</b> are defined here.
+This code blocks work in <b>Emacs/Org</b> environment and are not supposed to be called from Clojure or ClojureScript.
+</p>
+</div>
+
+<div id="outline-container-org36479eb" class="outline-3">
+<h3 id="org36479eb"><span class="section-number-3">4.1</span> time-is-now</h3>
+<div class="outline-text-3" id="text-4-1">
+<p>
+Returns current time as a string in a given format.
+</p>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+&lt;&lt;time-is-now()&gt;&gt;
+&lt;&lt;time-is-now(format="%F")
+#+CALL: time-is-now()
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 3:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">[format]</td>
+<td class="org-left">"%F %X"</td>
+<td class="org-left">Time string format as supported by <code>(format-time-string)</code> function. Optional.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orge6b43af">(format-time-string format)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org20c14b7" class="outline-3">
+<h3 id="lob-get-table-param"><a id="org20c14b7"></a><span class="section-number-3">4.2</span> get-table-param</h3>
+<div class="outline-text-3" id="text-lob-get-table-param">
+<p>
+Returns a value of a parameter defined in a table. Table must follow given requirements: parameter names are given
+in the first column, parameter values - in the second column. Hierarchical queries are supported in a way,
+if parameter name is given as <code>name/subname</code> then first <code>name</code> will be searched and then <code>subname</code> will be searched
+starting from <code>name</code> a row where <code>name</code> has been found.
+</p>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+&lt;&lt;get-table-param(table=../project.org:project-specification, title="Project name")&gt;&gt;
+&lt;&lt;get-table-param(table=../project.org:project-specification, title="Project name", splitby="-", joinby="_")&gt;&gt;
+&lt;&lt;get-table param(table=../project.org:project-specification, title="Clojure/Version")&gt;&gt;
+#+CALL: get-table-param(table=../project.org:project-specification, title="Project name")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 4:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">table</td>
+<td class="org-left">(quote ())</td>
+<td class="org-left">Table reference. Reference format is <code>[table containing org-file path:]table-name</code>,</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">for example <code>../file.org:table_name</code> or just <code>table_name</code> if a table is given</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">in the same file the call is done from. Default value simply allows return nil if</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">parameter is not given, since internally code block receives a table as a list.</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">title</td>
+<td class="org-left">""</td>
+<td class="org-left">Parameter name. Path-like parameter names are supported (i.e. names containing <code>'/'</code>.</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">If such <i>complex</i> parameter is given, than it'll be splited, and each resulting part</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">will be considered as a separate parameter name. The following parameter name search</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">will be started from a row where the preceding parameter name has been found, a value</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">of a preceding parameter is ignored. A value of the last parameter will be returned.</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">[splitby]</td>
+<td class="org-left">""</td>
+<td class="org-left">Parameter value splitter. Optional. Works in pair with <code>joinby</code>. If parameter values</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">a listed in a cell as comma-separated list, for example, than, giving <code>splitby=","</code>,</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">will split'em, and splitted values will be joined with <code>joinby</code> value.</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="org-left">[joinby]</td>
+<td class="org-left">""</td>
+<td class="org-left">Parameter value combinator. Optional. Works in pair with <code>splitby</code>.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org1cef108">(<span style="color: #00ffff;">let*</span> ((table-adopted (mapcar (<span style="color: #00ffff;">lambda</span> (x)
+                                (<span style="color: #00ffff;">if</span> (equal x 'hline)
+                                   '(hline hline hline)
+                                 x))
+                              table))
+       (titles (mapcar #'car table-adopted))
+       (path (split-string title (regexp-quote <span style="color: #ffa07a;">"/"</span>)))
+       (last-index (reduce (<span style="color: #00ffff;">lambda</span> (index title)
+                             (cl-position title titles <span style="color: #b0c4de;">:start</span> index <span style="color: #b0c4de;">:test</span> #'equal))
+                           path
+                           <span style="color: #b0c4de;">:initial-value</span> nil)))
+  (<span style="color: #00ffff;">if</span> last-index
+      (<span style="color: #00ffff;">let*</span> ((result (nth 1 (nth last-index table-adopted))))
+        (<span style="color: #00ffff;">if</span> (and result splitby joinby)
+            (mapconcat #'identity (split-string result (regexp-quote splitby) t <span style="color: #ffa07a;">"\s+"</span>) joinby)
+          result))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdcd615f" class="outline-3">
+<h3 id="orgdcd615f"><span class="section-number-3">4.3</span> get-specification-param</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+Returns parameter value given in <a href="#project-specification">the project specification table</a> inside <code>../project.org</code> file.
+</p>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+&lt;&lt;get-specification-param(title="Project name")&gt;&gt;
+&lt;&lt;get-specification-param(title="Main namespace", splitby="." joinby="/")&gt;&gt;
+#+CALL: get-specification-param(title="Project name")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 5:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">title</td>
+<td class="org-left">""</td>
+<td class="org-left">Parameter name (see <a href="#lob-get-table-param">(get-table-param)</a>).</td>
+</tr>
+
+<tr>
+<td class="org-left">[splitby]</td>
+<td class="org-left">""</td>
+<td class="org-left">Parameter value separator (see <a href="#lob-get-table-param">(get-table-param)</a>).</td>
+</tr>
+
+<tr>
+<td class="org-left">[joinby]</td>
+<td class="org-left">""</td>
+<td class="org-left">Parameter value combinator (see. <a href="#lob-get-table-param">(get-table-param)</a>).</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org276afb5">(<span style="color: #00ffff;">save-excursion</span>
+  (<span style="color: #00ffff;">let</span> ((project-org-dir (locate-dominating-file (buffer-file-name) <span style="color: #ffa07a;">"project.org"</span>)))
+       (<span style="color: #00ffff;">if</span> project-org-dir
+         (<span style="color: #00ffff;">let</span> ((project-spec-ref (concat project-org-dir <span style="color: #ffa07a;">"project.org:project-specification"</span>)))
+              (org-babel-execute-src-block
+                nil
+                (cdr (assoc 'get-table-param org-babel-library-of-babel))
+                (list
+                  (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"table=%s"</span> project-spec-ref))
+                  (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"title=\"%s\""</span> title))
+                  (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"splitby=\"%s\""</span> splitby))
+                  (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"joinby=\"%s\""</span>  joinby))))))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7480886" class="outline-3">
+<h3 id="org7480886"><span class="section-number-3">4.4</span> in-some-path</h3>
+<div class="outline-text-3" id="text-4-4">
+<p>
+Returns an absolute path to a file in one of the project directories given in <a href="#project-specification">the project specification table</a>,
+will take project name into account and insert it as intermediate directory if requested.
+</p>
+
+<p>
+<b>Requirements</b>: Project specification must have following parameters defined:
+</p>
+<ul class="org-ul">
+<li>Project name</li>
+<li>Parameter given in <code>param</code> code block parameter.</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+#+BEGIN_SRC clojure :tangle (org-sbe in-some-path (param="Clojure/Sources path" path \"core.clj\"))
+   ...
+#+END_SRC
+&lt;&lt;in-some-path(param="Clojure/Sources path", path="core.clj")&gt;&gt;
+#+CALL: in-some-path(param="Clojure/Sources path", path="core.clj")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 6:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">param</td>
+<td class="org-left">"Clojure/Sources path"</td>
+<td class="org-left">Parameter name defining the base directory (relative to project root)</td>
+</tr>
+
+<tr>
+<td class="org-left">[path]</td>
+<td class="org-left">""</td>
+<td class="org-left">Path relative to built directory name</td>
+</tr>
+
+<tr>
+<td class="org-left">[projectvise]</td>
+<td class="org-left">t</td>
+<td class="org-left">Whether to insert project name between base directory path and the path</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">part given in <code>path</code> parameter</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org9ee1824">(<span style="color: #00ffff;">save-excursion</span>
+  (<span style="color: #00ffff;">let*</span> ((project-org-dir (locate-dominating-file (buffer-file-name) <span style="color: #ffa07a;">"project.org"</span>))
+         (src-path (org-babel-execute-src-block
+                     nil
+                     (cdr (assoc 'get-specification-param org-babel-library-of-babel))
+                     (list
+                       (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"title=\"%s\""</span> param)))))
+         (project-name (org-babel-execute-src-block
+                         nil
+                         (cdr (assoc 'get-specification-param org-babel-library-of-babel))
+                         (list
+                           (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"title=\"Project name\""</span>)
+                           (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"splitby=\".\""</span>)
+                           (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"joinby=\"/\""</span>))))
+         (ns-path (replace-regexp-in-string <span style="color: #ffa07a;">"\-"</span> <span style="color: #ffa07a;">"_"</span> project-name)))
+        (concat project-org-dir src-path <span style="color: #ffa07a;">"/"</span> (<span style="color: #00ffff;">if</span> projectvise (concat ns-path <span style="color: #ffa07a;">"/"</span>) <span style="color: #ffa07a;">""</span>) path)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org57dc28b" class="outline-3">
+<h3 id="org57dc28b"><span class="section-number-3">4.5</span> in-clj-path</h3>
+<div class="outline-text-3" id="text-4-5">
+<p>
+Return an absolute path to a file in project's exported <b>Clojure</b> sources directory with respect to project name.
+</p>
+
+<p>
+<b>Requirements</b>: Project specification must have following parameters defined:
+</p>
+<ul class="org-ul">
+<li>Project name</li>
+<li>Clojure/Sources path</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+#+BEGIN_SRC clojure :tangle (org-sbe in-clj-path (path \"core.clj\"))
+   ...
+#+END_SRC
+&lt;&lt;in-clj-path(path="core.clj")&gt;&gt;
+#+CALL: in-clj-path(path="core.clj")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 7:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">path</td>
+<td class="org-left">""</td>
+<td class="org-left">Path relative to project's exported Clojure sources directory to be appended</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org1fa3dc5">(<span style="color: #00ffff;">save-excursion</span>
+  (org-babel-execute-src-block
+    nil
+    (cdr (assoc 'in-some-path org-babel-library-of-babel))
+    (list
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"param=\"Clojure/Sources path\""</span>)
+     (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"path=\"%s\""</span> path)))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9d4980e" class="outline-3">
+<h3 id="org9d4980e"><span class="section-number-3">4.6</span> in-cljs-path</h3>
+<div class="outline-text-3" id="text-4-6">
+<p>
+Return an absolute path to a file in project's exported <b>Clojure Script</b> sources directory with respect to project name.
+</p>
+
+<p>
+<b>Requirements</b>: Project specification must have following parameters defined:
+</p>
+<ul class="org-ul">
+<li>Project name</li>
+<li>ClojureScript/Sources path</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+#+BEGIN_SRC clojure :tangle (org-sbe in-cljs-path (path \"core.clj\"))
+   ...
+#+END_SRC
+&lt;&lt;in-cljs-path(path="core.clj")&gt;&gt;
+#+CALL: in-cljs-path(path="core.clj")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 8:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">path</td>
+<td class="org-left">""</td>
+<td class="org-left">Path relative to project's exported Clojure Script sources directory to be appended</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org01edb95">(<span style="color: #00ffff;">save-excursion</span>
+  (org-babel-execute-src-block
+    nil
+    (cdr (assoc 'in-some-path org-babel-library-of-babel))
+    (list
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"param=\"ClojureScript/Sources path\""</span>)
+     (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"path=\"%s\""</span> path)))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org2cb528f" class="outline-3">
+<h3 id="org2cb528f"><span class="section-number-3">4.7</span> in-tests-path</h3>
+<div class="outline-text-3" id="text-4-7">
+<p>
+Return an absolute path to a file in project's exported tests sources directory with respect to project name.
+</p>
+
+<p>
+<b>Requirements</b>: Project specification must have following parameters defined:
+</p>
+<ul class="org-ul">
+<li>Project name</li>
+<li>Tests path</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+#+BEGIN_SRC clojure :tangle (org-sbe in-tests-path (path \"core.clj\"))
+   ...
+#+END_SRC
+&lt;&lt;in-tests-path(path="core.clj")&gt;&gt;
+#+CALL: in-tests-path(path="core.clj")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 9:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">path</td>
+<td class="org-left">""</td>
+<td class="org-left">Path relative to project's exported tests directory to be appended</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgeaa8fa2">(<span style="color: #00ffff;">save-excursion</span>
+  (org-babel-execute-src-block
+    nil
+    (cdr (assoc 'in-some-path org-babel-library-of-babel))
+    (list
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"param=\"Tests path\""</span>)
+     (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"path=\"%s\""</span> path)))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgeec423a" class="outline-3">
+<h3 id="orgeec423a"><span class="section-number-3">4.8</span> in-resources-path</h3>
+<div class="outline-text-3" id="text-4-8">
+<p>
+Return an absolute path to a file in project's exported resources directory.
+</p>
+
+<p>
+<b>Requirements</b>: Project specification must have following parameters defined:
+</p>
+<ul class="org-ul">
+<li>Project name</li>
+<li>Resource path</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+#+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
+   ...
+#+END_SRC
+&lt;&lt;in-resources-path(path="index.html")&gt;&gt;
+#+CALL: in-resources-path(path="index.html")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 10:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">path</td>
+<td class="org-left">""</td>
+<td class="org-left">A path relative to project's exported resources directory to be appended</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org56960bc">(<span style="color: #00ffff;">save-excursion</span>
+  (org-babel-execute-src-block
+    nil
+    (cdr (assoc 'in-some-path org-babel-library-of-babel))
+    (list
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"param=\"Resource path\""</span>)
+     (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"path=\"%s\""</span> path))
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"projectvise=()"</span>))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga307e70" class="outline-3">
+<h3 id="orga307e70"><span class="section-number-3">4.9</span> in-assets-path</h3>
+<div class="outline-text-3" id="text-4-9">
+<p>
+Return an absolute path to a file in project's exported assets directory.
+</p>
+
+<p>
+<b>Requirements</b>: Project specification must have following parameters defined:
+</p>
+<ul class="org-ul">
+<li>Project name</li>
+<li>Assets path</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+#+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
+   ...
+#+END_SRC
+&lt;&lt;in-resources-path(path="index.html")&gt;&gt;
+#+CALL: in-resources-path(path="index.html")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 11:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">path</td>
+<td class="org-left">""</td>
+<td class="org-left">A path relative to project's exported assets directory to be appended</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org316cc90">(<span style="color: #00ffff;">save-excursion</span>
+  (org-babel-execute-src-block
+    nil
+    (cdr (assoc 'in-some-path org-babel-library-of-babel))
+    (list
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"param=\"Assets path\""</span>)
+     (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"path=\"%s\""</span> path))
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"projectvise=()"</span>))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga57c174" class="outline-3">
+<h3 id="orga57c174"><span class="section-number-3">4.10</span> in-target-path</h3>
+<div class="outline-text-3" id="text-4-10">
+<p>
+Returns an absolute path to a file in project's target directory.
+</p>
+
+<p>
+<b>Requirements</b>: Project specification must have following parameters defined:
+</p>
+<ul class="org-ul">
+<li>Project name</li>
+<li>Target path</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+#+BEGIN_SRC clojure :tangle (org-sbe in-target-path (path \"project.jar"))
+   ...
+#+END_SRC
+&lt;&lt;in-target-path(path="project.jar")&gt;&gt;
+#+CALL: in-target-path(path="project.jar")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 12:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">path</td>
+<td class="org-left">""</td>
+<td class="org-left">A path relative to project's target directory to be appended</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org1baa32d">(<span style="color: #00ffff;">save-excursion</span>
+  (org-babel-execute-src-block
+    nil
+    (cdr (assoc 'in-some-path org-babel-library-of-babel))
+    (list
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"param=\"Target path\""</span>)
+     (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"path=\"%s\""</span> path))
+     (cons <span style="color: #b0c4de;">:var</span> <span style="color: #ffa07a;">"projectvise=()"</span>))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgdde17ef" class="outline-3">
+<h3 id="orgdde17ef"><span class="section-number-3">4.11</span> render-project-dependencies</h3>
+<div class="outline-text-3" id="text-4-11">
+<p>
+Renders (returns as a string) project dependencies, defined in <a href="#project-dependencies">the project dependencies table</a>,
+as a list of <b>Clojure</b> vectors.
+</p>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+&lt;&lt;render-project-dependencies()&gt;&gt;
+#+CALL: render-project-dependencies()
+(org-sbe render-project-dependencies)
+</pre>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="org927076d"><span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Full dependency definition specification is given here</span>
+<span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">https://github.com/cemerick/pomegranate/blob/master/src/main/clojure/cemerick/pomegranate/aether.clj</span>
+<span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">in resolve-dependencies function</span>
+(<span style="color: #00ffff;">require</span> '<span style="color: #7fffd4;">subr-x</span>)
+(<span style="color: #00ffff;">require</span> '<span style="color: #7fffd4;">seq</span>)
+
+(<span style="color: #00ffff;">let</span> ((project-org-dir (locate-dominating-file (buffer-file-name) <span style="color: #ffa07a;">"project.org"</span>)))
+  (<span style="color: #00ffff;">if</span> project-org-dir
+      (<span style="color: #00ffff;">let*</span> ((project-spec-ref (concat project-org-dir <span style="color: #ffa07a;">"project.org:project-dependencies"</span>))
+             <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">deps-table is a list of lists and hlines</span>
+             (deps-table (org-babel-ref-resolve project-spec-ref))
+             <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Dependency representing hash-map key traversing sequence</span>
+             (serialize-key-traversing-seq '(name version scope optional classifier extension exclusions)))
+        (<span style="color: #00ffff;">cl-labels</span> (
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">dependency hash map has following keys</span>
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">- name - dependency artifact name</span>
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">- version - dependency artifact version</span>
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">- scope - dependency scope</span>
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">- optional - flag showing whether a dependency is optional, any value but "" and "no" is considered to be true</span>
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">- classifier - dependency Maven-classifier</span>
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">- extension - dependency Maven-extension</span>
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">- exclusions - list of transient dependency exclusions for a dependency</span>
+                  (make-dependency (name version scope optional classifier extension exclusions)
+                                   (<span style="color: #00ffff;">let</span> ((new-dep (make-hash-table)))
+                                     (puthash 'name name new-dep)
+                                     (puthash 'version (format <span style="color: #ffa07a;">"%s"</span> version) new-dep)
+                                     (puthash 'scope scope new-dep)
+                                     (puthash 'optional (<span style="color: #00ffff;">if</span> (or
+                                                             (string-empty-p optional)
+                                                             (string= <span style="color: #ffa07a;">"no"</span> (downcase optional)))
+                                                            nil
+                                                          't)
+                                              new-dep)
+                                     (puthash 'classifier classifier new-dep)
+                                     (puthash 'extension  extension  new-dep)
+                                     (puthash 'exclusions exclusions new-dep)
+                                     new-dep))
+                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Dependency serializing function</span>
+                  (serialize-dependency (dependency)
+                                        (concat <span style="color: #ffa07a;">"["</span>
+                                                <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Traversing every key in the dependency hash table and building dependency definition string</span>
+                                                (mapconcat (<span style="color: #00ffff;">lambda</span> (key)
+                                                             (<span style="color: #00ffff;">let</span> ((value (gethash key dependency)))
+                                                                  (<span style="color: #00ffff;">cond</span>
+                                                                    <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">name is always given</span>
+                                                                    ((equal key 'name)
+                                                                        value)
+                                                                          <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">I'm not sure but maybe version might be empty</span>
+                                                                    ((and (equal key 'version) (not (string-empty-p value)))
+                                                                        (format <span style="color: #ffa07a;">"\"%s\""</span> value))
+                                                                          <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Scope is optional</span>
+                                                                    ((and (equal key 'scope) (not (string-empty-p value)))
+                                                                        (format <span style="color: #ffa07a;">":scope \"%s\""</span> value))
+                                                                          <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Optional flag should be set only if it's true</span>
+                                                                    ((and (equal key 'optional) value)
+                                                                        <span style="color: #ffa07a;">":optional true"</span>)
+                                                                          <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Classifier is optinal</span>
+                                                                    ((and (equal key 'classifier) (not (string-empty-p value)))
+                                                                        (format <span style="color: #ffa07a;">":classifier \"%s\""</span> value))
+                                                                          <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Extension is optional</span>
+                                                                    ((and (equal key 'extension) (not (string-empty-p value)))
+                                                                        (format <span style="color: #ffa07a;">":extension \"%s\""</span> value))
+                                                                          <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Exclusions should be given if there're any</span>
+                                                                    ((and (equal key 'exclusions) (not (seq-empty-p value)))
+                                                                        (concat
+                                                                            <span style="color: #ffa07a;">":exclusions ["</span>
+                                                                            (mapconcat #'serialize-dependency value <span style="color: #ffa07a;">" "</span>)
+                                                                            <span style="color: #ffa07a;">"]"</span>)))))
+                                                           serialize-key-traversing-seq
+                                                           <span style="color: #ffa07a;">" "</span>)
+                                                <span style="color: #ffa07a;">"]"</span>)))
+          (<span style="color: #00ffff;">let</span> (
+                <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">deps-adopted is a list of hash tables representing dependencies</span>
+                (deps-adopted (reduce
+                                (<span style="color: #00ffff;">lambda</span> (deps-adopted dependency)
+                                  <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Skip any hlines and empty rows</span>
+                                  (<span style="color: #00ffff;">if</span> (or (equal dependency 'hline) (every #'string-empty-p dependency))
+                                      deps-adopted
+                                    <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Else destructuring the dependency given</span>
+                                    (destructuring-bind (name version scope optional classifier extension exclusions ex-classifier ex-extension _) dependency
+                                      (<span style="color: #00ffff;">cond</span>
+                                       <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Append new dependency hash map in case there's a name given</span>
+                                       ((not (string-empty-p name))
+                                        (append deps-adopted
+                                                (list (make-dependency name
+                                                                       version
+                                                                       scope
+                                                                       optional
+                                                                       classifier
+                                                                       extension
+                                                                       (<span style="color: #00ffff;">if</span> (not (string-empty-p exclusions))
+                                                                           (list (make-dependency exclusions
+                                                                                                  <span style="color: #ffa07a;">""</span>
+                                                                                                  <span style="color: #ffa07a;">""</span>
+                                                                                                  <span style="color: #ffa07a;">""</span>
+                                                                                                  ex-classifier
+                                                                                                  ex-extension
+                                                                                                  nil)))))))
+                                       <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Append another exclusion in case there's no name but exclusions given</span>
+                                       ((and (string-empty-p name) (not (string-empty-p exclusions)))
+                                        (<span style="color: #00ffff;">let*</span> ((last-dep (car (last deps-adopted))))
+                                          (puthash 'exclusions
+                                                   (append (gethash 'exclusions last-dep nil)
+                                                           (list (make-dependency exclusions
+                                                                                  <span style="color: #ffa07a;">""</span>
+                                                                                  <span style="color: #ffa07a;">""</span>
+                                                                                  <span style="color: #ffa07a;">""</span>
+                                                                                  ex-classifier
+                                                                                  ex-extension
+                                                                                  nil)))
+                                                   last-dep)
+                                          deps-adopted))))))
+                                <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Skipping title line</span>
+                                (cdr deps-table)
+                                <span style="color: #b0c4de;">:initial-value</span> nil)))
+            <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">So now I have list of dependencies (as hash maps) which I'm to transform into Clojure's vector of vectors</span>
+            <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">in Clojure syntax</span>
+            (mapconcat #'serialize-dependency deps-adopted <span style="color: #ffa07a;">"\n"</span>))))))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgd7201a5" class="outline-3">
+<h3 id="orgd7201a5"><span class="section-number-3">4.12</span> render-code-block-if</h3>
+<div class="outline-text-3" id="text-4-12">
+<p>
+Renders a code block if <a href="#project-specification">the project specification table</a> contains a parameter with a given name and a value passing
+an equality condition.
+</p>
+
+<p>
+<b>Requirements</b>:
+</p>
+<ul class="org-ul">
+<li>A code block with a given name must be defined in file the call is done from.</li>
+</ul>
+
+<p>
+<b>Examples:</b>
+</p>
+<pre class="example">
+&lt;&lt;render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")&gt;&gt;
+#+CALL: render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")
+</pre>
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption class="t-above"><span class="table-number">Table 13:</span> <b>Parameters:</b></caption>
+
+<colgroup>
+<col  class="org-left" />
+
+<col  class="org-left" />
+
+<col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Name</th>
+<th scope="col" class="org-left">Default value</th>
+<th scope="col" class="org-left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">name</td>
+<td class="org-left">""</td>
+<td class="org-left">A code block name to be rendered, the one given in it's <code>#+NAME:</code> dirrective.</td>
+</tr>
+
+<tr>
+<td class="org-left">condition</td>
+<td class="org-left">""</td>
+<td class="org-left">Rendering condition given as <code>"parameter = value"</code>, where <code>=</code> is string comparison</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">operation.</td>
+</tr>
+</tbody>
+</table>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp" id="orgb99be50">(<span style="color: #00ffff;">save-excursion</span>
+  (destructuring-bind (<span style="color: #98fb98;">&amp;optional</span> (param-name <span style="color: #ffa07a;">""</span>) <span style="color: #98fb98;">&amp;optional</span> (cond-value <span style="color: #ffa07a;">""</span>)) (split-string condition <span style="color: #ffa07a;">"="</span> t <span style="color: #ffa07a;">"\s+"</span>)
+    (<span style="color: #00ffff;">let</span> ((param-value (org-babel-execute-src-block
+                        nil
+                        (cdr (assoc 'get-specification-param org-babel-library-of-babel))
+                        (list
+                         (cons <span style="color: #b0c4de;">:var</span> (format <span style="color: #ffa07a;">"title=\"%s\""</span> param-name))))))
+      (<span style="color: #00ffff;">if</span> (string= param-value cond-value)
+          (<span style="color: #00ffff;">progn</span>
+            (org-babel-goto-named-src-block name)
+            (<span style="color: #00ffff;">let</span> ((tangle-result (org-babel-tangle-single-block <span style="color: #ffa07a;">""</span>)))
+              (nth 5 tangle-result)))
+        <span style="color: #ffa07a;">""</span>))))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org7d046a6" class="outline-2">
+<h2 id="org7d046a6"><span class="section-number-2">5</span> Boot-project</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+
+<div id="outline-container-org9e91c16" class="outline-3">
+<h3 id="org9e91c16"><span class="section-number-3">5.1</span> boot.properties</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+<code>boot.properties</code> file is used by <b>Boot</b> to link your <b>Clojure/ClojureScript</b> project to a particular version
+of <b>Boot</b> executing by a particular version of <b>Clojure</b>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-sh" id="orgc1d1a1a"><span style="color: #ff7f24;">#</span><span style="color: #ff7f24;">http://boot-clj.com</span>
+<span style="color: #ff7f24;">#</span><span style="color: #ff7f24;">2016-12-19 05:57:58</span>
+<span style="color: #eedd82;">BOOT_CLOJURE_NAME</span>=org.clojure/clojure
+<span style="color: #eedd82;">BOOT_CLOJURE_VERSION</span>=1.8.0
+<span style="color: #eedd82;">BOOT_VERSION</span>=2.6.0
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga421d9e" class="outline-3">
+<h3 id="orga421d9e"><span class="section-number-3">5.2</span> build.boot</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+<code>build.boot</code> file is executed by <b>Boot</b> upon running the following command <code class="src src-sh">boot task</code>, where <code>task</code>
+is a name of <b>Boot-task</b> to execute. Project's tasks are defined below in a corresponding sections.
+</p>
+
+<p>
+Setting up corresponding project directories if they are defined in <a href="#project-specification">the project specification table</a> and exist
+on build machine disk.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org66c945e">(<span style="color: #00ffff;">def</span> <span style="color: #eedd82;">paths</span> [ [<span style="color: #7fffd4;">:source-paths</span> <span style="color: #ffa07a;">"src"</span>]
+             [<span style="color: #7fffd4;">:source-paths</span> <span style="color: #ffa07a;">"src"</span>]
+             [<span style="color: #7fffd4;">:resource-paths</span> <span style="color: #ffa07a;">"resources"</span>]
+             [<span style="color: #7fffd4;">:asset-paths</span> <span style="color: #ffa07a;">"assets"</span>] ] )
+
+(<span style="color: #00ffff;">doseq</span> [[ env-key path ] paths]
+  (<span style="color: #00ffff;">if</span> (<span style="color: #00ffff;">and</span> (seq path) (not ((get-env env-key) path)))
+    (<span style="color: #00ffff;">let</span> [dir (file path)]
+      (<span style="color: #00ffff;">if</span> (<span style="color: #b0c4de;">.isDirectory</span> dir)
+        (set-env! env-key #(conj <span style="color: #eedd82;">%</span> (<span style="color: #b0c4de;">.getName</span> dir)))))))
+</pre>
+</div>
+
+<p>
+If dependency from <b>Clojure</b> is defined in <a href="#project-specification">the project specification table</a>, i.e. value <code>yes</code> is given against
+parameter <code>Clojure</code>, than adding <code>org.clojure/clojure</code> dependency.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org734179a">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(conj <span style="color: #eedd82;">%</span> '[<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>clojure <span style="color: #ffa07a;">"1.8.0"</span>]))
+</pre>
+</div>
+
+<p>
+If dependency from <b>ClojureScript</b> is defined in <a href="#project-specification">the project specification table</a>, i.e. value <code>yes</code> is given against
+parameter <code>ClojureScript</code>, than adding <code>org.clojure/clojurescript</code> dependency.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org5944511">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(conj <span style="color: #eedd82;">%</span> '[<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>clojurescript <span style="color: #ffa07a;">"1.9.225"</span>]))
+</pre>
+</div>
+
+<p>
+Adding project dependencies defined in <a href="#project-dependencies">the project dependencies table</a>.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org9746860">(<span style="color: #00ffff;">let</span> [deps '[
+
+           ]]
+  (set-env! <span style="color: #7fffd4;">:dependencies</span> #(into <span style="color: #eedd82;">%</span> deps)))
+</pre>
+</div>
+</div>
+
+<div id="outline-container-orgd47e65c" class="outline-4">
+<h4 id="orgd47e65c"><span class="section-number-4">5.2.1</span> Clojure related project's Boot-tasks</h4>
+<div class="outline-text-4" id="text-5-2-1">
+<p>
+These tasks will be added into resulting <code>build.boot</code> file, if <code>Clojure</code> parameter is set to <code>yes</code>
+in <a href="#project-specification">the project specification table</a>
+</p>
+
+<p>
+All blocks of code defining <b>Boot-tasks</b> for <b>Clojure</b> must have <code>boot-clojure-task</code> name. Each task defined
+in code block with <code>boot-clojure-task</code> name will be added into resulting <code>build.boot</code> file.
+</p>
+</div>
+
+<div id="outline-container-org1d2ab2d" class="outline-5">
+<h5 id="clj-build"><a id="org1d2ab2d"></a><span class="section-number-5">5.2.1.1</span> clj-build</h5>
+<div class="outline-text-5" id="text-clj-build">
+<p>
+This task builds project's uberjar which might be run with
+<code class="src src-sh">java -jar target/project.jar</code>
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org85fb3d9">(<span style="color: #00ffff;">deftask</span> <span style="color: #87cefa;">clj-build</span>
+  <span style="color: #ffa07a;">"Builds project's uberjar"</span>
+  []
+  (comp (pom <span style="color: #7fffd4;">:project</span> 'literate-boot
+             <span style="color: #7fffd4;">:version</span> <span style="color: #ffa07a;">"0.1.0-SNAPSHOT"</span>)
+        (aot <span style="color: #7fffd4;">:all</span> <span style="color: #7fffd4;">true</span>)
+        (uber)
+        (jar <span style="color: #7fffd4;">:main</span> '<span style="color: #98fb98;">literate-boot.core</span>)
+        (target <span style="color: #7fffd4;">:dir</span> #{<span style="color: #ffa07a;">"target"</span>})))
+</pre>
+</div>
+
+<p>
+To execute the task run: <code class="src src-sh">boot clj-build</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdb93fbb" class="outline-5">
+<h5 id="orgdb93fbb"><span class="section-number-5">5.2.1.2</span> clj-run</h5>
+<div class="outline-text-5" id="text-5-2-1-2">
+<p>
+This task executes project's <code>main</code> function in the <b>Boot's</b> <b>Java</b> environment.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="org55d3951">(<span style="color: #00ffff;">deftask</span> <span style="color: #87cefa;">clj-run</span>
+  <span style="color: #ffa07a;">"Runs the project's main function"</span>
+  []
+  (require '<span style="color: #98fb98;">literate-boot.core</span>)
+  (<span style="color: #00ffff;">let</span> [main-fn (resolve '<span style="color: #98fb98;">literate-boot.core</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>-main)]
+    (comp (aot <span style="color: #7fffd4;">:all</span> <span style="color: #7fffd4;">true</span>) (with-pass-thru _ (main-fn)))))
+</pre>
+</div>
+
+<p>
+To execute the task run: <code class="src src-sh">boot clj-run</code>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9129810" class="outline-4">
+<h4 id="org9129810"><span class="section-number-4">5.2.2</span> ClojureScript related project's Boot-задачи</h4>
+<div class="outline-text-4" id="text-5-2-2">
+<p>
+These tasks will be added into resulting <code>build.boot</code> file, if <code>ClojureScript</code> parameter is set to <code>yes</code>
+in <a href="#project-specification">the project specification table</a>
+</p>
+
+<p>
+All blocks of code defining <b>Boot-tasks</b> for <b>Clojure</b> must have <code>boot-clojurescript-task</code> name. Each task defined
+in a code block with <code>boot-clojurescript-task</code> name will be added into resulting <code>build.boot</code> file.
+</p>
+</div>
+
+<div id="outline-container-org63f34ef" class="outline-5">
+<h5 id="org63f34ef"><span class="section-number-5">5.2.2.1</span> cljs-figwheel</h5>
+<div class="outline-text-5" id="text-5-2-2-1">
+<p>
+This task is an interface to <b><a href="https://github.com/bhauman/lein-figwheel">figwheel</a></b>, to execute it run <code class="src src-sh">boot cljs-figwheel</code>.<br  />
+</p>
+
+<p>
+The task compiles <b>ClojureScript</b> files, runs HTTP-server serving project's public resources directory,
+runs changes monitor and automaticaly recompiles and reloads the project upon <code>*.cljs</code> files change,
+runs <b>nRepl</b> server.
+</p>
+
+<p>
+To run a <b>ClojureScript</b> <b>repl</b> one has to go through "9 steps to success":
+</p>
+
+<ol class="org-ol">
+<li>run <code class="src src-sh">boot cljs-figwheel</code></li>
+<li>wait for <b>Clojure</b> <b>repl</b> prompt</li>
+<li>look for address and port of a run web-server (usually <a href="http://localhost:3449/">http://localhost:3449/</a>) in the console output</li>
+<li>open a browser, novigate to web-server address:port URL, open browser's developer tools console and make sure
+there's "Opened Websocket REPL connection" message present</li>
+<li>look address and port of a <b>nRepl</b> server, in the console output and pass it to <code>(cider-connect)</code> call
+at the next step</li>
+<li>execute <code class="src src-emacs-lisp">(cider-connect HOST PORT)</code> or <code>M-x cider-connect</code> and input <b>nRepl</b> HOST and PORT,
+though, it appears as if <b>cider</b> is able to take the values needed from <code>.nrepl-port</code> file, so one can just
+press ENTER twice</li>
+<li>execute <code class="src src-clojure">(cljs-repl)</code> in <b>repl</b>-buffer to run a <b>ClojureScript</b> <b>REPL</b></li>
+<li>execute <code class="src src-clojure">(.log js/console "OK!")</code> in <b>repl</b>-buffer and make sure there's "OK!" message present
+in the brower's developer tools console.</li>
+<li>done!</li>
+</ol>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="orgbc62d51">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(into <span style="color: #eedd82;">%</span> '[[<span style="color: #98fb98;">ajchemist</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>boot-figwheel <span style="color: #ffa07a;">"0.5.4-6"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]
+                                   [<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>tools.nrepl <span style="color: #ffa07a;">"0.2.12"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]
+                                   [<span style="color: #98fb98;">com.cemerick</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>piggieback <span style="color: #ffa07a;">"0.2.1"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]
+                                   [figwheel-sidecar <span style="color: #ffa07a;">"0.5.7"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]]))
+
+(require '[boot-figwheel <span style="color: #7fffd4;">:refer</span> [figwheel start-figwheel! stop-figwheel! start-autobuild stop-autobuild cljs-repl fig-status]])
+
+<span style="color: #ff7f24;">;; </span><span style="color: #ff7f24;">This is for (cider-connect) to work.</span>
+<span style="color: #ff7f24;">;; </span><span style="color: #ff7f24;">NOTE: do not use (cider-jack-in), use (cider-connect) instead</span>
+<span style="color: #ff7f24;">;; </span><span style="color: #ff7f24;">---------------------------</span>
+<span style="color: #ff7f24;">;; </span><span style="color: #ff7f24;">Start of cider related code</span>
+(swap! <span style="color: #98fb98;">boot.repl</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span><span style="color: #eedd82;">*default-dependencies*</span> concat '[[<span style="color: #98fb98;">cider</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>cider-nrepl <span style="color: #ffa07a;">"0.14.0"</span>]])
+(swap! <span style="color: #98fb98;">boot.repl</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span><span style="color: #eedd82;">*default-middleware*</span> conj '<span style="color: #98fb98;">cider.nrepl</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>cider-middleware)
+<span style="color: #ff7f24;">;; </span><span style="color: #ff7f24;">End of cider related code</span>
+
+(<span style="color: #00ffff;">deftask</span> <span style="color: #87cefa;">cljs-figwheel</span>
+  <span style="color: #ffa07a;">"Compiles ClojureScript, serves it, autobuilds"</span>
+  []
+  (comp
+   (figwheel <span style="color: #7fffd4;">:build-ids</span> [<span style="color: #ffa07a;">"dev"</span>]
+             <span style="color: #ff7f24;">;</span><span style="color: #ff7f24;">:once-build</span><span style="color: #ff7f24;"> ["advanced"]</span>
+             <span style="color: #7fffd4;">:all-builds</span> [{<span style="color: #7fffd4;">:id</span> <span style="color: #ffa07a;">"dev"</span>
+                           <span style="color: #7fffd4;">:source-paths</span> (seq (get-env <span style="color: #7fffd4;">:source-paths</span>))
+                           <span style="color: #7fffd4;">:compiler</span> {<span style="color: #7fffd4;">:main</span> '<span style="color: #98fb98;">literate-boot.core</span>
+                                      <span style="color: #7fffd4;">:optimizations</span> <span style="color: #7fffd4;">:none</span>
+                                      <span style="color: #7fffd4;">:source-map</span> <span style="color: #7fffd4;">true</span>
+                                      <span style="color: #7fffd4;">:output-to</span> <span style="color: #ffa07a;">"app.js"</span>}
+                           <span style="color: #7fffd4;">:figwheel</span> {<span style="color: #7fffd4;">:build-id</span> <span style="color: #ffa07a;">"dev"</span>
+                                      <span style="color: #7fffd4;">:on-jsload</span> '<span style="color: #98fb98;">literate-boot.core</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>-main
+                                      <span style="color: #7fffd4;">:heads-up-display</span> <span style="color: #7fffd4;">true</span>
+                                      <span style="color: #7fffd4;">:autoload</span> <span style="color: #7fffd4;">true</span>
+                                      <span style="color: #7fffd4;">:debug</span> <span style="color: #7fffd4;">false</span>}}]
+             <span style="color: #7fffd4;">:figwheel-options</span> {<span style="color: #7fffd4;">:http-server-root</span> <span style="color: #ffa07a;">"public"</span>
+                                <span style="color: #7fffd4;">:open-file-command</span> <span style="color: #ffa07a;">"emacsclient"</span>
+                                <span style="color: #7fffd4;">:repl</span> <span style="color: #7fffd4;">false</span>}
+             <span style="color: #7fffd4;">:target-path</span> <span style="color: #ffa07a;">"resources/public"</span>)
+   (speak)
+   (repl)))
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org9abf054" class="outline-4">
+<h4 id="org9abf054"><span class="section-number-4">5.2.3</span> User's Boot-tasks</h4>
+<div class="outline-text-4" id="text-5-2-3">
+<p>
+All code blocks defining user's <b>Boot-tasks</b> must have <code>boot-user-task</code> name. Each tasks defined in a code block
+with <code>boot-user-task</code> name will be included into resulting <code>build.boot</code> file.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org0323057" class="outline-2">
+<h2 id="org0323057"><span class="section-number-2">6</span> Project code</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+
+<div id="outline-container-org6469905" class="outline-3">
+<h3 id="org6469905"><span class="section-number-3">6.1</span> Пространство имён Core</h3>
+<div class="outline-text-3" id="text-6-1">
+</div><div id="outline-container-orgd6232f4" class="outline-4">
+<h4 id="orgd6232f4"><span class="section-number-4">6.1.1</span> Функции</h4>
+<div class="outline-text-4" id="text-6-1-1">
+</div><div id="outline-container-org1dbd444" class="outline-5">
+<h5 id="org1dbd444"><span class="section-number-5">6.1.1.1</span> -main</h5>
+<div class="outline-text-5" id="text-6-1-1-1">
+<div class="org-src-container">
+<pre class="src src-clojure" id="org8922fff">(<span style="color: #00ffff;">ns</span> <span style="color: #98fb98;">literate-boot.core</span>
+  (<span style="color: #7fffd4;">:gen-class</span>))
+
+(<span style="color: #00ffff;">defn</span> <span style="color: #87cefa;">-main</span>
+  <span style="color: #ffa07a;">"Project's entry point"</span>
+  [&amp; args]
+  (println <span style="color: #ffa07a;">"Hello, from literate-boot!"</span>))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-clojure" id="orgc29e30a">(<span style="color: #00ffff;">ns</span> <span style="color: #98fb98;">literate-boot.core</span>
+  (<span style="color: #7fffd4;">:refer-clojure</span>))
+
+(enable-console-print!)
+
+(<span style="color: #00ffff;">defn</span> ^<span style="color: #7fffd4;">:export</span> <span style="color: #87cefa;">-main</span>
+  <span style="color: #ffa07a;">"Project's entry point"</span>
+  [&amp; args]
+  (println <span style="color: #ffa07a;">"Hello, from literate-boot!!"</span>))
+</pre>
+</div>
+
+<div class="org-src-container">
+<pre class="src src-html" id="org3cefdde"> &lt;<span style="color: #00ffff;">!doctype</span> html&gt;
+ &lt;<span style="color: #87cefa;">html</span>&gt;
+  &lt;<span style="color: #87cefa;">head</span>&gt;
+   &lt;<span style="color: #87cefa;">title</span>&gt;<span style="font-weight: bold; text-decoration: underline;">literate-boot</span>&lt;/<span style="color: #87cefa;">title</span>&gt;
+  &lt;/<span style="color: #87cefa;">head</span>&gt;
+  &lt;<span style="color: #87cefa;">body</span>&gt;
+    &lt;<span style="color: #87cefa;">script</span> <span style="color: #eedd82;">src</span>=<span style="color: #ffa07a;">"app.js"</span>&gt;&lt;/<span style="color: #87cefa;">script</span>&gt;
+  &lt;/<span style="color: #87cefa;">body</span>&gt;
+&lt;/<span style="color: #87cefa;">html</span>&gt;
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" class="footnum" href="#fnr.1">1</a></sup> <div class="footpara"><p class="footpara">
+For the one interested please see the documentation for <code>cemeric.pomegranate.aether/resolve-dependencies</code> function
+</p></div></div>
+
+<div class="footdef"><sup><a id="fn.2" class="footnum" href="#fnr.2">2</a></sup> <div class="footpara"><p class="footpara">
+<code>tangle.sh</code> and <code>tangle-all.sh</code> shell-script has been taken from <a href="https://github.com/thi-ng/babel">thi.ng/babel</a> project and adopted to this project a bit.
+</p></div></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="author">Author: Maxim Bazhenov</p>
+<p class="email">Email: <a href="mailto:maximgb@yandex.ru">maximgb@yandex.ru</a></p>
+<p class="date">Created: 2016-12-19 Пн. 05:58</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

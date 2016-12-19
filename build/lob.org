@@ -1,5 +1,5 @@
-Helper code blocks constituting the project's *"Library of Babel"* are defined. This code blocks work in *Emacs/Org*
-environment and are not supposed to be called from Clojure or ClojureScript.
+Helper code blocks constituting the project's *"Library of Babel"* are defined here.
+This code blocks work in *Emacs/Org* environment and are not supposed to be called from Clojure or ClojureScript.
 
 * time-is-now
 
