@@ -43,7 +43,7 @@
 
 # HTML export theming:
 # --------------------
-#+HTML_HEAD: <meta http-quiv="Content-Security-Policy" content="script-src 'self' http://www.pirilampo.org; style-src 'self' http://www.pirilampo.org; upgrade-insecure-requests"/>
+#+HTML_HEAD: <meta http-equiv="Content-Security-Policy" content="script-src 'self' pirilampo.org; style-src 'self' pirilampo.org; upgrade-insecure-requests"/>
 #
 # Taken from https://github.com/fniessen/org-html-themes
 # ------------------------------------------------------
