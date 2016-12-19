@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2016-12-19 Пн. 06:39 -->
+<!-- 2016-12-19 Пн. 06:51 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Clojure/ClojureScript Boot literate programming template</title>
@@ -179,7 +179,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' www.pirilampo.org; style-src 'self' 'unsafe-inline' www.pirilampo.org"/>
+<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' pirilampo.org/; style-src 'self' 'unsafe-inline' pirilampo.org/"/>
 <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/htmlize.css"/>
 <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/bigblow.css"/>
 <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/hideshow.css"/>
@@ -246,8 +246,8 @@ for the JavaScript code in this tag.
 <div id="content">
 <h1 class="title">Clojure/ClojureScript Boot literate programming template</h1>
 
-<div id="outline-container-org1fd42c7" class="outline-2">
-<h2 id="org1fd42c7"><span class="section-number-2">1</span> Quick start</h2>
+<div id="outline-container-orgd489224" class="outline-2">
+<h2 id="orgd489224"><span class="section-number-2">1</span> Quick start</h2>
 <div class="outline-text-2" id="text-1">
 <ul class="org-ul">
 <li>Load project <b>Library of Babel</b>, by executing the following code block
@@ -278,15 +278,15 @@ place the cursor on the code block and press C-c C-c, or run <code>java jar targ
 </div>
 </div>
 
-<div id="outline-container-org4b79617" class="outline-2">
-<h2 id="project-specification"><a id="org4b79617"></a><span class="section-number-2">2</span> Project specification</h2>
+<div id="outline-container-org3c576f4" class="outline-2">
+<h2 id="project-specification"><a id="org3c576f4"></a><span class="section-number-2">2</span> Project specification</h2>
 <div class="outline-text-2" id="text-project-specification">
 <p>
 Project specification is given in the table following. The project file system as well as <code>boot.properties</code>
 and <code>build.boot</code> files are generated according to the specification.
 </p>
 
-<table id="orgbd6937e" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org4a9b799" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 1:</span> Project specification</caption>
 
 <colgroup>
@@ -407,8 +407,8 @@ and <code>build.boot</code> files are generated according to the specification.
 </table>
 </div>
 
-<div id="outline-container-orgcec096a" class="outline-3">
-<h3 id="project-dependencies"><a id="orgcec096a"></a><span class="section-number-3">2.1</span> Dependencies</h3>
+<div id="outline-container-org4d58f55" class="outline-3">
+<h3 id="project-dependencies"><a id="org4d58f55"></a><span class="section-number-3">2.1</span> Dependencies</h3>
 <div class="outline-text-3" id="text-project-dependencies">
 <p>
 Project dependencies are given in the <b>dependencies</b> table<br  />
@@ -435,7 +435,7 @@ if you need to setup several exclusions for one dependency than for second and o
 <li><b>Note</b>       - this column is ignored, it's used for documentation purposes</li>
 </ul>
 
-<table id="org514263b" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<table id="org68d9958" border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 <caption class="t-above"><span class="table-number">Table 2:</span> Dependencies</caption>
 
 <colgroup>
@@ -478,13 +478,13 @@ if you need to setup several exclusions for one dependency than for second and o
 </div>
 </div>
 
-<div id="outline-container-orga8e0984" class="outline-2">
-<h2 id="env-requirements"><a id="orga8e0984"></a><span class="section-number-2">3</span> Environment and project requirements</h2>
+<div id="outline-container-org626656d" class="outline-2">
+<h2 id="env-requirements"><a id="org626656d"></a><span class="section-number-2">3</span> Environment and project requirements</h2>
 <div class="outline-text-2" id="text-env-requirements">
 </div>
 
-<div id="outline-container-orgc6063ed" class="outline-3">
-<h3 id="orgc6063ed"><span class="section-number-3">3.1</span> Environtment</h3>
+<div id="outline-container-org39194fa" class="outline-3">
+<h3 id="org39194fa"><span class="section-number-3">3.1</span> Environtment</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 This project template requires Emacs/Org-mode, Clojure, Boot. The project which might be built using this template
@@ -494,8 +494,8 @@ which in turn combine a project documentation and code.
 </div>
 </div>
 
-<div id="outline-container-org2c60e79" class="outline-3">
-<h3 id="org2c60e79"><span class="section-number-3">3.2</span> Code export from org-files.</h3>
+<div id="outline-container-org30242f2" class="outline-3">
+<h3 id="org30242f2"><span class="section-number-3">3.2</span> Code export from org-files.</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 To exctract code from org-files into files with <b>Clojure</b> source code <code>tangle.sh</code> file is used <sup><a id="fnr.2" class="footref" href="#fn.2">2</a></sup>.
@@ -516,7 +516,7 @@ and press C-u C-c C-v t, this will put the code block contents into <code>tangle
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell" id="orgaf956d9"><span style="color: #eedd82;">DIR</span>=<span style="color: #fa8072;">`pwd`</span>
+<pre class="src src-shell" id="orge9f49ca"><span style="color: #eedd82;">DIR</span>=<span style="color: #fa8072;">`pwd`</span>
 <span style="color: #eedd82;">FILES</span>=<span style="color: #ffa07a;">""</span>
 
 <span style="color: #ff7f24;"># </span><span style="color: #ff7f24;">wrap each argument in the code required to call tangle on it</span>
@@ -548,8 +548,8 @@ name or names of org-files to process.
 </div>
 </div>
 
-<div id="outline-container-orgf17d31c" class="outline-3">
-<h3 id="orgf17d31c"><span class="section-number-3">3.3</span> Project code export</h3>
+<div id="outline-container-org45a0c07" class="outline-3">
+<h3 id="org45a0c07"><span class="section-number-3">3.3</span> Project code export</h3>
 <div class="outline-text-3" id="text-3-3">
 <p>
 To extract project source code from all org-files the <code>tangle-all.sh</code> shell-script is used <sup><a id="fnr.2.100" class="footref" href="#fn.2">2</a></sup>.
@@ -561,24 +561,24 @@ and press C-u C-c C-v t, this will put the code block contents into <code>tangle
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell" id="orgc11473c">./tangle.sh project.org build/*.org org/*.org
+<pre class="src src-shell" id="org9dc218e">./tangle.sh project.org build/*.org org/*.org
 </pre>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgc60244c" class="outline-2">
-<h2 id="orgc60244c"><span class="section-number-2">4</span> "Library of Babel" helper code blocks library</h2>
+<div id="outline-container-orgb1e2580" class="outline-2">
+<h2 id="orgb1e2580"><span class="section-number-2">4</span> "Library of Babel" helper code blocks library</h2>
 <div class="outline-text-2" id="text-4">
 <p>
-Helper code blocks constituting the project's <b>"Library of Babel"</b> are defined. This code blocks work in <b>Emacs/Org</b>
-environment and are not supposed to be called from Clojure or ClojureScript.
+Helper code blocks constituting the project's <b>"Library of Babel"</b> are defined here.
+This code blocks work in <b>Emacs/Org</b> environment and are not supposed to be called from Clojure or ClojureScript.
 </p>
 </div>
 
-<div id="outline-container-org80cb920" class="outline-3">
-<h3 id="org80cb920"><span class="section-number-3">4.1</span> time-is-now</h3>
+<div id="outline-container-orgbfbc52b" class="outline-3">
+<h3 id="orgbfbc52b"><span class="section-number-3">4.1</span> time-is-now</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Returns current time as a string in a given format.
@@ -620,14 +620,14 @@ Returns current time as a string in a given format.
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org1d17822">(format-time-string format)
+<pre class="src src-emacs-lisp" id="orgea6845e">(format-time-string format)
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orge8c2643" class="outline-3">
-<h3 id="lob-get-table-param"><a id="orge8c2643"></a><span class="section-number-3">4.2</span> get-table-param</h3>
+<div id="outline-container-org58da30b" class="outline-3">
+<h3 id="lob-get-table-param"><a id="org58da30b"></a><span class="section-number-3">4.2</span> get-table-param</h3>
 <div class="outline-text-3" id="text-lob-get-table-param">
 <p>
 Returns a value of a parameter defined in a table. Table must follow given requirements: parameter names are given
@@ -748,7 +748,7 @@ starting from <code>name</code> a row where <code>name</code> has been found.
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgea66358">(<span style="color: #00ffff;">let*</span> ((table-adopted (mapcar (<span style="color: #00ffff;">lambda</span> (x)
+<pre class="src src-emacs-lisp" id="org608f4e2">(<span style="color: #00ffff;">let*</span> ((table-adopted (mapcar (<span style="color: #00ffff;">lambda</span> (x)
                                 (<span style="color: #00ffff;">if</span> (equal x 'hline)
                                    '(hline hline hline)
                                  x))
@@ -769,8 +769,8 @@ starting from <code>name</code> a row where <code>name</code> has been found.
 </div>
 </div>
 
-<div id="outline-container-org3371613" class="outline-3">
-<h3 id="org3371613"><span class="section-number-3">4.3</span> get-specification-param</h3>
+<div id="outline-container-org25c8344" class="outline-3">
+<h3 id="org25c8344"><span class="section-number-3">4.3</span> get-specification-param</h3>
 <div class="outline-text-3" id="text-4-3">
 <p>
 Returns parameter value given in <a href="#project-specification">the project specification table</a> inside <code>../project.org</code> file.
@@ -824,7 +824,7 @@ Returns parameter value given in <a href="#project-specification">the project sp
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org9f4c750">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="orgc4d4ec9">(<span style="color: #00ffff;">save-excursion</span>
   (<span style="color: #00ffff;">let</span> ((project-org-dir (locate-dominating-file (buffer-file-name) <span style="color: #ffa07a;">"project.org"</span>)))
        (<span style="color: #00ffff;">if</span> project-org-dir
          (<span style="color: #00ffff;">let</span> ((project-spec-ref (concat project-org-dir <span style="color: #ffa07a;">"project.org:project-specification"</span>)))
@@ -841,8 +841,8 @@ Returns parameter value given in <a href="#project-specification">the project sp
 </div>
 </div>
 
-<div id="outline-container-org229d015" class="outline-3">
-<h3 id="org229d015"><span class="section-number-3">4.4</span> in-some-path</h3>
+<div id="outline-container-org3e7a5a8" class="outline-3">
+<h3 id="org3e7a5a8"><span class="section-number-3">4.4</span> in-some-path</h3>
 <div class="outline-text-3" id="text-4-4">
 <p>
 Returns an absolute path to a file in one of the project directories given in <a href="#project-specification">the project specification table</a>,
@@ -913,7 +913,7 @@ will take project name into account and insert it as intermediate directory if r
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org2bf3051">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="org7cf5d5a">(<span style="color: #00ffff;">save-excursion</span>
   (<span style="color: #00ffff;">let*</span> ((project-org-dir (locate-dominating-file (buffer-file-name) <span style="color: #ffa07a;">"project.org"</span>))
          (src-path (org-babel-execute-src-block
                      nil
@@ -934,8 +934,8 @@ will take project name into account and insert it as intermediate directory if r
 </div>
 </div>
 
-<div id="outline-container-org30b159c" class="outline-3">
-<h3 id="org30b159c"><span class="section-number-3">4.5</span> in-clj-path</h3>
+<div id="outline-container-orgf881cfc" class="outline-3">
+<h3 id="orgf881cfc"><span class="section-number-3">4.5</span> in-clj-path</h3>
 <div class="outline-text-3" id="text-4-5">
 <p>
 Return an absolute path to a file in project's exported <b>Clojure</b> sources directory with respect to project name.
@@ -987,7 +987,7 @@ Return an absolute path to a file in project's exported <b>Clojure</b> sources d
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orga017914">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="org137f82b">(<span style="color: #00ffff;">save-excursion</span>
   (org-babel-execute-src-block
     nil
     (cdr (assoc 'in-some-path org-babel-library-of-babel))
@@ -999,8 +999,8 @@ Return an absolute path to a file in project's exported <b>Clojure</b> sources d
 </div>
 </div>
 
-<div id="outline-container-org9e9bb16" class="outline-3">
-<h3 id="org9e9bb16"><span class="section-number-3">4.6</span> in-cljs-path</h3>
+<div id="outline-container-orgd9d2edf" class="outline-3">
+<h3 id="orgd9d2edf"><span class="section-number-3">4.6</span> in-cljs-path</h3>
 <div class="outline-text-3" id="text-4-6">
 <p>
 Return an absolute path to a file in project's exported <b>Clojure Script</b> sources directory with respect to project name.
@@ -1052,7 +1052,7 @@ Return an absolute path to a file in project's exported <b>Clojure Script</b> so
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgc2399fc">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="org171b91c">(<span style="color: #00ffff;">save-excursion</span>
   (org-babel-execute-src-block
     nil
     (cdr (assoc 'in-some-path org-babel-library-of-babel))
@@ -1064,8 +1064,8 @@ Return an absolute path to a file in project's exported <b>Clojure Script</b> so
 </div>
 </div>
 
-<div id="outline-container-orgdf19c7f" class="outline-3">
-<h3 id="orgdf19c7f"><span class="section-number-3">4.7</span> in-tests-path</h3>
+<div id="outline-container-org7d043d7" class="outline-3">
+<h3 id="org7d043d7"><span class="section-number-3">4.7</span> in-tests-path</h3>
 <div class="outline-text-3" id="text-4-7">
 <p>
 Return an absolute path to a file in project's exported tests sources directory with respect to project name.
@@ -1117,7 +1117,7 @@ Return an absolute path to a file in project's exported tests sources directory 
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgccc9156">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="org697d3fc">(<span style="color: #00ffff;">save-excursion</span>
   (org-babel-execute-src-block
     nil
     (cdr (assoc 'in-some-path org-babel-library-of-babel))
@@ -1129,8 +1129,8 @@ Return an absolute path to a file in project's exported tests sources directory 
 </div>
 </div>
 
-<div id="outline-container-org57d415e" class="outline-3">
-<h3 id="org57d415e"><span class="section-number-3">4.8</span> in-resources-path</h3>
+<div id="outline-container-org682ee61" class="outline-3">
+<h3 id="org682ee61"><span class="section-number-3">4.8</span> in-resources-path</h3>
 <div class="outline-text-3" id="text-4-8">
 <p>
 Return an absolute path to a file in project's exported resources directory.
@@ -1182,7 +1182,7 @@ Return an absolute path to a file in project's exported resources directory.
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgf604f8d">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="orga17b173">(<span style="color: #00ffff;">save-excursion</span>
   (org-babel-execute-src-block
     nil
     (cdr (assoc 'in-some-path org-babel-library-of-babel))
@@ -1195,8 +1195,8 @@ Return an absolute path to a file in project's exported resources directory.
 </div>
 </div>
 
-<div id="outline-container-org786eec4" class="outline-3">
-<h3 id="org786eec4"><span class="section-number-3">4.9</span> in-assets-path</h3>
+<div id="outline-container-org64505fe" class="outline-3">
+<h3 id="org64505fe"><span class="section-number-3">4.9</span> in-assets-path</h3>
 <div class="outline-text-3" id="text-4-9">
 <p>
 Return an absolute path to a file in project's exported assets directory.
@@ -1248,7 +1248,7 @@ Return an absolute path to a file in project's exported assets directory.
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgee915af">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="org5efe687">(<span style="color: #00ffff;">save-excursion</span>
   (org-babel-execute-src-block
     nil
     (cdr (assoc 'in-some-path org-babel-library-of-babel))
@@ -1261,8 +1261,8 @@ Return an absolute path to a file in project's exported assets directory.
 </div>
 </div>
 
-<div id="outline-container-org0e26bd2" class="outline-3">
-<h3 id="org0e26bd2"><span class="section-number-3">4.10</span> in-target-path</h3>
+<div id="outline-container-orgbeccf38" class="outline-3">
+<h3 id="orgbeccf38"><span class="section-number-3">4.10</span> in-target-path</h3>
 <div class="outline-text-3" id="text-4-10">
 <p>
 Returns an absolute path to a file in project's target directory.
@@ -1314,7 +1314,7 @@ Returns an absolute path to a file in project's target directory.
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="orgff8f7aa">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="orgd7da782">(<span style="color: #00ffff;">save-excursion</span>
   (org-babel-execute-src-block
     nil
     (cdr (assoc 'in-some-path org-babel-library-of-babel))
@@ -1327,8 +1327,8 @@ Returns an absolute path to a file in project's target directory.
 </div>
 </div>
 
-<div id="outline-container-orgfb31622" class="outline-3">
-<h3 id="orgfb31622"><span class="section-number-3">4.11</span> render-project-dependencies</h3>
+<div id="outline-container-orgba4deb1" class="outline-3">
+<h3 id="orgba4deb1"><span class="section-number-3">4.11</span> render-project-dependencies</h3>
 <div class="outline-text-3" id="text-4-11">
 <p>
 Renders (returns as a string) project dependencies, defined in <a href="#project-dependencies">the project dependencies table</a>,
@@ -1345,7 +1345,7 @@ as a list of <b>Clojure</b> vectors.
 </pre>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org8d60c88"><span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Full dependency definition specification is given here</span>
+<pre class="src src-emacs-lisp" id="org05352bc"><span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">Full dependency definition specification is given here</span>
 <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">https://github.com/cemerick/pomegranate/blob/master/src/main/clojure/cemerick/pomegranate/aether.clj</span>
 <span style="color: #ff7f24;">; </span><span style="color: #ff7f24;">in resolve-dependencies function</span>
 (<span style="color: #00ffff;">require</span> '<span style="color: #7fffd4;">subr-x</span>)
@@ -1468,8 +1468,8 @@ as a list of <b>Clojure</b> vectors.
 </div>
 </div>
 
-<div id="outline-container-org24c98bd" class="outline-3">
-<h3 id="org24c98bd"><span class="section-number-3">4.12</span> render-code-block-if</h3>
+<div id="outline-container-orge8d51cb" class="outline-3">
+<h3 id="orge8d51cb"><span class="section-number-3">4.12</span> render-code-block-if</h3>
 <div class="outline-text-3" id="text-4-12">
 <p>
 Renders a code block if <a href="#project-specification">the project specification table</a> contains a parameter with a given name and a value passing
@@ -1530,7 +1530,7 @@ an equality condition.
 </table>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp" id="org28b8d05">(<span style="color: #00ffff;">save-excursion</span>
+<pre class="src src-emacs-lisp" id="orgecc6b01">(<span style="color: #00ffff;">save-excursion</span>
   (destructuring-bind (<span style="color: #98fb98;">&amp;optional</span> (param-name <span style="color: #ffa07a;">""</span>) <span style="color: #98fb98;">&amp;optional</span> (cond-value <span style="color: #ffa07a;">""</span>)) (split-string condition <span style="color: #ffa07a;">"="</span> t <span style="color: #ffa07a;">"\s+"</span>)
     (<span style="color: #00ffff;">let</span> ((param-value (org-babel-execute-src-block
                         nil
@@ -1549,22 +1549,22 @@ an equality condition.
 </div>
 </div>
 
-<div id="outline-container-orgf9f4eb2" class="outline-2">
-<h2 id="orgf9f4eb2"><span class="section-number-2">5</span> Boot-project</h2>
+<div id="outline-container-org999bd7e" class="outline-2">
+<h2 id="org999bd7e"><span class="section-number-2">5</span> Boot-project</h2>
 <div class="outline-text-2" id="text-5">
 </div>
 
-<div id="outline-container-orga944469" class="outline-3">
-<h3 id="orga944469"><span class="section-number-3">5.1</span> boot.properties</h3>
+<div id="outline-container-org3246f30" class="outline-3">
+<h3 id="org3246f30"><span class="section-number-3">5.1</span> boot.properties</h3>
 <div class="outline-text-3" id="text-5-1">
 <p>
-Файл boot.properties используется Boot для привязки проекта к конкретной версии Boot и запуска этой версии Boot
-на конкретной версии Clojure.
+<code>boot.properties</code> file is used by <b>Boot</b> to link your <b>Clojure/ClojureScript</b> project to a particular version
+of <b>Boot</b> executing by a particular version of <b>Clojure</b>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh" id="org1338a73"><span style="color: #ff7f24;">#</span><span style="color: #ff7f24;">http://boot-clj.com</span>
-<span style="color: #ff7f24;">#</span><span style="color: #ff7f24;">2016-12-19 06:38:58</span>
+<pre class="src src-sh" id="orgcacf92a"><span style="color: #ff7f24;">#</span><span style="color: #ff7f24;">http://boot-clj.com</span>
+<span style="color: #ff7f24;">#</span><span style="color: #ff7f24;">2016-12-19 06:51:16</span>
 <span style="color: #eedd82;">BOOT_CLOJURE_NAME</span>=org.clojure/clojure
 <span style="color: #eedd82;">BOOT_CLOJURE_VERSION</span>=1.8.0
 <span style="color: #eedd82;">BOOT_VERSION</span>=2.6.0
@@ -1573,20 +1573,21 @@ an equality condition.
 </div>
 </div>
 
-<div id="outline-container-orgeafec99" class="outline-3">
-<h3 id="orgeafec99"><span class="section-number-3">5.2</span> build.boot</h3>
+<div id="outline-container-orga62e5f3" class="outline-3">
+<h3 id="orga62e5f3"><span class="section-number-3">5.2</span> build.boot</h3>
 <div class="outline-text-3" id="text-5-2">
 <p>
-Файл <code>build.boot</code> исполняется Boot при запуске <code class="src src-sh">boot task</code>, где <code>task</code> имя задачи для исполнения. Задачи проекта
-описаны ниже, в соответствующем разделе.
+<code>build.boot</code> file is executed by <b>Boot</b> upon running the following command <code class="src src-sh">boot task</code>, where <code>task</code>
+is a name of <b>Boot-task</b> to execute. Project's tasks are defined below in a corresponding sections.
 </p>
 
 <p>
-Устанавливаем дирректории проекта, если они объявлены в спецификации и присутствуют на диске.
+Setting up corresponding project directories if they are defined in <a href="#project-specification">the project specification table</a> and exist
+on build machine disk.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org53182bb">(<span style="color: #00ffff;">def</span> <span style="color: #eedd82;">paths</span> [ [<span style="color: #7fffd4;">:source-paths</span> <span style="color: #ffa07a;">"src"</span>]
+<pre class="src src-clojure" id="org46fdb98">(<span style="color: #00ffff;">def</span> <span style="color: #eedd82;">paths</span> [ [<span style="color: #7fffd4;">:source-paths</span> <span style="color: #ffa07a;">"src"</span>]
              [<span style="color: #7fffd4;">:source-paths</span> <span style="color: #ffa07a;">"src"</span>]
              [<span style="color: #7fffd4;">:resource-paths</span> <span style="color: #ffa07a;">"resources"</span>]
              [<span style="color: #7fffd4;">:asset-paths</span> <span style="color: #ffa07a;">"assets"</span>] ] )
@@ -1600,31 +1601,31 @@ an equality condition.
 </div>
 
 <p>
-Если в проекте объявлена зависимость от <i>Clojure</i>, т.е. в спецификации для параметра <code>Clojure</code> указано <code>yes</code>,
-то добавляем зависимость от <i>Clojure</i>.
+If dependency from <b>Clojure</b> is defined in <a href="#project-specification">the project specification table</a>, i.e. value <code>yes</code> is given against
+parameter <code>Clojure</code>, than adding <code>org.clojure/clojure</code> dependency.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org48b6d07">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(conj <span style="color: #eedd82;">%</span> '[<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>clojure <span style="color: #ffa07a;">"1.8.0"</span>]))
+<pre class="src src-clojure" id="org50afcf1">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(conj <span style="color: #eedd82;">%</span> '[<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>clojure <span style="color: #ffa07a;">"1.8.0"</span>]))
 </pre>
 </div>
 
 <p>
-Если в проекте объявлена зависимость от <i>ClojureScript</i>, т.е. в спецификации для параметра <code>ClojureScript</code>
-указано <code>yes</code>, то добавляем зависимость от <i>ClojureScript</i>.
+If dependency from <b>ClojureScript</b> is defined in <a href="#project-specification">the project specification table</a>, i.e. value <code>yes</code> is given against
+parameter <code>ClojureScript</code>, than adding <code>org.clojure/clojurescript</code> dependency.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org50eb431">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(conj <span style="color: #eedd82;">%</span> '[<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>clojurescript <span style="color: #ffa07a;">"1.9.225"</span>]))
+<pre class="src src-clojure" id="org46cc93b">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(conj <span style="color: #eedd82;">%</span> '[<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>clojurescript <span style="color: #ffa07a;">"1.9.225"</span>]))
 </pre>
 </div>
 
 <p>
-Добавляем пользовательские зависимости проекта.
+Adding project dependencies defined in <a href="#project-dependencies">the project dependencies table</a>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgb0c8b01">(<span style="color: #00ffff;">let</span> [deps '[
+<pre class="src src-clojure" id="org959fb54">(<span style="color: #00ffff;">let</span> [deps '[
 
            ]]
   (set-env! <span style="color: #7fffd4;">:dependencies</span> #(into <span style="color: #eedd82;">%</span> deps)))
@@ -1632,34 +1633,30 @@ an equality condition.
 </div>
 </div>
 
-<div id="outline-container-org101429d" class="outline-4">
-<h4 id="org101429d"><span class="section-number-4">5.2.1</span> Boot-задачи проекта для <i>Clojure</i></h4>
+<div id="outline-container-org8b5af5a" class="outline-4">
+<h4 id="org8b5af5a"><span class="section-number-4">5.2.1</span> Clojure related project's Boot-tasks</h4>
 <div class="outline-text-4" id="text-5-2-1">
 <p>
-Boot-задачи для <i>Clojure</i> будут добавлены в результирующий <code>build.boot</code>, если в спецификации проекта в параметре
-<code>Clojure</code> указано значение <code>yes</code>.
+These tasks will be added into resulting <code>build.boot</code> file, if <code>Clojure</code> parameter is set to <code>yes</code>
+in <a href="#project-specification">the project specification table</a>
 </p>
 
 <p>
-Все блоки кода с boot-задачами для <i>Clojure</i> должны иметь имя <code>boot-clojure-task</code>. Каждая задача с таким именем будет
-включена в результирующий <code>build.boot</code>.
+All blocks of code defining <b>Boot-tasks</b> for <b>Clojure</b> must have <code>boot-clojure-task</code> name. Each task defined
+in code block with <code>boot-clojure-task</code> name will be added into resulting <code>build.boot</code> file.
 </p>
 </div>
 
-<div id="outline-container-org1b4881d" class="outline-5">
-<h5 id="clj-build"><a id="org1b4881d"></a><span class="section-number-5">5.2.1.1</span> clj-build</h5>
+<div id="outline-container-orgf923576" class="outline-5">
+<h5 id="clj-build"><a id="orgf923576"></a><span class="section-number-5">5.2.1.1</span> clj-build</h5>
 <div class="outline-text-5" id="text-clj-build">
 <p>
-Эта задача строит uberjar проекта который запускается командой.
+This task builds project's uberjar which might be run with
+<code class="src src-sh">java -jar target/project.jar</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-sh">java -jar target/project.jar
-</pre>
-</div>
-
-<div class="org-src-container">
-<pre class="src src-clojure" id="org5efeb88">(<span style="color: #00ffff;">deftask</span> <span style="color: #87cefa;">clj-build</span>
+<pre class="src src-clojure" id="org13a802c">(<span style="color: #00ffff;">deftask</span> <span style="color: #87cefa;">clj-build</span>
   <span style="color: #ffa07a;">"Builds project's uberjar"</span>
   []
   (comp (pom <span style="color: #7fffd4;">:project</span> 'literate-boot
@@ -1672,21 +1669,20 @@ Boot-задачи для <i>Clojure</i> будут добавлены в рез�
 </div>
 
 <p>
-Для вызова задачи выполните: <code class="src src-sh">boot clj-build</code>
+To execute the task run: <code class="src src-sh">boot clj-build</code>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org3a0f6b0" class="outline-5">
-<h5 id="org3a0f6b0"><span class="section-number-5">5.2.1.2</span> clj-run</h5>
+<div id="outline-container-org3710ea8" class="outline-5">
+<h5 id="org3710ea8"><span class="section-number-5">5.2.1.2</span> clj-run</h5>
 <div class="outline-text-5" id="text-5-2-1-2">
 <p>
-Эта задача запускает проект в той же Java-среде в которой запущен Boot. Перед запуском надо скомпелировать проект
-задачей <a href="#clj-build">clj-build</a>.
+This task executes project's <code>main</code> function in the <b>Boot's</b> <b>Java</b> environment.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgf086ab7">(<span style="color: #00ffff;">deftask</span> <span style="color: #87cefa;">clj-run</span>
+<pre class="src src-clojure" id="org8b42bc2">(<span style="color: #00ffff;">deftask</span> <span style="color: #87cefa;">clj-run</span>
   <span style="color: #ffa07a;">"Runs the project's main function"</span>
   []
   (require '<span style="color: #98fb98;">literate-boot.core</span>)
@@ -1696,54 +1692,62 @@ Boot-задачи для <i>Clojure</i> будут добавлены в рез�
 </div>
 
 <p>
-Для вызова задачи выполните: <code class="src src-sh">boot clj-run</code>
+To execute the task run: <code class="src src-sh">boot clj-run</code>
 </p>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgb46a58b" class="outline-4">
-<h4 id="orgb46a58b"><span class="section-number-4">5.2.2</span> Boot-задачи проекта для <i>ClojureScript</i></h4>
+<div id="outline-container-orgcdd8516" class="outline-4">
+<h4 id="orgcdd8516"><span class="section-number-4">5.2.2</span> ClojureScript related project's Boot-задачи</h4>
 <div class="outline-text-4" id="text-5-2-2">
 <p>
-Boot-задачи для <i>ClojureScript</i> будут добавлены в результирующий <code>build.boot</code>, если в спецификации проекта
-в параметре <code>ClojureScript</code> указано значение <code>yes</code>.
+These tasks will be added into resulting <code>build.boot</code> file, if <code>ClojureScript</code> parameter is set to <code>yes</code>
+in <a href="#project-specification">the project specification table</a>
 </p>
 
 <p>
-Все блоки кода с boot-задачами для <i>ClojureScript</i> должны иметь имя <code>boot-clojurescript-task</code>. Каждая задача с таким
-именем будет включена в результирующий <code>build.boot</code>.
+All blocks of code defining <b>Boot-tasks</b> for <b>Clojure</b> must have <code>boot-clojurescript-task</code> name. Each task defined
+in a code block with <code>boot-clojurescript-task</code> name will be added into resulting <code>build.boot</code> file.
 </p>
 </div>
 
-<div id="outline-container-orgeac5224" class="outline-5">
-<h5 id="orgeac5224"><span class="section-number-5">5.2.2.1</span> cljs-figwheel</h5>
+<div id="outline-container-orgb4cde8e" class="outline-5">
+<h5 id="orgb4cde8e"><span class="section-number-5">5.2.2.1</span> cljs-figwheel</h5>
 <div class="outline-text-5" id="text-5-2-2-1">
 <p>
-Эта задача интерфейс к <b>figwheel</b>, для запуска используйте <code class="src src-sh">boot cljs-figwheel</code>.<br  />
+This task is an interface to <b><a href="https://github.com/bhauman/lein-figwheel">figwheel</a></b>, to execute it run <code class="src src-sh">boot cljs-figwheel</code>.<br  />
 </p>
 
 <p>
-Компилирует ClojureScript файлы, запускает HTTP-server обслуживающий дирректорию публичных ресурсов,
-запускает монитор для перекомпиляции, запускает nRepl сервер. Для входа в ClojureScript REPL выполнить
-"9 шагов к успеху":
+The task compiles <b>ClojureScript</b> files, runs HTTP-server serving project's public resources directory,
+runs changes monitor and automaticaly recompiles and reloads the project upon <code>*.cljs</code> files change,
+runs <b>nRepl</b> server.
+</p>
+
+<p>
+To run a <b>ClojureScript</b> <b>repl</b> one has to go through "9 steps to success":
 </p>
 
 <ol class="org-ol">
-<li>выполнить <code class="src src-sh">boot cljs-figwheel</code></li>
-<li>дождаться звукового сигнала</li>
-<li>посмотреть в консоли адрес и порт запущенного веб-сервера (обычно <a href="http://localhost:3449/">http://localhost:3449/</a>)</li>
-<li>открыть браузер, открыть URL, увидеть в JavaScript-консоли сообщение Opened Websocket REPL connection</li>
-<li>посмотреть в консоли адрес и порт nRepl сервера, передать их в следующем шаге</li>
-<li>выполнить <code class="src src-emacs-lisp">(cider-connect HOST PORT)</code> или M-x cider-connect и ввести HOST и PORT, хотя, походу
-cider сам прекрасно всё цепляет из файла <code>.nrepl-port</code>, так что можно просто два раза ENTER нажать</li>
-<li>в REPL буфере ввести <code class="src src-clojure">(cljs-repl)</code> чтобы запустить ClojureScript REPL</li>
-<li>в REPL буфере ввести <code class="src src-clojure">(.log js/console "OK!")</code></li>
-<li>увидеть сообщение "OK!" в JavaScript-консоли браузера</li>
+<li>run <code class="src src-sh">boot cljs-figwheel</code></li>
+<li>wait for <b>Clojure</b> <b>repl</b> prompt</li>
+<li>look for address and port of a run web-server (usually <a href="http://localhost:3449/">http://localhost:3449/</a>) in the console output</li>
+<li>open a browser, novigate to web-server address:port URL, open browser's developer tools console and make sure
+there's "Opened Websocket REPL connection" message present</li>
+<li>look address and port of a <b>nRepl</b> server, in the console output and pass it to <code>(cider-connect)</code> call
+at the next step</li>
+<li>execute <code class="src src-emacs-lisp">(cider-connect HOST PORT)</code> or <code>M-x cider-connect</code> and input <b>nRepl</b> HOST and PORT,
+though, it appears as if <b>cider</b> is able to take the values needed from <code>.nrepl-port</code> file, so one can just
+press ENTER twice</li>
+<li>execute <code class="src src-clojure">(cljs-repl)</code> in <b>repl</b>-buffer to run a <b>ClojureScript</b> <b>REPL</b></li>
+<li>execute <code class="src src-clojure">(.log js/console "OK!")</code> in <b>repl</b>-buffer and make sure there's "OK!" message present
+in the brower's developer tools console.</li>
+<li>done!</li>
 </ol>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org29f545a">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(into <span style="color: #eedd82;">%</span> '[[<span style="color: #98fb98;">ajchemist</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>boot-figwheel <span style="color: #ffa07a;">"0.5.4-6"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]
+<pre class="src src-clojure" id="orgaa5061c">(set-env! <span style="color: #7fffd4;">:dependencies</span> #(into <span style="color: #eedd82;">%</span> '[[<span style="color: #98fb98;">ajchemist</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>boot-figwheel <span style="color: #ffa07a;">"0.5.4-6"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]
                                    [<span style="color: #98fb98;">org.clojure</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>tools.nrepl <span style="color: #ffa07a;">"0.2.12"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]
                                    [<span style="color: #98fb98;">com.cemerick</span><span style="color: #00ff00; background-color: #1f1f1f;">/</span>piggieback <span style="color: #ffa07a;">"0.2.1"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]
                                    [figwheel-sidecar <span style="color: #ffa07a;">"0.5.7"</span> <span style="color: #7fffd4;">:scope</span> <span style="color: #ffa07a;">"test"</span>]]))
@@ -1787,34 +1791,34 @@ cider сам прекрасно всё цепляет из файла <code>.nre
 </div>
 </div>
 
-<div id="outline-container-org6afb77f" class="outline-4">
-<h4 id="org6afb77f"><span class="section-number-4">5.2.3</span> Пользовательские boot-задачи</h4>
+<div id="outline-container-orgd5798e4" class="outline-4">
+<h4 id="orgd5798e4"><span class="section-number-4">5.2.3</span> User's Boot-tasks</h4>
 <div class="outline-text-4" id="text-5-2-3">
 <p>
-Все блоки кода с пользовательскими boot-задачами должны иметь имя <code>boot-user-task</code>. Каждая задача с таким
-именем будет включена в результирующий <code>build.boot</code>.
+All code blocks defining user's <b>Boot-tasks</b> must have <code>boot-user-task</code> name. Each tasks defined in a code block
+with <code>boot-user-task</code> name will be included into resulting <code>build.boot</code> file.
 </p>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orge0e1ecc" class="outline-2">
-<h2 id="orge0e1ecc"><span class="section-number-2">6</span> Project code</h2>
+<div id="outline-container-org67846f2" class="outline-2">
+<h2 id="org67846f2"><span class="section-number-2">6</span> Project code</h2>
 <div class="outline-text-2" id="text-6">
 </div>
 
-<div id="outline-container-org7e040be" class="outline-3">
-<h3 id="org7e040be"><span class="section-number-3">6.1</span> Пространство имён Core</h3>
+<div id="outline-container-orge4014e8" class="outline-3">
+<h3 id="orge4014e8"><span class="section-number-3">6.1</span> Core namespace</h3>
 <div class="outline-text-3" id="text-6-1">
-</div><div id="outline-container-org14c6ca9" class="outline-4">
-<h4 id="org14c6ca9"><span class="section-number-4">6.1.1</span> Функции</h4>
+</div><div id="outline-container-orgfb993e1" class="outline-4">
+<h4 id="orgfb993e1"><span class="section-number-4">6.1.1</span> Functions</h4>
 <div class="outline-text-4" id="text-6-1-1">
-</div><div id="outline-container-org76f8570" class="outline-5">
-<h5 id="org76f8570"><span class="section-number-5">6.1.1.1</span> -main</h5>
+</div><div id="outline-container-orgd0279dd" class="outline-5">
+<h5 id="orgd0279dd"><span class="section-number-5">6.1.1.1</span> -main</h5>
 <div class="outline-text-5" id="text-6-1-1-1">
 <div class="org-src-container">
-<pre class="src src-clojure" id="orgc61fb80">(<span style="color: #00ffff;">ns</span> <span style="color: #98fb98;">literate-boot.core</span>
+<pre class="src src-clojure" id="orgface3c0">(<span style="color: #00ffff;">ns</span> <span style="color: #98fb98;">literate-boot.core</span>
   (<span style="color: #7fffd4;">:gen-class</span>))
 
 (<span style="color: #00ffff;">defn</span> <span style="color: #87cefa;">-main</span>
@@ -1825,7 +1829,7 @@ cider сам прекрасно всё цепляет из файла <code>.nre
 </div>
 
 <div class="org-src-container">
-<pre class="src src-clojure" id="org7fdac1f">(<span style="color: #00ffff;">ns</span> <span style="color: #98fb98;">literate-boot.core</span>
+<pre class="src src-clojure" id="orge0c2410">(<span style="color: #00ffff;">ns</span> <span style="color: #98fb98;">literate-boot.core</span>
   (<span style="color: #7fffd4;">:refer-clojure</span>))
 
 (enable-console-print!)
@@ -1838,7 +1842,7 @@ cider сам прекрасно всё цепляет из файла <code>.nre
 </div>
 
 <div class="org-src-container">
-<pre class="src src-html" id="org40a5122"> &lt;<span style="color: #00ffff;">!doctype</span> html&gt;
+<pre class="src src-html" id="org974e5ff"> &lt;<span style="color: #00ffff;">!doctype</span> html&gt;
  &lt;<span style="color: #87cefa;">html</span>&gt;
   &lt;<span style="color: #87cefa;">head</span>&gt;
    &lt;<span style="color: #87cefa;">title</span>&gt;<span style="font-weight: bold; text-decoration: underline;">literate-boot</span>&lt;/<span style="color: #87cefa;">title</span>&gt;
@@ -1872,7 +1876,7 @@ For the one interested please see the documentation for <code>cemeric.pomegranat
 <div id="postamble" class="status">
 <p class="author">Author: Maxim Bazhenov</p>
 <p class="email">Email: <a href="mailto:maximgb@yandex.ru">maximgb@yandex.ru</a></p>
-<p class="date">Created: 2016-12-19 Пн. 06:39</p>
+<p class="date">Created: 2016-12-19 Пн. 06:51</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

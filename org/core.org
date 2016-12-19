@@ -1,8 +1,8 @@
 #+SETUPFILE: ../build/setup.org
 
-* Пространство имён Core
+* Core namespace
 
-** Функции
+** Functions
 
 *** -main
 
