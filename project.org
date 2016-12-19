@@ -2,6 +2,7 @@
 #+SETUPFILE: build/setup.org
 
 * Table of contents                                      :noexport:TOC_4_org:
+ - [[Introduction][Introduction]]
  - [[Quick start][Quick start]]
  - [[Project specification][Project specification]]
    - [[Dependencies][Dependencies]]
@@ -11,8 +12,13 @@
  - [[Project code][Project code]]
  - [[Footnotes][Footnotes]]
 
+* Introduction
+
+  #+INCLUDE: "README.org" :minlevel 2
+
 * Quick start
 
+  - *Git* clone from https://github.com/MaximGB/clojure-boot-literate.git.
   - Load project *Library of Babel*, by executing the following code block
     src_emacs-lisp[]{(org-babel-lob-ingest "build/lob.org")}, to execute it place the cursor on the block
     and press C-c C-c.
