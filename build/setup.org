@@ -43,6 +43,8 @@
 
 # HTML export theming:
 # --------------------
+#+HTML_HEAD: <meta http-quiv="Content-Security-Policy" content="script-src 'self' http://www.pirilampo.org; style-src 'self' http://www.pirilampo.org; upgrade-insecure-requests"/>
+#
 # Taken from https://github.com/fniessen/org-html-themes
 # ------------------------------------------------------
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/bigblow/css/htmlize.css"/>
