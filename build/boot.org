@@ -44,7 +44,7 @@
   #+BEGIN_SRC clojure
     (def paths [ [:source-paths "<<get-specification-param(title="Clojure/Sources path")>>"]
                  [:source-paths "<<get-specification-param(title="ClojureScript/Sources path")>>"]
-                 [:resource-paths "<<get-specification-param(title="Classpath resources path")>>"]
+                 [:resource-paths "<<get-specification-param(title="Resource path")>>"]
                  [:asset-paths "<<get-specification-param(title="Assets path")>>"] ] )
 
     (doseq [[ env-key path ] paths]

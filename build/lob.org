@@ -1,22 +1,22 @@
-Тут описаны вспомогательные функции-блоки для литературного проекта. Эти функции-блоки работают в среде *Emacs/Org*,
-они не предназначены для вызова из Clojure.
+Helper code blocks constituting the project's *"Library of Babel"* are defined. This code blocks work in *Emacs/Org*
+environment and are not supposed to be called from Clojure or ClojureScript.
 
 * time-is-now
 
-  Возвращает текущее время в виде строки в заданном формате.
+  Returns current time as a string in a given format.
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     <<time-is-now()>>
     <<time-is-now(format="%F")
     #+CALL: time-is-now()
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя    | Значение по умолчанию | Описание                    |
-  |--------+-----------------------+-----------------------------|
-  | format | "%F %X"               | Формат возвращаемой строки. |
+  | Name     | Default value | Description                                                                   |
+  |----------+---------------+-------------------------------------------------------------------------------|
+  | [format] | "%F %X"       | Time string format as supported by ~(format-time-string)~ function. Optional. |
 
   #+NAME: time-is-now
   #+BEGIN_SRC emacs-lisp :var format="%F %X" :results value silent
@@ -28,10 +28,12 @@
   :CUSTOM_ID: lob-get-table-param
   :END:
 
-  Возвращает значение параметра с указанным именем из какой-либо таблицы. В первой колонке таблицы задаются имена
-  параметров, во второй колонке - значения.
+  Returns a value of a parameter defined in a table. Table must follow given requirements: parameter names are given
+  in the first column, parameter values - in the second column. Hierarchical queries are supported in a way,
+  if parameter name is given as ~name/subname~ then first ~name~ will be searched and then ~subname~ will be searched
+  starting from ~name~ a row where ~name~ has been found.
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     <<get-table-param(table=../project.org:project-specification, title="Project name")>>
     <<get-table-param(table=../project.org:project-specification, title="Project name", splitby="-", joinby="_")>>
@@ -39,26 +41,26 @@
     #+CALL: get-table-param(table=../project.org:project-specification, title="Project name")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя     | Значение по умолчанию | Описание                                                                         |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | table   | (quote ())            | Ссылка на таблицу. В виде [путь к файлу с таблицей:]имя таблицы, например:       |
-  |         |                       | ../file.org:table_name или просто table_name если таблица находится в том же |
-  |         |                       | файле из которого делается вызов. Значение по-умолчанию позволяет просто без     |
-  |         |                       | ошибки вернуть nil, так как таблица передаётся в блок просто в виде списка.      |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | title   | ""                    | Имя параметра. Поддерживаются имена-пути, или емена содержащие '/'. Если         |
-  |         |                       | задан такой параметр, то он разбивается на части, и каждая часть рассматривается |
-  |         |                       | как отдельный параметр. Поиск очередного параметра начинается со строки          |
-  |         |                       | предыдущего, значение предыдущего параметра отбрасывается. Возвращается значение |
-  |         |                       | последнего параметра.                                                            |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | splitby | ""                    | Разделитель значений параметра. Работает совместно с joinby. Если значения       |
-  |         |                       | в ячейке перечислены, например, через запятую, то, указав splitby=",", мы их     |
-  |         |                       | разделим, и разделённые значения будут объеденены с помощью joinby.              |
-  |---------+-----------------------+----------------------------------------------------------------------------------|
-  | joinby  |                       | Объединитель значений параметра. Работает совместно со splitby.                  |
+  | Name      | Default value | Description                                                                           |
+  |-----------+---------------+---------------------------------------------------------------------------------------|
+  | table     | (quote ())    | Table reference. Reference format is ~[table containing org-file path:]table-name~,   |
+  |           |               | for example ~../file.org:table_name~ or just ~table_name~ if a table is given         |
+  |           |               | in the same file the call is done from. Default value simply allows return nil if     |
+  |           |               | parameter is not given, since internally code block receives a table as a list.       |
+  |-----------+---------------+---------------------------------------------------------------------------------------|
+  | title     | ""            | Parameter name. Path-like parameter names are supported (i.e. names containing ~'/'~. |
+  |           |               | If such /complex/ parameter is given, than it'll be splited, and each resulting part  |
+  |           |               | will be considered as a separate parameter name. The following parameter name search  |
+  |           |               | will be started from a row where the preceding parameter name has been found, a value |
+  |           |               | of a preceding parameter is ignored. A value of the last parameter will be returned.  |
+  |-----------+---------------+---------------------------------------------------------------------------------------|
+  | [splitby] | ""            | Parameter value splitter. Optional. Works in pair with ~joinby~. If parameter values  |
+  |           |               | a listed in a cell as comma-separated list, for example, than, giving ~splitby=","~,  |
+  |           |               | will split'em, and splitted values will be joined with ~joinby~ value.                |
+  |-----------+---------------+---------------------------------------------------------------------------------------|
+  | [joinby]  | ""            | Parameter value combinator. Optional. Works in pair with ~splitby~.                   |
 
   #+NAME: get-table-param
   #+BEGIN_SRC emacs-lisp :var table=(quote ()) :var title="" :var splitby="" :var joinby="" :hlines yes :results value silent
@@ -82,22 +84,22 @@
 
 * get-specification-param
 
-  Возвращает значение параметра с указанным именем из спецификации проекта.
+  Returns parameter value given in [[#project-specification][the project specification table]] inside ~../project.org~ file.
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     <<get-specification-param(title="Project name")>>
     <<get-specification-param(title="Main namespace", splitby="." joinby="/")>>
     #+CALL: get-specification-param(title="Project name")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя     | Значение по умолчанию | Описание                                                |
-  |---------+-----------------------+---------------------------------------------------------|
-  | title   | ""                    | Имя параметра (см. [[#lob-get-table-param][(get-table-param)]]).                  |
-  | splitby | ""                    | Разделитель значений параметра (см. [[#lob-get-table-param][(get-table-param)]]). |
-  | joinby  |                       | Объединитель значений параметр (см. [[#lob-get-table-param][(get-table-param)]]). |
+  | Name      | Default value | Description                                          |
+  |-----------+---------------+------------------------------------------------------|
+  | title     | ""            | Parameter name (see [[#lob-get-table-param][(get-table-param)]]).           |
+  | [splitby] | ""            | Parameter value separator (see [[#lob-get-table-param][(get-table-param)]]).   |
+  | [joinby]  | ""            | Parameter value combinator (see. [[#lob-get-table-param][(get-table-param)]]). |
 
   #+NAME: get-specification-param
   #+BEGIN_SRC emacs-lisp :var title="" :var splitby="" :var joinby="" :results value silent
@@ -117,30 +119,30 @@
 
 * in-some-path
 
-  Возвращает абсолютный путь до файла в одной из дирректорий экспортируемых исходников проекта с учётом имени проекта
-  и промежуточной дирректории, задаваемой параметром из спецификации проекта.
+  Returns an absolute path to a file in one of the project directories given in [[#project-specification][the project specification table]],
+  will take project name into account and insert it as intermediate directory if requested.
 
-  *Требования*: В спецификации проекта должен быть заданы параметры:
+  *Requirements*: Project specification must have following parameters defined:
   - Project name
-  - Параметр передаваемый через param
+  - Parameter given in ~param~ code block parameter.
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     #+BEGIN_SRC clojure :tangle (org-sbe in-some-path (param="Clojure/Sources path" path \"core.clj\"))
        ...
     #+END_SRC
-    <<in-some-path(param="Clojure/Расоложение исходников", path="core.clj")>>
+    <<in-some-path(param="Clojure/Sources path", path="core.clj")>>
     #+CALL: in-some-path(param="Clojure/Sources path", path="core.clj")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{8cm}| :float nil
-  | Имя         | Значение по умолчанию             | Описание                                                      |
-  |-------------+-----------------------------------+---------------------------------------------------------------|
-  | param       | "Clojure/Sources path" | Имя параметра, задющего часть пути относительно корня проекта |
-  | path        | ""                                | Путь относительно дирректории исходников                      |
-  | projectvise | t                                 | Вставлять имя проекта между базовой дирректорией              |
-  |             |                                   | и формируемым окончанием пути.                                |
+  | Name          | Default value          | Description                                                             |
+  |---------------+------------------------+-------------------------------------------------------------------------|
+  | param         | "Clojure/Sources path" | Parameter name defining the base directory (relative to project root)   |
+  | [path]        | ""                     | Path relative to built directory name                                   |
+  | [projectvise] | t                      | Whether to insert project name between base directory path and the path |
+  |               |                        | part given in ~path~ parameter                                          |
 
   #+NAME: in-some-path
   #+BEGIN_SRC emacs-lisp :var param="Clojure/Sources path" :var path="" :var projectvise='t :results value silent
@@ -164,13 +166,13 @@
 
 * in-clj-path
 
-  Возвращает абсолютный путь до файла в дирректории экспортируемых clj-исходников проекта с учётом имени проекта.
+  Return an absolute path to a file in project's exported *Clojure* sources directory with respect to project name.
 
-  *Требования*: В спецификации проекта должен быть заданы параметры:
+  *Requirements*: Project specification must have following parameters defined:
   - Project name
   - Clojure/Sources path
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     #+BEGIN_SRC clojure :tangle (org-sbe in-clj-path (path \"core.clj\"))
        ...
@@ -179,11 +181,11 @@
     #+CALL: in-clj-path(path="core.clj")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                                         |
-  |------+-----------------------+--------------------------------------------------|
-  | path | ""                    | Путь относительно дирректории Clojure исходников |
+  | Name | Default value | Description                                                                  |
+  |------+---------------+------------------------------------------------------------------------------|
+  | path | ""            | Path relative to project's exported Clojure sources directory to be appended |
 
   #+NAME: in-clj-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
@@ -198,13 +200,13 @@
 
 * in-cljs-path
 
-  Возвращает абсолютный путь до файла в дирректории экспортируемых cljs-исходников проекта с учётом имени проекта.
+  Return an absolute path to a file in project's exported *Clojure Script* sources directory with respect to project name.
 
-  *Требования*: В спецификации проекта должен быть заданы параметры:
+  *Requirements*: Project specification must have following parameters defined:
   - Project name
   - ClojureScript/Sources path
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     #+BEGIN_SRC clojure :tangle (org-sbe in-cljs-path (path \"core.clj\"))
        ...
@@ -213,11 +215,11 @@
     #+CALL: in-cljs-path(path="core.clj")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                                               |
-  |------+-----------------------+--------------------------------------------------------|
-  | path | ""                    | Путь относительно дирректории ClojureScript исходников |
+  | Name | Default value | Description                                                                         |
+  |------+---------------+-------------------------------------------------------------------------------------|
+  | path | ""            | Path relative to project's exported Clojure Script sources directory to be appended |
 
   #+NAME: in-cljs-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
@@ -232,13 +234,13 @@
 
 * in-tests-path
 
-  Возвращает абсолютный путь до файла в дирректории экспортируемых тестов проекта с учётом имени проекта.
+  Return an absolute path to a file in project's exported tests sources directory with respect to project name.
 
-  *Требования*: В спецификации проекта должен быть заданы параметры:
+  *Requirements*: Project specification must have following parameters defined:
   - Project name
   - Tests path
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     #+BEGIN_SRC clojure :tangle (org-sbe in-tests-path (path \"core.clj\"))
        ...
@@ -247,11 +249,11 @@
     #+CALL: in-tests-path(path="core.clj")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                                        |
-  |------+-----------------------+-------------------------------------------------|
-  | path | ""                    | Путь относительно дирректории исходников тестов |
+  | Name | Default value | Description                                                        |
+  |------+---------------+--------------------------------------------------------------------|
+  | path | ""            | Path relative to project's exported tests directory to be appended |
 
   #+NAME: in-tests-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
@@ -266,13 +268,13 @@
 
 * in-resources-path
 
-  Возвращает абсолютный путь до файла в дирректории classpath ресурсов.
+  Return an absolute path to a file in project's exported resources directory.
 
-  *Требования*: В спецификации проекта должен быть заданы параметры:
+  *Requirements*: Project specification must have following parameters defined:
   - Project name
-  - Classpath resources path
+  - Resource path
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     #+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
        ...
@@ -281,11 +283,11 @@
     #+CALL: in-resources-path(path="index.html")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                               |
-  |------+-----------------------+----------------------------------------|
-  | path | ""                    | Путь относительно дирректории ресурсов |
+  | Name | Default value | Description                                                              |
+  |------+---------------+--------------------------------------------------------------------------|
+  | path | ""            | A path relative to project's exported resources directory to be appended |
 
   #+NAME: in-resources-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
@@ -294,20 +296,20 @@
         nil
         (cdr (assoc 'in-some-path org-babel-library-of-babel))
         (list
-         (cons :var "param=\"Classpath resources path\"")
+         (cons :var "param=\"Resource path\"")
          (cons :var (format "path=\"%s\"" path))
          (cons :var "projectvise=()"))))
   #+END_SRC
 
 * in-assets-path
 
-  Возвращает абсолютный путь до файла в дирректории прочих ресурсов.
+  Return an absolute path to a file in project's exported assets directory.
 
-  *Требования*: В спецификации проекта должен быть заданы параметры:
+  *Requirements*: Project specification must have following parameters defined:
   - Project name
   - Assets path
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     #+BEGIN_SRC clojure :tangle (org-sbe in-resources-path (path \"index.html"))
        ...
@@ -316,11 +318,11 @@
     #+CALL: in-resources-path(path="index.html")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                               |
-  |------+-----------------------+----------------------------------------|
-  | path | ""                    | Путь относительно дирректории ресурсов |
+  | Name | Default value | Description                                                           |
+  |------+---------------+-----------------------------------------------------------------------|
+  | path | ""            | A path relative to project's exported assets directory to be appended |
 
   #+NAME: in-assets-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
@@ -333,28 +335,29 @@
          (cons :var (format "path=\"%s\"" path))
          (cons :var "projectvise=()"))))
   #+END_SRC
+
 * in-target-path
 
-  Возвращает абсолютный путь до файла в целевой дирректории.
+  Returns an absolute path to a file in project's target directory.
 
-  *Требования*: В спецификации проекта должен быть заданы параметры:
+  *Requirements*: Project specification must have following parameters defined:
   - Project name
   - Target path
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
-    #+BEGIN_SRC clojure :tangle (org-sbe in-target-path (path \"index.html"))
+    #+BEGIN_SRC clojure :tangle (org-sbe in-target-path (path \"project.jar"))
        ...
     #+END_SRC
-    <<in-target-path(path="index.html")>>
-    #+CALL: in-target-path(path="index.html")
+    <<in-target-path(path="project.jar")>>
+    #+CALL: in-target-path(path="project.jar")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя  | Значение по умолчанию | Описание                              |
-  |------+-----------------------+---------------------------------------|
-  | path | ""                    | Путь относительно целевой дирректории |
+  | Name | Default value | Description                                                  |
+  |------+---------------+--------------------------------------------------------------|
+  | path | ""            | A path relative to project's target directory to be appended |
 
   #+NAME: in-target-path
   #+BEGIN_SRC emacs-lisp :var path="" :results value silent
@@ -370,9 +373,10 @@
 
 * render-project-dependencies
 
-  Возвращает строки содержащие зависимости проекта взятые из таблицы зависимостей
+  Renders (returns as a string) project dependencies, defined in [[#project-dependencies][the project dependencies table]],
+  as a list of *Clojure* vectors.
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     <<render-project-dependencies()>>
     #+CALL: render-project-dependencies()
@@ -503,23 +507,25 @@
 
 * render-code-block-if
 
-  Выводит результат работы блока кода если в спецификации проекта присутствует параметр с требуемым значением.
+  Renders a code block if [[#project-specification][the project specification table]] contains a parameter with a given name and a value passing
+  an equality condition.
 
-  *Требования*:
-  - Блок кода с данным именем должен присутствовать в org-файле из которого делается вызов
+  *Requirements*:
+  - A code block with a given name must be defined in file the call is done from.
 
-  *Примеры:*
+  *Examples:*
   #+BEGIN_EXAMPLE
     <<render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")>>
     #+CALL: render-codeblock-if(name="project-clojurescript-dependencies" if="ClojureScript=yes")
   #+END_EXAMPLE
 
-  #+CAPTION: *Параметры:*
+  #+CAPTION: *Parameters:*
   #+ATTR_LATEX: :width \textwidth :align |l|l|p{10cm}| :float nil
-  | Имя       | Значение по умолчанию | Описание                                                                        |
-  |-----------+-----------------------+---------------------------------------------------------------------------------|
-  | name      | ""                    | Имя блока присвоенное через диррективу ~#+NAME:~.                               |
-  | condition | ""                    | Условие вывода в формате "ПАРАМЕТР = ЗНАЧЕНИЕ", где = операция сравнения строк. |
+  | Name      | Default value | Description                                                                        |
+  |-----------+---------------+------------------------------------------------------------------------------------|
+  | name      | ""            | A code block name to be rendered, the one given in it's ~#+NAME:~ dirrective.      |
+  | condition | ""            | Rendering condition given as ~"parameter = value"~, where ~=~ is string comparison |
+  |           |               | operation.                                                                         |
 
   #+NAME: render-codeblock-if
   #+BEGIN_SRC emacs-lisp :var name="" :var condition="" :results value silent

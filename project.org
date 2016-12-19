@@ -44,38 +44,40 @@
 
   #+CAPTION: Project specification
   #+NAME: project-specification
-  | Property                 | Value            |
-  |--------------------------+------------------|
-  | Boot                     |                  |
-  |--------------------------+------------------|
-  | Version                  | 2.6.0            |
-  |--------------------------+------------------|
-  | Project name             | literate-boot    |
-  | Project version          | 0.1.0-SNAPSHOT   |
-  | Org sources path         | org              |
-  | Tests path               | tests            |
-  | Classpath resources path | resources        |
-  | Assets path              | assets           |
-  | Target path              | target           |
-  | Main namespace           | core             |
-  |--------------------------+------------------|
-  | Clojure                  | yes              |
-  |--------------------------+------------------|
-  | Version                  | 1.8.0            |
-  | Sources path             | src              |
-  |--------------------------+------------------|
-  | ClojureScript            | yes              |
-  |--------------------------+------------------|
-  | Version                  | 1.9.225          |
-  | Sources path             | src              |
-  | Public resources path    | resources/public |
-  |--------------------------+------------------|
-  | Cider                    |                  |
-  |--------------------------+------------------|
-  | Version                  | 0.14.0           |
+  | Property              | Value            |
+  |-----------------------+------------------|
+  | Boot                  |                  |
+  |-----------------------+------------------|
+  | Version               | 2.6.0            |
+  |-----------------------+------------------|
+  | Project name          | literate-boot    |
+  | Project version       | 0.1.0-SNAPSHOT   |
+  | Org sources path      | org              |
+  | Tests path            | tests            |
+  | Resource path         | resources        |
+  | Assets path           | assets           |
+  | Target path           | target           |
+  | Main namespace        | core             |
+  |-----------------------+------------------|
+  | Clojure               | yes              |
+  |-----------------------+------------------|
+  | Version               | 1.8.0            |
+  | Sources path          | src              |
+  |-----------------------+------------------|
+  | ClojureScript         | yes              |
+  |-----------------------+------------------|
+  | Version               | 1.9.225          |
+  | Sources path          | src              |
+  | Public resources path | resources/public |
+  |-----------------------+------------------|
+  | Cider                 |                  |
+  |-----------------------+------------------|
+  | Version               | 0.14.0           |
 
 ** Dependencies
-
+   :PROPERTIES:
+   :CUSTOM_ID: project-dependencies
+   :END:
    Project dependencies are given in the *dependencies* table\\
 
    One dependency per the table row should be given. The table columns correspond to options supported by [[https://github.com/cemerick/pomegranate][pomegranate]]
