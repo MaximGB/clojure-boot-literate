@@ -5,4 +5,4 @@
   (tangling) both from Emacs directly as well as from project generated shell-scripts.
   
   The project is self-documenting, get started from ~project.org~ and it should be more or less clear how to use it,
-  or navigate to [[docs/][pre-exported documentation]].
+  or navigate to [[https://maximgb.github.io/clojure-boot-literate/][pre-exported documentation]].
