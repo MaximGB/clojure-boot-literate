@@ -133,7 +133,7 @@
 
     To execute the task run: src_sh[:dir ".."]{boot clj-run}
 
-** ClojureScript related project's Boot-задачи
+** ClojureScript related project's Boot-tasks
 
    These tasks will be added into resulting ~build.boot~ file, if ~ClojureScript~ parameter is set to ~yes~
    in [[#project-specification][the project specification table]]
